@@ -15,7 +15,7 @@ geometry:
   - right=2.5cm
   - bottom=2.5cm
 indent: true
-date: 2026-09-08
+date: 2026-09-15
 fontsize: 12pt
 number-sections: false
 number-depth: 2
@@ -65,7 +65,7 @@ output-file: manuscript.pdf
 keep-tex: true
 abstract-title: "Abstract"
 abstract: |
-  For the last two decades, the gradient projection algorithm (GPA) has been the most used tool to rotate factor solutions. However, GPA is currently limited to perform either orthogonal or oblique rotation. This is a shortcoming because in some cases the researcher knows in advance that some factor correlations should be zero whereas others could be nonzero. This capability is currently unavailable in Exploratory Factor Analysis. Thereby, we developed a new kind of rotation, the orthoblique rotation, in which both oblique and orthogonal factors co-exists. Building on the orthogonal and oblique algorithms of Jennrich, we provide a deeper account of how GPA works and use this account to generalize factor rotation to the orthoblique case. We then demonstrate that this rotation helps to estimate exploratory bi-factor models with multiple general factors in which the general factors may be correlated but must remain orthogonal to the group factors, which can be considered a generalization of the biquartimin and bigeomin criteria. We also illustrate its application to exploratory multitrait-multimethod models, where the methods and traits should be uncorrelated between them but could correlate among themselves. Taken together, this work can be seen as a continuation of the efforts of Jennrich to broad the reach and flexibility of Exploratory Factor Analysis. Finally, we made available the new orthoblique rotation in the R package \texttt{latent}, whose \texttt{lrotate()} function serves the same purpose as the \texttt{GPArotation} package of @bernaards_2005.
+  For the last two decades, the gradient projection algorithm (GPA) has been the most used tool to rotate factor solutions. However, GPA is currently limited to perform either full orthogonal or oblique rotations. This is a shortcoming because in some cases it is known in advance that some factor correlations must be zero but keeping structural zeros in the factor correlation matrix after rotation is currently unavailable in Exploratory Factor Analysis. Thereby, we developed a new kind of rotation, the orthoblique rotation, in which both oblique and orthogonal factors co-exists. Building on the orthogonal and oblique algorithms of Jennrich, we provide a deeper account of how GPA works and use this account to generalize factor rotation to the orthoblique case. We then demonstrate that this rotation helps to estimate exploratory bi-factor models with multiple general factors in which the general factors may be correlated but must remain orthogonal to the group factors, which can be considered a generalization of the biquartimin and bigeomin criteria. We also illustrate its application to exploratory multitrait-multimethod models, where the methods and traits should be uncorrelated between them but could correlate among themselves. Taken together, this work can be seen as a continuation of the efforts of Jennrich to broad the reach and flexibility of Exploratory Factor Analysis. Finally, we made available the new orthoblique rotation in the R package \texttt{latent}, whose \texttt{lrotate()} function serves the same purpose as the \texttt{GPArotation} package of @bernaards_2005.
 ---
 
 \doublespacing
@@ -199,7 +199,7 @@ node[midway,right] {$\mathbf{x}_3$};
 \label{fig:orthogonal-oblique-manifolds}
 \end{figure}
 
-Visually, the GPA consists of moving these vectors across the surface of the unit sphere until the complexity criterion $\tilde{f}$ is minimized, subject to additional perpendicularity constraints in orthogonal rotation. To move the vectors in this way while minimizing $\tilde{f}$, small steps must be taken through an iterative algorithm. However, this is not trivial. At iteration $k$, traditional unconstrained optimization algorithms usually compute a new candidate as
+Visually, the GPA consists of moving these vectors across the surface of the unit sphere until the complexity criterion $\tilde{f}$ is minimized, subject to the additional perpendicularity constraints in orthogonal rotation. To move the vectors in this way while minimizing $\tilde{f}$, small steps must be taken through an iterative algorithm. However, this is not trivial. At iteration $k$, traditional unconstrained optimization algorithms usually compute a new candidate as
 $$
 \mathbf{X}_{k+1} = \mathbf{X}_k + t_k\mathbf{V}_k,
 $$ {#eq-updating}
@@ -208,7 +208,7 @@ where $\mathbf{V}_k$ is a direction along which the complexity function decrease
 
 Hence, the GPA solves two problems: (1) proposing an appropriate descent direction $\mathbf{V}_k$ on $\mathcal{M}$ and (2) securing that, after moving along this direction, the new candidate $\mathbf{X}_{k+1}$ remains on $\mathcal{M}$.
 
-## Solution to problem 1: the Riemannian gradient
+# Solution to problem 1: the Riemannian gradient
 
 Informally, if we zoom enough around a point $\mathbf{X} \in \mathcal{M}$, eventually everything looks linear.^[As an analogy, the Earth in round but locally everything looks flat.] Thus, an idea to move over $\mathcal{M}$ consists of finding tangent directions to $\mathbf{X} \in \mathcal{M}$ that look linear from an infinitesimal point of view. 
 
@@ -243,7 +243,7 @@ $$
 \mathbf{0}
 \right\},
 $$
-where the subscript $k$ is dropped hereafter for clarity and generality. The set $\mathcal{T}_\mathbf{X}\mathcal{M}$ is known as the tangent space of $\mathbf{X}$ on $\mathcal{M}$. In other words, $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ is the set of all infinitesimally feasible directions at $\mathbf{X}$ that are orthogonal to it and hence, linear. This linearity property is important because it allows traditional optimization algorithms that works in $\mathbb{R}^{n\times n}$ to be used in the GPA framework.
+where the subscript $k$ is dropped hereafter for clarity and generality. The set $\mathcal{T}_\mathbf{X}\mathcal{M}$ is known as the tangent space of $\mathbf{X}$ on $\mathcal{M}$. In other words, $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ is the set of all infinitesimally feasible directions at $\mathbf{X}$ that are linear. This linearity property is important because it allows traditional optimization algorithms that works in $\mathbb{R}^{n\times n}$ to be used in the GPA framework.
 
 Connecting this new notion of linear space to our previous examples, the tangent spaces of the orthogonal and oblique manifolds at any $\mathbf{X} \in \mathcal{M}$ can be stated as the collection of directions for which the differentials of their respective defining functions is $\mathbf{0}$:
 $$
@@ -273,22 +273,13 @@ where $\mathrm{ddiag}$ is an operator that sets the off-diagonal entries of a ma
 
 Notice that tangent spaces can be viewed as a collection of the $n^2-d$ free components in the manifolds, so that $\mathrm{dim}(\mathcal{T}_{\mathbf{X}}\mathcal{O}(n)) = n(n-1)/2$ is the number of free elements in an orthogonal matrix and $\mathrm{dim}(\mathcal{T}_{\mathbf{X}}\mathcal{OB}(n)) = n(n-1)$ is the number of free elements in an oblique matrix. Thereby, we can exploit the above differentials to parameterize the tangent spaces in such a way that the parameterizations preserve the tangent space dimension.
 
-In the orthogonal case, for instance, if $\mathbf{V} = \mathbf{X\Omega}$, then by substitution in @eq-tangent_space, we have
+In the orthogonal case, for instance, if we set $\mathbf{V} = \mathbf{X\Omega}$, then by substitution in @eq-tangent_space, we have
 $$
-\mathcal{T}_{\mathbf{X}}\mathcal{O}(n)
-=
-\left\{
-\mathbf{X\Omega}:
-\mathbf{\Omega}
-+
-\mathbf{\Omega}^\top
-=
-\mathbf{0}
-\right\}.
+\mathcal{T}_{\mathbf{X}}\mathcal{O}(n) = \left\{ \mathbf{X\Omega}: \mathbf{\Omega} + \mathbf{\Omega}^\top = \mathbf{0} \right\}.
 $$
-This is a valid full-rank parameterization of the tangent space of the orthogonal manifold because $\mathbf{\Omega}$ is skew-symmetric with $n(n-1)/2$ free elements.
+This is a valid full-rank parameterization of the tangent space of the orthogonal manifold because $\mathbf{\Omega}$ is a skew-symmetric matrix and hence it has $n(n-1)/2$ free elements.
 
-In the oblique case, for a nonsingular rotation matrix $\mathbf{X}$, a suitable full-rank parameterization of the tangent space is then $\mathbf{V} = \mathbf{X}^{-\top} \mathbf{\Omega}$, which by substitution in @eq-tangent_space, yields
+In the oblique case, for a nonsingular rotation matrix $\mathbf{X}$, a useful full-rank parameterization of the tangent space is $\mathbf{V} = \mathbf{X}^{-\top} \mathbf{\Omega}$, which by substitution in @eq-tangent_space, yields
 $$
 \mathcal{T}_{\mathbf{X}}\mathcal{OB}(n)
 =
@@ -301,27 +292,22 @@ $$
 $$
 Indeed, $\mathbf{\Omega}$ is an arbitrary off-diagonal matrix with $n(n-1)$ free elements and thus it is a valid full-rank basis of the tangent space of the oblique manifold.
 
-Now, notice that any member of $\mathbb{R}^{n \times n}$ can be decomposed in orthogonal complements. At a point $\mathbf{X}\in\mathcal{M}$, the Euclidean space can be decomposed into the orthogonal direct sum of the tangent and normal spaces,
+Now, notice that any member of $\mathbb{R}^{n \times n}$ can be decomposed in orthogonal complements. At any point $\mathbf{X}\in\mathcal{M}$, the Euclidean space can be decomposed into the orthogonal direct sum of the tangent and normal spaces,
 $$
 \mathbb{R}^{n\times n}
 =
 \mathcal{T}_\mathbf{X}\mathcal{M}
 \oplus
 \mathcal{N}_\mathbf{X}\mathcal{M}.
-$$
+$$ {#eq-orth_compl}
 
 If this $\mathbb{R}^{n\times n}$ element is the Euclidean gradient of $\tilde{f}$ at $\mathbf{X}$, this means that it can be decomposed into an element belonging to the tangent space, $\mathcal{T}_{\mathbf{X}}\mathcal{M}$, and another belonging to the normal space, $\mathcal{N}_{\mathbf{X}}\mathcal{M}$. Therefore, there must exist orthogonal complements satisfying
 
-\begin{equation}
-\label{orth_compl}
-\text{grad}\tilde{f}(\mathbf{X})
-=
-\text{grad}\tilde{f}(\mathbf{X})_\parallel
-+
-\text{grad}\tilde{f}(\mathbf{X})_\perp,
-\end{equation}
+$$
+\text{grad}\tilde{f}(\mathbf{X}) = \text{grad}\tilde{f}(\mathbf{X})_\parallel + \text{grad}\tilde{f}(\mathbf{X})_\perp,
+$$ {#eq-orth_compl_grad}
 
-where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\mathbf{X})_\perp$ are the projections of $\text{grad}\tilde{f}(\mathbf{X})$ onto the tangent and normal spaces, respectively [@absil_2009, p. 47]. Figure 2 depicts the relationship between these quantities. 
+where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\mathbf{X})_\perp$ are the projections of $\text{grad}\tilde{f}(\mathbf{X})$ onto the tangent and normal spaces of the manifold $\mathcal{M}$, respectively [@absil_2009, p. 47]. Figure 2 depicts the relationship between these quantities. 
 
 \begin{figure}[!ht]
 \centering
@@ -345,9 +331,9 @@ where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\ma
 \label{fig:tangent-gradient}
 \end{figure}
 
-As it can be seen in Figure 2, a tangent space is indeed a linearization of the manifold at a given $\mathbf{X}$ and thus any vector in the tangent space is orthogonal to $\mathbf{X}$. However, to make sense of a notion of orthogonality at any $\mathbf{X} \in \mathcal{M}$, we must endow the tangent space with a metric like the Frobenius inner product (i.e., $\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})$), so that $\mathcal{M}$ acquires a Riemannian structure, turning it into a Riemannian manifold. In other words, the collection of inner products on the tangent space defines a Riemannian metric on $\mathcal{M}$, turning it into a Riemannian manifold. And this definition of inner product over the tangent space of $\mathcal{M}$ allows us to develop a definition of orthogonal complements and gradients on nonlinear manifolds. Let's see why.
+As it can be seen in Figure 2, a tangent space is indeed a linearization of the manifold at a given $\mathbf{X}$ and for any vector in the tangent space there would be another vector from the normal space that is orthogonal to it and satisfies @eq-orth_compl. However, to make sense of this notion of orthogonality at any $\mathbf{V} \in \mathcal{T}_{\mathbf{X}}\mathcal{M}$, we must endow the tangent space with a metric like the Frobenius inner product (i.e., $\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})$), so that $\mathcal{M}$ acquires a Riemannian structure, turning it into a Riemannian manifold. In other words, the collection of inner products on the tangent space defines a Riemannian metric on $\mathcal{M}$, turning it into a Riemannian manifold. And this definition of inner product over the tangent space of $\mathcal{M}$ allows us to develop a definition of orthogonal complements.
 
-Define another complexity function $f$ with domain on $\mathcal{M}$ such that $f=\tilde{f}|_{\mathcal{M}}$. In other words, $f$ is the restriction of $\tilde{f}$ to $\mathcal{M}$. Then, using (\ref{orth_compl}) and the Frobenius inner product as Riemannian metric, we arrive at the following identities for any $\mathbf{V} \in \mathcal{T}_\mathbf{X}\mathcal{M}$: 
+Define another complexity function $f$ with domain on $\mathcal{M}$ such that $f=\tilde{f}|_{\mathcal{M}}$. In other words, $f$ is the restriction of $\tilde{f}$ to $\mathcal{M}$. Then, using @eq-orth_compl_grad and the Frobenius inner product as Riemannian metric, we arrive at the following identities for any $\mathbf{V} \in \mathcal{T}_\mathbf{X}\mathcal{M}$: 
 $$
 \begin{aligned}
 \left\langle
@@ -612,16 +598,23 @@ $$
 
 These are indeed the same projected gradients formulas denoted by \texttt{Gp} in the orthogonal and oblique implementations of @bernaards_2005 [pp. 692--695] and in the \texttt{GPArotation} package.
 
-## Solution to problem 2: the Retraction
+# Solution to problem 2: the Retraction
 
 With this generalization of gradients to nonlinear manifolds, we are prepared to compute valid descent directions in $\mathcal{T}_{\mathbf{X}}\mathcal{M}$. However, we are not ready yet because the update
 $$
 \mathbf{X}_{k+1} = \mathbf{X}_k-t_k\text{grad}f(\mathbf{X}_k)
 $$
 
-does not generally belong to $\mathcal{M}$, however small $t_k$ is. The tangent direction only provides a first-order linear approximation to the manifold at $\mathbf{X}_k$, as we showed before in @eq-taylor. This means that the condition $\mathrm{D}h(\mathbf{X})[\mathbf{V}]=\mathbf{0}$ does not generally imply that $\mathbf{X}+t\mathbf{V}$ lies exactly on $\mathcal{M}$ for a nonzero $t$. It only ensures that the constraint is preserved to first order. Returning the updated matrix to the manifold is the second problem addressed by the GPA. 
+does not generally belong to $\mathcal{M}$, however small $t_k$ is. The tangent direction only provides a first-order linear approximation to the manifold at $\mathbf{X}_k$, as we showed before in @eq-taylor. This means that the condition $\mathrm{D}h(\mathbf{X})[\mathbf{V}]=\mathbf{0}$ does not generally imply that the tangent step $\mathbf{X}+t\mathbf{V}$ lies exactly on $\mathcal{M}$ for a nonzero $t$. It only ensures that the constraints are preserved to first order. To see this, let's take the crossproduct of the tangent step to check how it departs from the orthogonal manifold constraints:
+$$
+\begin{aligned}
+(\mathbf{X}+t\mathbf{V})^\top (\mathbf{X}+t\mathbf{V}) &= \mathbf{X}^\top\mathbf{X} + t(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}) + t^2\mathbf{V}^\top\mathbf{V} \\
+&= \mathbf{I} + t^2\mathbf{V}^\top\mathbf{V}.
+\end{aligned}
+$$
+Here, the factor $\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}$ vanishes because $\mathbf{V}$ was chosen precisely to satisfy the tangent equation for the orthogonal manifold (@eq-tangent_space). The orthogonality constraint is therefore violated by the residual $t^2\mathbf{V}^\top\mathbf{V}$. Following the same argument in the case of the oblique manifold, we would have found that the unit norm constraint is off by a factor of $t^2\text{ddiag}(\mathbf{V}^\top\mathbf{V})$. 
 
-After taking a step $t$ along the negative Riemannian gradient, the resulting point must be returned to the manifold and this is achieved through a retraction [Definition 4.1; @absil_2009].
+Now suppose that we apply some projection $R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}$ that restores the constraints exactly. Because the tangent step is already correct to first order, $R_\mathbf{X}$ only needs to act on the higher-order constraints. This is exactly what a retraction does: fixing the constraints of the tangent step without modifying the descent direction (i.e., the negative of the Riemannian gradient).
 
 \begin{definition}
 \label{retraction_definition}
@@ -634,29 +627,22 @@ $DR_\mathbf{X}(\mathbf{0})$ is the identity map on
 $\mathcal{T}_\mathbf{X}\mathcal{M}$.
 \end{definition}
 
+The first condition ensures that no movement is necessary is the tangent step is valid and already belongs to the manifold. The second condition requires that $R_{\mathbf{X}}(t\mathbf{V})$ has the same initial direction $\mathbf{V}$ as the tangent step $\mathbf{X}+t\mathbf{V}$. Thus, a retraction restores the manifold constraints exactly without changing the first-order motion on the manifold.
+
 <!-- Both requirements can equivalently be stated by considering the curve -->
 <!-- $$ -->
 <!-- \gamma(t)=R_\mathbf{X}(t\mathbf{V}), -->
 <!-- $$ -->
-<!-- which satisfies $\gamma(0)=\mathbf{X}$ and -->
-<!-- $\gamma^\prime(0)=\mathbf{V}$.  -->
+<!-- which satisfies $\gamma(0)=\mathbf{X}$ and $\gamma^\prime(0)=\mathbf{V}$. -->
 
-Thus, a retraction maps a tangent direction back onto the manifold while preserving that direction to first order. Consequently, it does not need to be an orthogonal projection onto the manifold and there can be many different valid retractions for the same manifold.
+<!-- Let $\mathcal{P}$ be a smooth map from an ambient neighborhood of $\mathbf{X}$ into the manifold. Suppose that $\mathcal P(\mathbf{Y})=\mathbf{Y}$ for every nearby $\mathbf{Y} \in\mathcal M$. Then $R_{\mathbf X}(\mathbf V)=\mathcal P(\mathbf X+\mathbf V)$ defines a local retraction. Since $\mathcal P$ leaves manifold points unchanged, $\mathcal P(\gamma(t))=\gamma(t)$. Differentiating this identity at zero yields $\mathrm D\mathcal P(\mathbf X)[\mathbf V] = \mathbf V$. The chain rule then gives $\mathrm D R_{\mathbf X}(\mathbf0)[\mathbf V] = \mathrm D\mathcal P(\mathbf X)[\mathbf V] = \mathbf V$. Also, $R_{\mathbf X}(\mathbf0)=\mathcal P(\mathbf X)=\mathbf X$. That proves both conditions. -->
 
 Combining the Riemannian gradient with a retraction, the valid updating equation that GPA uses becomes
+$$
+\mathbf{X}_{k+1} = R_{\mathbf{X}_k} \left(-t_k\text{grad}f(\mathbf{X}_k) \right).
+$$ {#eq-gpa_update}
 
-\begin{equation}
-\label{gpa_update}
-\mathbf{X}_{k+1}
-=
-R_{\mathbf{X}_k}
-\left(
--t_k\text{grad}f(\mathbf{X}_k)
-\right).
-\end{equation}
-
-Hence, the Riemannian gradient determines a valid descent direction in the tangent space, whereas the retraction guarantees that the new candidate
-$\mathbf{X}_{k+1}$ belongs to $\mathcal{M}$, correcting the higher-order imprecisions of the tangent direction. Figure 3 illustrates how a tangent step is retracted onto the manifold.
+Hence, the Riemannian gradient determines a valid descent direction in the tangent space, whereas the retraction guarantees that the new candidate $\mathbf{X}_{k+1}$ belongs to $\mathcal{M}$, correcting the higher-order imprecisions of the tangent step. Figure 3 illustrates how a tangent step is retracted onto the manifold.
 
 \begin{figure}[!ht]
 \centering
@@ -702,20 +688,15 @@ $\mathbf{X}_{k+1}$ belongs to $\mathcal{M}$, correcting the higher-order impreci
 \label{fig:retraction}
 \end{figure}
 
+Thereby, mapping the tangent step back to the manifold is the second problem addressed by the GPA through a retraction. After taking a step $t$ along the negative Riemannian gradient, the resulting point must be projected back onto the manifold while preserving the tangent step’s initial velocity.
+
 For orthogonal rotation, a suitable retraction is obtained by applying the Gram-Schmidt algorithm to the columns of $\mathbf{X} + \mathbf{V}$. Equivalently, $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{Q}$, where $\mathbf{Q}$ is the orthonormal matrix of the QR decomposition of $\mathbf{X} + \mathbf{V}$. Alternatively, if $\mathbf{X}+\mathbf{V}=\mathbf{U}\mathbf{D}\mathbf{W}^\top$ is a singular value decomposition, another valid retraction is $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{U}\mathbf{W}^\top$. This is actually the orthogonal projection used in the algorithms of @jennrich_2001 and @bernaards_2005. The QR and singular value decomposition retractions need not produce the same finite update, but both preserve tangent directions to first order and both are smooth operations satisfying the conditions in Definition \ref{retraction_definition}.
 
-On the other hand, for oblique rotation, a suitable retraction involves just normalizing the columns of $\mathbf{X} + \mathbf{V}$:
-$$
-R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{V})
-=(\mathbf{X}+\mathbf{V})
-\left[\mathrm{ddiag}\!\left((\mathbf{X}+\mathbf{V})^\top
-(\mathbf{X}+\mathbf{V})\right)\right]^{-1/2},
-$$
-which is the manifold projection derived by @jennrich_2002 [Appendix A.1].
+On the other hand, for oblique rotation, a suitable retraction involves just normalizing the columns of $\mathbf{X} + \mathbf{V}$: $R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{V}) = (\mathbf{X}+\mathbf{V}) \left[\mathrm{ddiag}\!\left((\mathbf{X}+\mathbf{V})^\top (\mathbf{X}+\mathbf{V})\right)\right]^{-1/2}$, which is the manifold projection used by @jennrich_2002 [Appendix A.1].
 
 # The orthoblique manifold
 
-The orthoblique manifold encompasses a mixture of oblique and orthogonal factors. Geometrically, in $n=3$ it consists of solving the same problem of orthogonal an oblique rotations by minimizing a complexity function while moving vectors on an sphere, with the difference that only some vectors are required to be orthogonal.
+The orthoblique manifold encompasses a mixture of oblique and orthogonal factors. Geometrically, in $n=3$ it consists of solving the same problem of orthogonal an oblique rotations by minimizing a complexity function while moving vectors on an sphere, with the difference that only one vector is required to be orthogonal to the others.
 
 \begin{figure}[!ht]
 \centering
@@ -1121,18 +1102,9 @@ A retraction onto the orthoblique manifold after moving along direction $\mathbf
 $$
 R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
 $$
-When $\mathbf{V}=\mathbf{0}$, $\mathbf{X}$ is unchanged, so $R_{\mathbf{X}}(\mathbf{0}) = \mathbf{X}$.
+When $\mathbf{V}=\mathbf{0}$, $\mathbf{X}$ is unchanged, so $R_{\mathbf{X}}(\mathbf{0}) = \mathbf{X}$. Moreover, the normalizations and orthogonal projections of each block satisfies the orthoblique constraints and thus the tangent space equations are intact and imply $\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}] = \mathbf{V}$. Thus, the proposed retraction satisfies both requirements of Definition \ref{retraction_definition}.
 
-Moreover, the tangent-space equations imply
-$$
-\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}] = \mathbf{V}.
-$$
-
-\textcolor{red}{Proof}
-
-Thus, the proposed retraction satisfies both requirements of Definition \ref{retraction_definition}.
-
-## Generalization to infinitely many oblique blocks
+## Generalization to an arbitrary number of oblique blocks
 
 The previous construction of the orthoblique manifold can be extended to any number $m$ of oblique blocks. Let $p_i$ be the number of factors in the $i$th oblique block and let $r$ be the number of completely orthogonal factors, so that $n=\sum_{i=1}^m p_i+r$. Then,
 
@@ -1163,9 +1135,9 @@ $$
 &= 0, \quad \text{at convergence.}
 \end{aligned}
 $$ {#eq-differential_rotated}
-where $\Delta f_\mathbf{\Lambda\Psi}$ is the gradient of the complexity function with respect to the rotated parameters and $\zeta$ is the function that transform the rotation matrix into the rotated parameters. More importantly, at a given solution the complexity criterion must be stationary along every direction $\mathbf{V}$ of the tangent space. This means that the inner product must be 0 at an stationary point.
+where $\Delta f_\mathbf{\Lambda\Psi}$ is the gradient of the complexity function with respect to the rotated parameters and $\zeta$ is the function that transform the rotation matrix into the rotated parameters. More importantly, the second equality follows because at a given solution the complexity criterion must be stationary.
 
-In orthogonal rotation, the rotated loadings are $\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}$. As we already showed, a tangent direction in this manifold can be written as $\mathbf{V} = \mathbf{X}\mathbf{\Omega}$ for an skew-symmetric $\mathbf{\Omega}$. Then, the directional derivative of the loadings is $\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega}$. Substituting these expressions in @eq-differential_rotated and equaling to zero we have
+In orthogonal rotation, the rotated loadings are $\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}$. As we already showed, a tangent direction in this manifold can be written as $\mathbf{V} = \mathbf{X}\mathbf{\Omega}$ for an skew-symmetric $\mathbf{\Omega}$. Then, the directional derivative of the rotated loadings is $\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega}$. Substituting these expressions in @eq-differential_rotated and equaling to zero we have
 $$
 \langle \Delta f_\mathbf{\Lambda}, \mathbf{\Lambda}\mathbf{\Omega}\rangle = \langle \mathbf{\Omega}, \mathbf{\Lambda}^\top\Delta f_{\Lambda}\rangle = 0.
 $$
