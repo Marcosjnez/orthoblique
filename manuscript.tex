@@ -1032,13 +1032,19 @@ case of the oblique manifold, we would have found that the unit norm
 constraint is off by a factor of
 \(t^2\text{ddiag}(\mathbf{V}^\top\mathbf{V})\).
 
-Now suppose that we apply some projection
+Thereby, mapping the tangent step back to the manifold is the second
+problem addressed by the GPA. After taking a step \(t\) along the
+negative Riemannian gradient, the resulting point must be projected back
+onto the manifold while preserving the initial direction of the tangent
+step.
+
+Suppose that we apply some projection
 \(R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}\)
 that restores the constraints exactly. Because the tangent step is
 already correct to first order, \(R_\mathbf{X}\) only needs to act on
-the higher-order constraints. This is exactly what a retraction does:
-fixing the constraints of the tangent step without modifying the descent
-direction (i.e., the negative of the Riemannian gradient).
+the higher-order residuals. This is exactly what a retraction does: it
+fixes the constraints of the tangent step without modifying the descent
+direction, which in the GPA is the negative of the Riemannian gradient.
 
 \begin{definition}
 \label{retraction_definition}
@@ -1051,12 +1057,16 @@ $DR_\mathbf{X}(\mathbf{0})$ is the identity map on
 $\mathcal{T}_\mathbf{X}\mathcal{M}$.
 \end{definition}
 
-The first condition ensures that no movement is necessary is the tangent
+The first condition ensures that no movement is necessary if the tangent
 step is valid and already belongs to the manifold. The second condition
-requires that \(R_{\mathbf{X}}(t\mathbf{V})\) has the same initial
-direction \(\mathbf{V}\) as the tangent step \(\mathbf{X}+t\mathbf{V}\).
-Thus, a retraction restores the manifold constraints exactly without
-changing the first-order motion on the manifold.
+recognizes that the tangent step \(\mathbf{X} + t\mathbf{V}\) already
+satisfies the manifold constraints to first order because \(\mathbf{V}\)
+was picked to satisfy the tangent space equations. Therefore it requires
+that \(R_{\mathbf{X}}(t\mathbf{V})\) has the same initial direction
+\(\mathbf{V}\) as the tangent step. In other words, a retraction
+restores the manifold constraints exactly without changing the
+first-order motion on the manifold so that the Riemannian gradient can
+still be used as the descent direction.
 
 Combining the Riemannian gradient with a retraction, the valid updating
 equation that GPA uses becomes
@@ -1066,9 +1076,10 @@ equation that GPA uses becomes
 
 Hence, the Riemannian gradient determines a valid descent direction in
 the tangent space, whereas the retraction guarantees that the new
-candidate \(\mathbf{X}_{k+1}\) belongs to \(\mathcal{M}\), correcting
-the higher-order imprecisions of the tangent step. Figure 3 illustrates
-how a tangent step is retracted onto the manifold.
+candidate \(\mathbf{X}_{k+1}\) belongs to \(\mathcal{M}\) after
+correcting the higher-order imprecisions of the tangent step.
+\ref{retraction} illustrates how a tangent step is retracted onto the
+manifold.
 
 \begin{figure}[!ht]
 \centering
@@ -1113,12 +1124,6 @@ how a tangent step is retracted onto the manifold.
 \caption{Illustration of a retraction. Starting from $\mathbf{X}\in\mathcal{M}$, a tangent step is taken along the negative Riemannian gradient in the tangent space $\mathcal{T}_{\mathbf{X}}\mathcal{M}$. Since the point $\mathbf{X}-t\,\operatorname{grad}f(\mathbf{X})$ does not generally belong to the manifold, the retraction maps it back onto $\mathcal{M}$.}
 \label{fig:retraction}
 \end{figure}
-
-Thereby, mapping the tangent step back to the manifold is the second
-problem addressed by the GPA through a retraction. After taking a step
-\(t\) along the negative Riemannian gradient, the resulting point must
-be projected back onto the manifold while preserving the tangent step's
-initial velocity.
 
 For orthogonal rotation, a suitable retraction is obtained by applying
 the Gram-Schmidt algorithm to the columns of
