@@ -2093,54 +2093,62 @@ facet-level variance, and general factors, representing broader variance
 shared across facets.
 
 This formulation extends the exploratory bifactor approach of Jennrich
-\& Bentler (2011) and Jennrich \& Bentler (2012) to several correlated
-general factors. In their biquartimin and bigeomin criteria, a single
-general-factor column is excluded from the simplicity criterion, which
-is applied to the group-factor columns only. Here, there are six
-general-factor columns, and their orientation also has to be determined.
-We therefore applied a criterion to the general factor columns and
-another to the specific factor columns. Thus this example also
-illustrates the possibility of combining different rotation criteria
-within the same analysis.
+and Bentler (2011; 2012) to the case of multiple correlated general
+factors. In their biquartimin and bigeomin criteria, a single
+general-factor column is excluded from the simplicity rotation
+criterion, which is applied to the group-factor columns only. Here,
+there are six general-factor columns, and their orientation also has to
+be determined. We therefore applied a criterion to the general factor
+columns and another to the specific factor columns. Thus this example
+also illustrates the possibility of combining different rotation
+criteria within the same analysis.
 
-To put the HEXACO theory into test, there were many possible choices for
-analysis. Because there are 30 factors in total, a nontarget rotation
-has a large rotational search space and hence there exists the risk that
-we capitalize on chance. On the other hand, because the target matrix
-would prompts a lot of loadings towards \(0\), we felt that this would
-be a too confirmatory analysis. Therefore, four different specifications
-were fitted: geomin for the general and specific factors, oblimin for
-the general and specific factors, geomin for the general factors
-combined with target rotation for the specific factors, and oblimin for
-the general factors combined with target rotation for the specific
+To examine the extent to which the theoretical HEXACO structure is
+sound, there were many possible choices for analysis. Because there are
+30 factors in total, a nontarget rotation has a large rotational search
+space and hence there exists the risk that we capitalize on chance. On
+the other hand, because the target matrix would constrain a large number
+of loadings toward zero, the analysis would become more confirmatory
+than intended. Therefore, four alternative specifications were fitted to
+explore how the recovered HEXACO structure varied across rotation
+criteria: geomin for the general and specific factors, oblimin for the
+general and specific factors, geomin for the general factors combined
+with target rotation for the specific factors, and oblimin for the
+general factors combined with target rotation for the specific
 factors.\footnote{We set the oblimin parameter \(\gamma\) to \(0\) in
-  all the analyses, so the criteria becomes quartimin. For geomin, we
+  all the analyses, so the criterion becomes quartimin. For geomin, we
   set \(\epsilon=.01\) in all the analyses. For the analyses with the
   target rotation, the target used the known HEXACO facet memberships to
-  anchor the orientation of the specific factors.} Notice that in the
-nontarget analyses, the target on the specific factors was replaced by
-the same criterion than the one for the general factors. As such, these
-latter configurations can be seen as direct generalizations of the
-biquartimin and bigeomin criteria developed by Jennrich \& Bentler
-(2011) and Jennrich \& Bentler (2012).
+  anchor the orientation of the specific factors.} Because the
+specific-factor block was considerably larger and more complex than the
+general-factor block, target rotation was applied only to the specific
+factors in the target-based specifications, providing theoretical
+anchoring where rotational complexity was greatest. In the
+specifications without target rotation, the specific factors were
+rotated using the same rotation criterion as the general factors (i.e.,
+oblimin or geomin). As such, these latter configurations can be seen as
+generalizations of the biquartimin and bigeomin criteria developed by
+Jennrich and Bentler (2011; 2012).
 
 In the end, it was reassuring to see that the results of all the
 analyses converged overall. On the one hand, in both target-based
 specifications all 96 items had their largest absolute loading among the
-24 specific factors on the theoretically corresponding facet. This
-occurred for 72 of 96 items with geomin on the specific factors and for
-73 of 96 items with oblimin on the specific factors. On the other hand,
-the correspondence with the expected facet structure was substantial
-even under the nontarget specifications: 75.0\% of the items with geomin
-and 76.0\% with oblimin had their largest absolute specific-factor
-loading on the corresponding facet. The broad recovery of the facet
-pattern was therefore not solely a consequence of applying a target.
-Nevertheless, this correspondence was not complete. Thus, whereas the
-target specifications largely confirmed the expected HEXACO structure,
-the nontarget rotations may additionally provide insights to which
-facets and items may need further attention. Facets whose designated
-items have small loadings should be subjected to a closer examination of
-their content or item placement.
+24 specific factors on the theoretically-expected facet. When target
+rotation was not applied, this occurred for 72 of 96 items with geomin
+on the specific factors and for 73 of 96 items with oblimin on the
+specific factors. On the other hand, the correspondence with the
+expected facet structure was substantial even under the nontarget
+specifications: 75.0\% of the items with geomin and 76.0\% with oblimin
+had their largest absolute specific-factor loading on the corresponding
+facet. The broad recovery of the facet pattern was therefore not solely
+a consequence of applying a target. Nevertheless, this correspondence
+was not complete. Whereas the target specifications largely confirmed
+the expected HEXACO structure, the nontarget rotations may additionally
+provide insights into which facets and items may need further attention.
+Facets whose designated items have small loadings should be subjected to
+a closer examination of their content or item placement.
+
+\textcolor{red}{Hablar del patrón de los factores generales.}
 
 For brevity, we interpret further only the oblimin + target
 solution.\footnote{To check the other solutions, see the repository
@@ -2174,14 +2182,14 @@ general factors were estimated, while the remaining 420 were exactly
 zero.
 
 The six general factors remained substantially exploratory in this
-analysis. The median absolute loading on the theoretically corresponding
+analysis. The median absolute loading on the theoretically-expected
 general factor was .385; 85 of the 96 designated general-factor loadings
 exceeded .20 in absolute value, and 430 of the 480 general-factor
 cross-loadings (89.6\%) were below .20. For the 24 specific factors, the
-median absolute designated loading was .430. Ninety-one of the 96
-designated specific-factor loadings exceeded .20, and 2,205 of the 2,208
-off-target specific-factor loadings (99.86\%) were below .20. Only three
-off-target specific loadings exceeded .20 and none exceeded .30.
+median absolute theoretically expected loading was .430, and 91 of these
+96 loadings exceeded .20. In contrast, 2,205 of the 2,208
+specific-factor cross-loadings (99.86\%) were below .20, and no
+cross-loading exceeded .30.
 
 \begin{figure}[!ht]
 \centering
@@ -2197,15 +2205,15 @@ off-target specific loadings exceeded .20 and none exceeded .30.
 \caption{\fontsize{12}{12}\selectfont Absolute values of factor correlations for the HEXACO oblimin + target solution.}
 \end{figure}
 
-The statistical advantage of the orthoblique manifold was particularly
+The conceptual advantage of the orthoblique manifold was particularly
 clear in this example. A fully oblique 30-factor rotation would allow
 all 435 factor correlations, although only the 15 correlations among the
 six general factors are needed for this representation. Conversely, a
 fully orthogonal rotation would force these 15 correlations to zero. At
 the same time, the mixed rotation criterion leaves the six general
-factors under a more free simplicity criterion and uses the target only
-where the large number of specific factors makes desirable some kind of
-anchoring that prevents capitalizing on chance.
+factors under a less restrictive simplicity criterion and uses the
+target only where the large number of specific factors makes theoretical
+anchoring desirable, reducing the risk of capitalizing on chance.
 
 Taken together, these applications illustrate the distinction between
 rotation criteria and manifold restrictions. Complexity criteria can
@@ -2217,8 +2225,8 @@ simple-structure model.
 
 \section{Conclusion}\label{conclusion}
 
-Until now, EFA and ESEM have generally required the factors to be
-treated as either completely orthogonal or completely oblique. We
+Until now, conventional GPA-based factor rotation has generally treated
+factors as either completely orthogonal or completely oblique. We
 developed the orthoblique rotation to allow oblique blocks of factors to
 coexist with exact orthogonality between selected blocks. The empirical
 applications illustrated two complementary uses of this geometry: an
@@ -2226,7 +2234,7 @@ MTMM representation in which trait and method factors can correlate
 within their respective blocks while remaining orthogonal between
 blocks, and a general-specific personality representation in which
 several general factors may correlate while remaining orthogonal to the
-specific factors.
+specific factors, which are also mutually orthogonal.
 
 We also provided a detailed and self-contained review of the GPA,
 connecting its computational steps with the geometry of the rotation
@@ -2244,14 +2252,14 @@ researchers understand how further extensions can be constructed.
 
 In the end, this extension should be understood as a continuation of the
 general rotation program developed by Jennrich (2001), Jennrich (2002),
-and Bernaards \& Jennrich (2005). Moreover, the empirical analyses on
-data with multiple general factors also illustrated that the current
-work can also be viewed as a continuation of the bifactor exploratory
-analysis methods with biquartimin and bigeomin (Jennrich \& Bentler,
-2011, 2012). The central insight of Jennrich was that the same algorithm
-could optimize many simplicity criteria. Here, we showed how the same
-geometric reasoning can also accommodate different patterns of
-factor-correlation constraints.
+and Bernaards and Jennrich 2005. Moreover, the empirical analyses on
+data with multiple general factors illustrated that the current work can
+also be viewed as a continuation of the bifactor exploratory analysis
+methods with biquartimin and bigeomin (Jennrich \& Bentler, 2011, 2012).
+A central insight of Jennrich was that the same algorithm could optimize
+many simplicity criteria. Here, we showed how the same geometric
+reasoning can also accommodate different patterns of factor-correlation
+constraints.
 
 Additionally, we provided a new R package to exploit these new rotation
 capabilities. \texttt{lefa()} combines factor extraction and
@@ -2336,6 +2344,14 @@ Liu, Y. (2020). Riemannian {Newton} and trust-region algorithms for
 analytic rotation in exploratory factor analysis. \emph{British Journal
 of Mathematical and Statistical Psychology}.
 \url{https://doi.org/10.1111/bmsp.12211}
+
+\bibitem[\citeproctext]{ref-marsh_2020}
+Marsh, H. W., Guo, J., Dicke, T., Parker, P. D., \& Craven, R. G.
+(2020). Confirmatory factor analysis ({CFA}), exploratory structural
+equation modeling ({ESEM}), and {Set-ESEM}: {Optimal} balance between
+goodness of fit and parsimony. \emph{Multivariate Behavioral Research},
+\emph{55}(1), 102--119.
+\url{https://doi.org/10.1080/00273171.2019.1602503}
 
 \bibitem[\citeproctext]{ref-mplus}
 Muthén, L. K., \& Muthén, B. O. (2017). \emph{Mplus {User}'s {Guide}.
