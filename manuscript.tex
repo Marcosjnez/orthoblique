@@ -229,7 +229,7 @@
 \@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
 \makeatother
 \hypersetup{
-  pdftitle={The orthoblique rotation for exploratory factor analysis},
+  pdftitle={The orthoblique rotation for factor analysis},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -238,7 +238,7 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{The orthoblique rotation for exploratory factor analysis}
+\title{The orthoblique rotation for factor analysis}
 \author{}
 \date{2026-09-15}
 \begin{document}
@@ -246,28 +246,29 @@
 \begin{abstract}
 For the last two decades, the gradient projection algorithm (GPA) has
 been the most used tool to rotate factor solutions. However, GPA is
-currently limited to perform either full orthogonal or oblique
+currently limited to performing either full orthogonal or oblique
 rotations. This is a shortcoming because in some cases it is known in
 advance that some factor correlations must be zero but keeping
 structural zeros in the factor correlation matrix after rotation is
 currently unavailable in Exploratory Factor Analysis. Thereby, we
 developed a new kind of rotation, the orthoblique rotation, in which
-both oblique and orthogonal factors co-exists. Building on the
-orthogonal and oblique algorithms of Jennrich, we provide a deeper
-account of how GPA works and use this account to generalize factor
-rotation to the orthoblique case. We then demonstrate that this rotation
-helps to estimate exploratory bi-factor models with multiple general
-factors in which the general factors may be correlated but must remain
-orthogonal to the group factors, which can be considered a
+both oblique and orthogonal relations between factors coexists. Building
+on the orthogonal and oblique algorithms of Jennrich, we provide a
+deeper account of how GPA works and use this account to generalize
+factor rotation to the orthoblique case. We then demonstrate that this
+rotation helps to estimate exploratory bi-factor models with multiple
+general factors in which the general factors may be correlated but must
+remain orthogonal to the group factors, which can be considered a
 generalization of the biquartimin and bigeomin criteria. We also
 illustrate its application to exploratory multitrait-multimethod models,
-where the methods and traits should be uncorrelated between them but
-could correlate among themselves. Taken together, this work can be seen
-as a continuation of the efforts of Jennrich to broad the reach and
-flexibility of Exploratory Factor Analysis. Finally, we made available
-the new orthoblique rotation in the R package \texttt{latent}, whose
-\texttt{lrotate()} function serves the same purpose as the
-\texttt{GPArotation} package of Bernaards \& Jennrich (2005).
+where trait and method factors may correlate within their respective
+sets but trait--method correlations are constrained to zero. Taken
+together, this work can be seen as a continuation of the efforts of
+Jennrich to broaden the reach and flexibility of Exploratory Factor
+Analysis. Finally, we made available the new orthoblique rotation in the
+R package \texttt{latent}, whose \texttt{lrotate()} function serves the
+same purpose as the \texttt{GPArotation} package of Bernaards and
+Jennrich (2005).
 \end{abstract}
 
 
@@ -280,41 +281,41 @@ the new orthoblique rotation in the R package \texttt{latent}, whose
 
 Exploratory structural equation modeling (ESEM) is an increasingly
 popular framework for estimating large and complex factor structures. It
-was developed to overcome the unacceptable model fit indices often
-encountered in real applications of confirmatory factor analysis (CFA;
-Marsh et al., 2020). The particular feature of ESEM is that it permits
-the estimation of all the loading parameters of the measurement models
-by means of a rotation step, avoiding the risk of model
-misspecification. This way, ESEM avoids the incorrect allocation of
-cross-loadings in the measurement model, which is an important caveat of
-CFA.
+was developed to overcome the overly restrictive measurement models and
+the unacceptable model fit indices often encountered in real
+applications of confirmatory factor analysis (CFA; Marsh et al., 2020).
+The particular feature of ESEM is that it permits the estimation of all
+the loading parameters of the measurement models by means of a rotation
+step, reducing the risk of model misspecification. This way, ESEM avoids
+incorrectly fixing cross-loadings to zero in the measurement model,
+which is an important caveat of CFA.
 
 However, the flexibility of ESEM comes at the expense of specifying a
-suitable simplicity or parsimony criteria to be maximized, so that a
-factor solution is rotated to a loading matrix that resembles as much as
-possible such desired simplicity. In these regards, the gradient
-projection algorithm (GPA; Jennrich, 2001; Jennrich, 2002) has been the
-predominant computational tool for rotating loading patterns during the
-last twenty years. The success of GPA is instantiated by its
-implementation in widely used and reputed statistical programs such as
-MPlus (Muthén \& Muthén, 2017), \texttt{lavaan} (Rosseel, 2012), and
-\texttt{psych} (Revelle, 2022). At difference with previously used
-rotation procedures like the criterion-specific pairwise algorithms
-discussed by Jennrich (2001), GPA is simple and elegant. In fact, a
-general purpose optimization based on GPA can be written in about 50
-lines of code in the R language \footnote{See the \texttt{GPForth} and
-  \texttt{GPFoblq} functions from the \texttt{GPArotation} R package
-  (Bernaards \& Jennrich, 2005) for orthogonal and oblique rotation,
-  respectively.}. Moreover, GPA is based on an optimization framework
-where traditional step-size selection techniques (e.g., backtracking
-line-search or trust-region) and search directions based on first and
-second-order derivatives can be used (Liu, 2020).
+suitable simplicity or parsimony criterion to be optimized, so that a
+factor solution is rotated to a loading matrix that best approximates
+the desired simple structure. In this regard, the gradient projection
+algorithm (GPA; Jennrich, 2001; Jennrich, 2002) has been the predominant
+computational tool for rotating loading patterns during the last twenty
+years. The success of GPA is instantiated by its availability in widely
+used and reputed statistical programs such as Mplus (Muthén \& Muthén,
+2017), \texttt{lavaan} (Rosseel, 2012), and \texttt{psych} (Revelle,
+2022). In contrast with previously used rotation procedures like the
+criterion-specific pairwise algorithms discussed by Jennrich (2001), GPA
+is simple and elegant. In fact, a general-purpose optimization based on
+GPA can be written in about 50 lines of code in the R language
+\footnote{See the \texttt{GPForth} and \texttt{GPFoblq} functions from
+  the \texttt{GPArotation} R package (Bernaards \& Jennrich, 2005) for
+  orthogonal and oblique rotation, respectively.}. Moreover, GPA is
+based on an optimization framework where traditional step-size selection
+techniques (e.g., backtracking line-search or trust-region) and search
+directions based on first- and second-order derivatives can be used
+(Liu, 2020).
 
 The generality of GPA for factor rotation was the main contribution of
 Jennrich (2001) and Jennrich (2002). Rather than developing a different
 algorithm for every simplicity criterion, these papers showed that a
 common computational procedure could optimize many criteria under the
-same rotation constraints. Bernaards \& Jennrich (2005) developed this
+same rotation constraints. Bernaards and Jennrich (2005) developed this
 idea into general-purpose software and separated the evaluation of the
 criterion and its gradient from the operations that enforce the rotation
 constraints. They also provided derivations, proofs, and software
@@ -328,44 +329,45 @@ matrix, and how they work together provides a constructive route from
 the orthogonal and oblique cases to other rotation geometries.
 
 This generalization is very important because in ESEM, the applications
-of GPA are currently limited to orthogonal and oblique rotation. In
-other words, all the factors in ESEM are currenlty either constrained to
-be orthogonal or allowed to correlate. This circumstance is problematic
-in cases where the researchers know in advance that two sets of factors
-may be correlated within them but orthogonal between. For example,
-consider multitrait-multimethod models, in which methods and traits may
-correlate among them but the methods are uncorrelated with the traits. n
-this scenario, there should be structural zeros in the factor
-correlation matrix to effectively separate the variable explanined by
-traits and methods. In other cases, imposing the orthogonality in just
-one factor or group of factors is desirable to render a parsimonious
-pattern structure. For instance, consider applications of exploratory
-bi-factor modeling with one or multiple general factors in which all the
-general factors must be orthogonal to the group factors, but could be
-correlated among themselves (Jennrich \& Bentler, 2012; Jiménez et al.,
-2023). If the general factors were allowed to correlate with the group
-factors in an oblique rotation analysis, then the variance explained by
-each kind of factor could not be correctly disentangled, with the
-consequence that cross-loadings across the general factors would be
-biased through these inter-factor correlations.
+of GPA are currently limited to either orthogonal and oblique rotation.
+In other words, all the factors in ESEM are currenlty either constrained
+to be orthogonal or allowed to correlate. This circumstance is
+problematic in cases where the researchers know in advance that two sets
+of factors may be correlated within each set but orthogonal between
+sets. For example, consider multitrait-multimethod models, in which
+trait and method factors may correlate within their respective sets but
+trait--method correlations are constrained to zero. In this scenario,
+there should be structural zeros in the factor correlation matrix to
+effectively separate the variance explained by traits and methods. In
+other cases, it may be desirable to constrain one factor, or a group of
+factors, to be orthogonal to the remaining factors in order to obtain a
+more parsimonious pattern structure. For instance, consider applications
+of exploratory bi-factor modeling with one or multiple general factors
+in which all the general factors must be orthogonal to the group
+factors, but may be correlated among themselves (Jennrich \& Bentler,
+2012; Jiménez et al., 2023). If the general factors were allowed to
+correlate with the group factors in an oblique rotation analysis, then
+the variance explained by each kind of factor could not be correctly
+disentangled, with the consequence that cross-loadings across the
+general factors would be biased.
 
 Thereby, a generalization of the oblique and orthogonal rotations that
 allows for a mix of oblique and orthogonal factors within the same ESEM
 model could aid the correct estimation of such factor structures.
 
-The objectives of this paper are threefold. First, we give a coherent
-and self-contained explanation of GPA for orthogonal and oblique
-rotation, connecting the matrix formulas of Jennrich (2001), Jennrich
-(2002), and Bernaards \& Jennrich (2005) with their underlying geometry.
-Second, using these explanations, we derive the orthoblique manifold and
-show how the conventional rotations are obtained as special cases.
-Third, we make available these new rotation capabilities in the
-\texttt{latent} package and explain how \texttt{lrotate()} extends the
-rotation framework represented by \texttt{GPArotation}. Lastly, we
-illustrate the usefulness of this generalization in exploratory
-multitrait-multimethod and bifactor models with the idea of retaining
-the flexibility of ESEM to uncover crossloadings and wrong theoretical
-expectations while enforcing certain factor-correlation restrictions.
+The objectives of this work are fourfold. First, we give a coherent and
+self-contained explanation of GPA for orthogonal and oblique rotation,
+connecting the matrix formulas of Jennrich (2001), Jennrich (2002), and
+Bernaards and Jennrich (2005) with their underlying geometry. Second,
+using these explanations, we derive the orthoblique manifold and show
+how the conventional rotations are obtained as special cases. Third, we
+make these new rotation capabilities available in the \texttt{latent}
+package and explain how \texttt{lrotate()} extends the rotation
+framework represented by \texttt{GPArotation}. Lastly, we illustrate the
+usefulness of this generalization in exploratory multitrait-multimethod
+and bifactor models with the idea of retaining the flexibility of ESEM
+to uncover cross-loadings and wrong theoretical expectations while
+retaining certain factor-correlation restrictions.
 
 \section{Factor rotation}\label{factor-rotation}
 
@@ -381,7 +383,7 @@ find an equally fitting model
 \(\hat{\mathbf{\Sigma}} = \mathbf{\Lambda}\mathbf{\Psi}\mathbf{\Lambda}^\top + \mathbf{\Theta}\),
 where \(\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}\) and
 \(\mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}\) is the latent factor
-correlation matrix. This last step involves finding the optimum rotation
+correlation matrix. This last step involves finding the optimal rotation
 matrix \(\mathbf{X}\) that minimizes a complexity criterion seeking to
 obtain a sparse and interpretable \(\mathbf{\Lambda}\). However,
 \(\mathbf{X}\) must be subject to certain constraints that distinguish
@@ -409,14 +411,7 @@ function \(h:\mathbb{R}^{n\times n}\rightarrow\mathbb{R}^{d}\) that
 satisfies
 
 \[
-\mathcal{M}
-=
-h^{-1}(\mathbf{0})
-=
-\left\{
-\mathbf{X}\in\mathbb{R}^{n\times n}:
-h(\mathbf{X})=\mathbf{0}
-\right\},
+\mathcal{M} = h^{-1}(\mathbf{0}) = \left\{ \mathbf{X}\in\mathbb{R}^{n\times n}: h(\mathbf{X})=\mathbf{0} \right\},
 \]
 
 so that any matrix \(\mathbf{X}\in\mathcal{M}\) implies
@@ -424,37 +419,23 @@ so that any matrix \(\mathbf{X}\in\mathcal{M}\) implies
 constraints defining the manifold. This means that, in the orthogonal
 case, \(h\) collects the \(n(n+1)/2\) distinct constraints of the
 symmetric matrix \(\mathbf{X}^\top\mathbf{X}-\mathbf{I}\), whereas in
-the oblique case it collects the \(n\) diagonal constraints. This
-manner, the orthogonal and oblique manifolds can be stated as follows,
-respectively:
+the oblique case it collects the \(n\) diagonal constraints. In this
+manner, the orthogonal and oblique manifolds can be stated as the sets
+of full-rank \(\mathbf{X}\) matrices satisfying the following
+conditions, respectively:
 
 \[
 \begin{aligned}
-\mathcal{O}(n)
-&=
-\left\{
-\mathbf{X}\in\mathbb{R}^{n\times n}:
-h(\mathbf{X}) = \mathbf{X}^\top\mathbf{X}-\mathbf{I}
-=
-\mathbf{0}
-\right\},
-\\
-\mathcal{OB}(n)
-&=
-\left\{
-\mathbf{X}\in\mathbb{R}^{n\times n}:
-h(\mathbf{X}) = \mathrm{diag}(\mathbf{X}^\top\mathbf{X})-\mathbf{1}
-=
-\mathbf{0}
-\right\}.
+\mathcal{O}(n) &= \left\{ \mathbf{X}\in\mathbb{R}^{n\times n}: h(\mathbf{X}) = \mathbf{X}^\top\mathbf{X}-\mathbf{I} = \mathbf{0} \right\}, \\
+\mathcal{OB}(n) &= \left\{ \mathbf{X}\in\mathbb{R}^{n\times n}: h(\mathbf{X}) = \mathrm{diag}(\mathbf{X}^\top\mathbf{X})-\mathbf{1} = \mathbf{0} \right\}.
 \end{aligned}
 \]
 
-To understand better these manifold definitions, an illustration of the
-orthogonal and oblique manifolds in \(n=3\) is presented in Figure 1. In
-both manifolds, each column \(\mathbf{x}_j\) of the rotation matrix is a
-unit vector and can therefore be represented on the unit sphere. The
-oblique manifold is the product of \(n\) unit spheres, whereas the
+To better understand these manifold definitions, an illustration of the
+orthogonal and oblique manifolds for \(n=3\) is presented in Figure 1.
+In both manifolds, each column \(\mathbf{x}_j\) of the rotation matrix
+is a unit vector and can therefore be represented on the unit sphere.
+The oblique manifold is the product of \(n\) unit spheres, whereas the
 orthogonal manifold is the subset of this product in which the vectors
 are also constrained to point in mutually perpendicular directions.
 
@@ -551,7 +532,7 @@ candidate \(\mathbf{X}_{k+1}\) remains on the manifold, not even when
 direction \(\mathbf{V}_k\) is also unrestricted in
 \(\mathbb{R}^{n\times n}\) and is not necessarily a valid descent
 direction on a nonlinear manifold. In other words, a straight-line
-displacement in the Euclidean space, like shows the updating
+displacement in the Euclidean space, as shown in the updating
 Equation~\ref{eq-updating}, is not generally a feasible displacement on
 a nonlinear manifold.
 
@@ -563,9 +544,17 @@ after moving along this direction, the new candidate
 \section{Solution to problem 1: the Riemannian
 gradient}\label{solution-to-problem-1-the-riemannian-gradient}
 
-Informally, if we zoom enough around a point
+\textcolor{red}{Introduce the Riemannian gradient}
+
+(Boumal, 2023, Definition 3.58)
+
+\begin{definition}
+The Riemannian gradient of $f$ at $\mathbf{X}\in\mathcal{M}$, denoted by $\text{grad}f(\mathbf{X})$, is the unique element of $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ that satisfies $\mathrm{D}f(\mathbf{X})[\mathbf{V}] = \left\langle \mathbf{V}, \text{grad}f(\mathbf{X}) \right\rangle_{\mathbf{X}}$ for every $\mathbf{V}\in\mathcal{T}_{\mathbf{X}}\mathcal{M}$.
+\end{definition}
+
+Informally, if we zoom in enough around a point
 \(\mathbf{X} \in \mathcal{M}\), eventually everything looks
-linear.\footnote{As an analogy, the Earth in round but locally
+linear.\footnote{As an analogy, the Earth is round but locally
   everything looks flat.} Thus, an idea to move over \(\mathcal{M}\)
 consists of finding tangent directions to \(\mathbf{X} \in \mathcal{M}\)
 that look linear from an infinitesimal point of view.
@@ -584,51 +573,25 @@ that Equation~\ref{eq-taylor} becomes \(\mathbf{0}\) and we preserve the
 manifold constraints to first order. Therefore, appropriate directions
 to move along the manifolds constitute the kernel of
 \(\mathrm{D}h(\mathbf{X}_k)\): \[
-\mathcal{T}_{\mathbf{X}}\mathcal{M}
-\equiv
-\ker\mathrm{D}h(\mathbf{X})
-=
-\left\{
-\mathbf{V}\in\mathbb{R}^{n\times n}:
-\mathrm{D}h(\mathbf{X})[\mathbf{V}]
-=
-\mathbf{0}
-\right\},
+\mathcal{T}_{\mathbf{X}}\mathcal{M} \equiv \ker\mathrm{D}h(\mathbf{X}) = \left\{ \mathbf{V}\in\mathbb{R}^{n\times n}: \mathrm{D}h(\mathbf{X})[\mathbf{V}] = \mathbf{0} \right\},
 \] where the subscript \(k\) is dropped hereafter for clarity and
 generality. The set \(\mathcal{T}_\mathbf{X}\mathcal{M}\) is known as
 the tangent space of \(\mathbf{X}\) on \(\mathcal{M}\). In other words,
 \(\mathcal{T}_{\mathbf{X}}\mathcal{M}\) is the set of all
 infinitesimally feasible directions at \(\mathbf{X}\) that are linear.
 This linearity property is important because it allows traditional
-optimization algorithms that works in \(\mathbb{R}^{n\times n}\) to be
+optimization algorithms that work in \(\mathbb{R}^{n\times n}\) to be
 used in the GPA framework.
 
 Connecting this new notion of linear space to our previous examples, the
 tangent spaces of the orthogonal and oblique manifolds at any
 \(\mathbf{X} \in \mathcal{M}\) can be stated as the collection of
 directions for which the differentials of their respective defining
-functions is \(\mathbf{0}\):
+functions are \(\mathbf{0}\):
 \begin{equation}\protect\phantomsection\label{eq-tangent_space}{
 \begin{aligned}
-\mathcal{T}_{\mathbf{X}}\mathcal{O}(n)
-&=
-\left\{
-\mathbf{V}\in\mathbb{R}^{n\times n}:
-\mathbf{X}^\top\mathbf{V}
-+
-\mathbf{V}^\top\mathbf{X}
-=
-\mathbf{0}
-\right\},
-\\
-\mathcal{T}_{\mathbf{X}}\mathcal{OB}(n)
-&=
-\left\{
-\mathbf{V}\in\mathbb{R}^{n\times n}:
-\mathrm{ddiag}(\mathbf{X}^\top\mathbf{V})
-=
-\mathbf{0}
-\right\},
+\mathcal{T}_{\mathbf{X}}\mathcal{O}(n) &= \left\{ \mathbf{V}\in\mathbb{R}^{n\times n}: \mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X} = \mathbf{0} \right\}, \\
+\mathcal{T}_{\mathbf{X}}\mathcal{OB}(n) &= \left\{ \mathbf{V}\in\mathbb{R}^{n\times n}: \mathrm{ddiag}(\mathbf{X}^\top\mathbf{V}) = \mathbf{0} \right\},
 \end{aligned}
 }\end{equation} where \(\mathrm{ddiag}\) is an operator that sets the
 off-diagonal entries of a matrix to zero.
@@ -728,7 +691,7 @@ the tangent space with a metric like the Frobenius inner product (i.e.,
 \(\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})\)),
 so that \(\mathcal{M}\) acquires a Riemannian structure, turning it into
 a Riemannian manifold. In other words, the collection of inner products
-on the tangent space defines a Riemannian metric on \(\mathcal{M}\),
+on the tangent spaces defines a Riemannian metric on \(\mathcal{M}\),
 turning it into a Riemannian manifold. And this definition of inner
 product over the tangent space of \(\mathcal{M}\) allows us to develop a
 definition of orthogonal complements.
@@ -795,19 +758,10 @@ f=\tilde{f}|_{\mathcal{M}}
 \end{aligned}
 \]
 
-\(\text{grad}f(\mathbf{X})\), known as the Riemannian gradient, is
-defined as the unique element of \(\mathcal{T}_{\mathbf{X}}\mathcal{M}\)
-that satisfies
-\(\mathrm{D}f(\mathbf{X})[\mathbf{V}] = \left\langle\mathbf{V}, \text{grad}f(\mathbf{X}) \right\rangle_{\mathbf{X}}\)
-for any \(\mathbf{V}\in\mathcal{T}_{\mathbf{X}}\mathcal{M}\) (Boumal,
-2023, Definition 3.58). And from the preceding identities, this element
-turns out to be \(\text{grad}\tilde{f}(\mathbf{X})_\parallel\), the
-projection of the Euclidean gradient onto the tangent space of
-\(\mathcal{M}\).
-
-\begin{definition}
-The Riemannian gradient of $f$ at $\mathbf{X}\in\mathcal{M}$, denoted by $\text{grad}f(\mathbf{X})$, is the unique element of $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ that satisfies $\mathrm{D}f(\mathbf{X})[\mathbf{V}] = \left\langle \mathbf{V}, \text{grad}f(\mathbf{X}) \right\rangle_{\mathbf{X}}$ for every $\mathbf{V}\in\mathcal{T}_{\mathbf{X}}\mathcal{M}$.
-\end{definition}
+The last equality follows directly from the definition of Riemmanian
+gradient. And from the preceding identities, this element turns out to
+be \(\text{grad}\tilde{f}(\mathbf{X})_\parallel\), the projection of the
+Euclidean gradient onto the tangent space of \(\mathcal{M}\).
 
 There can be many ways to find the Riemannian gradient, but a good
 strategy consists of obtaining an expression for
@@ -840,7 +794,7 @@ spaces must be \[
 \end{aligned}
 \] respectively. Clearly, the tangent and normal parameterizations are
 orthogonal in each scenario.\footnote{\(\langle \mathbf{X\Omega}, \mathbf{XA} \rangle = 0\)
-  for an skew-symmetric \(\mathbf{\Omega}\) and symmetric \(\mathbf{A}\)
+  for a skew-symmetric \(\mathbf{\Omega}\) and symmetric \(\mathbf{A}\)
   (orthogonal manifold) and
   \(\langle \mathbf{X}^{-\top}\mathbf{\Omega}, \mathbf{XA} \rangle = 0\)
   for an off-diagonal \(\mathbf{\Omega}\) and diagonal \(\mathbf{A}\)
@@ -1149,10 +1103,11 @@ which is the manifold projection used by Jennrich (2002, Appendix A.1).
 \section{The orthoblique manifold}\label{the-orthoblique-manifold}
 
 The orthoblique manifold encompasses a mixture of oblique and orthogonal
-factors. Geometrically, in \(n=3\) it consists of solving the same
-problem of orthogonal an oblique rotations by minimizing a complexity
-function while moving vectors on an sphere, with the difference that
-only one vector is required to be orthogonal to the others.
+relations between factors. Geometrically, in \(n=3\) it consists of
+solving the same problem of orthogonal and oblique rotations by
+minimizing a complexity function while moving vectors on a sphere, with
+the difference that only one vector is required to be orthogonal to the
+others (Figure \ref{fig:orthoblique-manifold}).
 
 \begin{figure}[!ht]
 \centering
@@ -1206,10 +1161,10 @@ node[midway,right] {$\mathbf{x}_3$};
 \label{fig:orthoblique-manifold}
 \end{figure}
 
-Without loss of generality, we will treat the case of two blocks of
-oblique factors and another block of completely orthogonal factors.
-However, the following results can be generalized to any number of
-oblique blocks of factors.
+For clarity, we first consider the case of two blocks of oblique factors
+and another block of completely orthogonal factors. However, the
+following results can be generalized to any number of oblique blocks of
+factors.
 
 Let \(\mathcal{POB}\big(\{p,q\},r\big)\) denote the set of orthoblique
 matrices in \(\mathbb{R}^{n\times n}\) defined by
@@ -1232,19 +1187,13 @@ matrices in \(\mathbb{R}^{n\times n}\) defined by
 \] where \(p\) is the number of oblique factors in the first block,
 \(q\) is the number of oblique factors in the second block, \(r\) is the
 number of completely orthogonal factors in the third block, and thus
-\(n=p+q+r\). Lets partition \(\mathbf{X}\) accordingly as
+\(n=p+q+r\). Let's partition \(\mathbf{X}\) accordingly as
 \(\mathbf{X}=\begin{bmatrix}\mathbf{X}_1 & \mathbf{X}_2 & \mathbf{X}_3 \end{bmatrix}\),
 where \(\mathbf{X}_1\in\mathbb{R}^{n\times p}\),
 \(\mathbf{X}_2\in\mathbb{R}^{n\times q}\), and
 \(\mathbf{X}_3\in\mathbb{R}^{n\times r}\). Then, \[
-\mathbf{Y}_1
-=
-\mathbf{X}_1^\top\mathbf{X}_1,
-\qquad
-\mathbf{Y}_2
-=
-\mathbf{X}_2^\top\mathbf{X}_2,
-\qquad
+\mathbf{Y}_1 = \mathbf{X}_1^\top\mathbf{X}_1, \qquad
+\mathbf{Y}_2 = \mathbf{X}_2^\top\mathbf{X}_2, \qquad
 \mathbf{I} = \mathbf{X}_3^\top\mathbf{X}_3.
 \]
 
@@ -1265,7 +1214,7 @@ satisfying Definition \ref{retraction_definition}.
 \subsection{Defining function}\label{defining-function}
 
 We can write the orthoblique manifold in terms of a defining function
-\(h\) that collect the constraints in block-matrix form such that
+\(h\) that collects the constraints in block-matrix form such that
 \(\mathcal{POB}\big(\{p,q\},r\big) = \left\{ \mathbf{X}\in\mathbb{R}^{n\times n}: h(\mathbf{X}) = \mathbf{0} \right\}\),
 with
 
@@ -1338,8 +1287,8 @@ Then, the tangent space can be represented as \[
 \mathbf{V}_3^\top\mathbf{X}_3
 \end{bmatrix}
 =
-\mathbf{0}.
-\right\}
+\mathbf{0}
+\right\}.
 \]
 
 At a nonsingular rotation matrix \(\mathbf{X}\), we can parameterize
@@ -1370,13 +1319,10 @@ substitution we have
 &
 \mathbf{\Omega}_{33} + \mathbf{\Omega}_{33}^\top
 \end{bmatrix} = \mathbf{0}
-\right\}
+\right\},
 \]
 
-Therefore, the restriction of the tangent space implies that the
-diagonals of \(\mathbf{\Omega}_{11}\) and \(\mathbf{\Omega}_{22}\) must
-be zero, whereas the remaining blocks must follow a skew-symmetric
-structure: \[
+where \(\mathbf{\Omega}\) has the following block structure: \[
 \mathbf{\Omega} = \begin{bmatrix}
 \mathbf{\Omega}_{11}
 &
@@ -1395,10 +1341,12 @@ structure: \[
 -\mathbf{\Omega}_{23}^\top
 &
 \mathbf{\Omega}_{33}
-\end{bmatrix},
-\] where \(\mathbf{\Omega}_{11}\) and \(\mathbf{\Omega}_{22}\) are
-arbitrary zero-diagonal matrices and \(\mathbf{\Omega}_{33}\) is
-skew-symmetric. We can see that
+\end{bmatrix}.
+\] \(\mathbf{\Omega}_{11}\) and \(\mathbf{\Omega}_{22}\) can be
+arbitrary zero-diagonal matrices and \(\mathbf{\Omega}_{33}\) must be
+skew-symmetric. The block matrices in the upper diagonal can be totally
+arbitrary, but the must be skew-symmetric with respect to the lower
+diagonal blocks. We can see that
 \(\text{dim}(\mathbf{\Omega}) = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2\).
 Indeed, this is the same than \(n^2-d\) and hence
 \(\mathbf{X}^{-\top}\mathbf{\Omega}\) is a valid full-rank basis of the
@@ -1524,10 +1472,10 @@ components in the following symmetric matrix become \(\mathbf{0}\): \[
 \end{bmatrix}.
 \]
 
-Each block can now be solved separately.\footnote{Notice that we removed
+Each block can now be solved separately.\footnote{Notice that we omitted
   the lower triangle of the matrix because it is redundant with the
   transpose of the upper triangle.} Furthermore, the diagonal blocks of
-the above expression are the same equations than in the oblique and
+the above expression are the same equations as in the oblique and
 orthogonal demonstrations but represented in block format. Thereby, the
 unique \(\mathbf{A}\) that satisfies Equation~\ref{eq-riemannian_param}
 becomes \[
@@ -1616,10 +1564,10 @@ R_{\mathbf{X}_k}
 \right) \in \mathcal{POB}.
 \]
 
-For clarity, let \(\mathbf{Z}\) denote the nonprojected update
+For clarity, let \(\mathbf{Z}\) denote the tangent step
 \(\mathbf{X}_{k} - t\mathrm{grad}f(\mathbf{X}_k)\) and let
-\(\mathbf{R}\) be the projected update \(\mathbf{X}_{k+1}\). Let also
-partition these matrices in blocks
+\(\mathbf{R}\) be the retracted update \(\mathbf{X}_{k+1}\). Let us
+partition these matrices into blocks
 \(\mathbf{Z} = \begin{bmatrix} \mathbf{Z}_1 & \mathbf{Z}_2 & \mathbf{Z}_3 \end{bmatrix}\)
 and
 \(\mathbf{R} = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}\)
@@ -1675,6 +1623,10 @@ and imply
 the proposed retraction satisfies both requirements of Definition
 \ref{retraction_definition}.
 
+\textcolor{red}{Proof that the orthoblique retraction is valid by showing that the normalization and orthogonal projections functions are not proportional to $t$, so the first-order constraints are preserved, its directional derivative remains untouched and thus the second condition is satisfied.}
+
+\textcolor{red}{Make a comment about the order of the operations not affecting the satisfaction of the retraction conditions.}
+
 \subsection{Generalization to an arbitrary number of oblique
 blocks}\label{generalization-to-an-arbitrary-number-of-oblique-blocks}
 
@@ -1693,10 +1645,10 @@ orthogonal factors, so that \(n=\sum_{i=1}^m p_i+r\). Then,
 \right\}.
 \]
 
-In this setup, there would be more oblique, oblique-oblique, and
-oblique-orthogonal blocks to consider in the tangent space, normal
-space, and retraction. But all the formulas of these quantities follow
-by applying the same blockwise approach as before.
+In this setup, the tangent space, normal space, and retraction would
+involve additional oblique blocks, pairs of oblique blocks, and pairs of
+oblique and orthogonal blocks. But all the formulas of these quantities
+follow by applying the same blockwise approach as before.
 
 Furthermore, this generalization shows that orthogonal and oblique
 rotations are special cases of the orthoblique manifold. If there are no
@@ -1705,7 +1657,7 @@ oblique blocks and \(r=n\), then
 oblique block with \(p_1=n\) and \(r=0\), then
 \(\mathcal{POB}(\{n\},0)=\mathcal{OB}(n)\).
 
-Now that we have valid gradient projections and retractions formulas for
+Now that we have valid gradient projection and retraction formulas for
 the orthoblique rotation, we are ready to implement these in open-source
 software.
 
@@ -1803,7 +1755,7 @@ rotation, with a wide catalogue of rotation criteria. These are features
 retained in our \texttt{latent} package, with some additional
 capabilities. The relevant innovation here is the addition of the
 orthoblique manifold to restrict the factor-correlation structure as
-desired and the aplication of different rotation criteria to different
+desired and the application of different rotation criteria to different
 blocks of factors.
 
 Rotation in the \texttt{latent} package is performed through the
@@ -1850,11 +1802,12 @@ orthogonal.
 
 As an alternative to \texttt{lrotate()}, the function \texttt{lefa()}
 for exploratory factor analysis takes the raw data or a covariance
-matrix as inputs and perform factor extraction first and rotation later.
-\texttt{lefa()} allows all the same arguments than \texttt{lrotate()}
-but contain additional choices for factor extraction with either maximum
-likelihood (\texttt{"ml"}), unweighted least-squares (\texttt{"uls"}),
-or diagonally-weighted least-squares (\texttt{"dwls"}) for ordinal data.
+matrix as inputs and performs factor extraction first and rotation
+later. \texttt{lefa()} allows all the same arguments as
+\texttt{lrotate()} but contains additional choices for factor extraction
+with either maximum likelihood (\texttt{"ml"}), unweighted least-squares
+(\texttt{"uls"}), or diagonally-weighted least-squares (\texttt{"dwls"})
+for ordinal data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1869,14 +1822,15 @@ or diagonally-weighted least-squares (\texttt{"dwls"}) for ordinal data.
 \end{Shaded}
 
 Because different factor blocks may contain different levels of
-complexity, both \texttt{lrotate} and \texttt{lefa()} allows the
+complexity, both \texttt{lrotate} and \texttt{lefa()} allow the
 application of different rotation criteria to arbitrary columns of
 \(\mathbf{\Lambda}\). Suppose that we have a block of three oblique
 factors and another block of three orthogonal factors. Then, we may
 choose to apply oblimin to the oblique block to maximize item simplicity
-but varimax to the orthogonal block to maximize factor variance. This
-rotation specification is very easy by providing a list of rotation
-criteria to the \texttt{rotation} argument:
+but varimax to the orthogonal block to maximize the variance of the
+squared loadings within factors. This rotation specification can be
+easily implemented by providing a list of rotation criteria to the
+\texttt{rotation} argument:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1907,19 +1861,19 @@ the package with the command \texttt{pak::pak("marcosjnez/latent")}.
 \section{Empirical applications}\label{empirical-applications}
 
 We now illustrate the use of the orthoblique manifold with two empirical
-applications in which a fully orthogonal or fully oblique rotation would
-be unnecessarily restrictive. The examples come from psychopathology and
-personality research. In both cases, we used target rotation, so the
-theoretical factor structure provides a starting point for the analyses.
-But we do not take these theoretical structures for granted. Instead,
-EFA will deliver a result that may agree or not with the target. In
-these regards, EFA becomes useful because the substantive structure
-provides information about the expected orientation of the factors, but
-there is no reason to assume that all secondary loadings are exactly
-zero or that all the items are true indicators of their theoretical
-factors.
+applications in which neither a fully orthogonal nor a fully oblique
+rotation would represent the intended factor-correlation structure. The
+examples come from psychopathology and personality research. In both
+cases, we used target rotation, so the theoretical factor structure
+provides a starting point for the analyses, but we do not take these
+theoretical structures for granted. Instead, EFA will deliver a result
+that may agree or not with the target. In this regards, EFA becomes
+useful because the substantive structure provides information about the
+expected orientation of the factors, but there is no reason to assume
+that all secondary loadings are exactly zero or that all the items are
+true indicators of their theoretical factors.
 
-In the psychopathology example, we use a multitrait--multimethod (MTMM)
+In the psychopathology example, we use a multitrait-multimethod (MTMM)
 design, where the same traits are measured using different informants.
 In these models, the associations between indicators may arise from the
 substantive traits but also from the method through which the
@@ -1936,33 +1890,33 @@ loadings or that some facets are less clearly defined than expected. EFA
 allows these possibilities to be examined instead of assuming that every
 item belongs exclusively to its designated domain and facet. However,
 the distinction between general and specific factors still requires
-selected factor correlations to be zero. The orthoblique rotation makes
-it possible to retain these restrictions while allowing all loadings to
-be estimated.
+selected factor correlations to be zero. Thus, the exploratory model
+leaves all loadings free, whereas the orthoblique manifold constrains to
+zero the correlations between general and specific factors, as well as
+the correlations between specific factors belonging to different blocks.
 
-Thus, both examples can be studied exploratorily without introducing
-correlations between the blocks whose contributions to the common
-variance are intended to remain separate.
+Thus, both examples can be studied exploratorily while preserving the
+theoretically specified zero correlations between theoretically
+unrelated factors.
 
 All analyses were conducted with the \texttt{latent} package and the
 \texttt{lefa()} function.
 
-\subsection{Multitrait--multimethod
-data}\label{multitraitmultimethod-data}
+\subsection{ASEBA. An exploratory Multitrait-multimethod
+model}\label{aseba.-an-exploratory-multitrait-multimethod-model}
 
-The first application uses the multitrait--multimethod (MTMM) data
-analyzed by Watts et al. (2022). The correlation matrix was obtained
-from the supplementary materials available at
-\url{https://osf.io/hvskz/}. We used the ABCD sample (\(N=2,119\)),
-which includes child, parent, and teacher-reported psychopathology
-indicators measuring three traits: Attention Problems, Externalizing,
-and Internalizing. \footnote{The original data included 56 indicators
-  but two duplicated indicators (\texttt{ARGUc} and \texttt{ARGUp}) were
-  identified after noticing the correlation matrix was not
-  positive-definite. These indicators were removed from the supplied
-  correlation matrix as we did not know to which method factor they
-  would correspond, leaving 54 indicators available for the current
-  analysis.}
+The first application uses the MTMM data analyzed by Watts et al.
+(2022). The correlation matrix was obtained from the supplementary
+materials available at \url{https://osf.io/hvskz/}. We used the ABCD
+sample (\(N=2,119\)), which includes child-, parent-, and
+teacher-reported psychopathology indicators measuring three traits:
+Attention Problems, Externalizing, and Internalizing. \footnote{The
+  original data included 56 indicators but two duplicated indicators
+  (\texttt{ARGUc} and \texttt{ARGUp}) were identified after noticing the
+  correlation matrix was not positive-definite. These indicators were
+  removed from the supplied correlation matrix as we did not know to
+  which method factor they would correspond, leaving 54 indicators
+  available for the current analysis.}
 
 The original authors included the Attention Problems indicators in an
 Externalizing factor (Watts et al., 2022). This decision had a
@@ -1972,8 +1926,9 @@ Externalizing composite, Watts et al. (2022) included these indicators
 because attention-deficit/hyperactivity disorder is widely regarded as a
 marker of childhood Externalizing. They also referred to previous ASEBA
 analyses in which Attention Problems loaded strongly on an Externalizing
-factor. An exploratory analysis can examine whether the resulting factor
-represents both kinds of indicators or mainly one of them.
+factor. An exploratory analysis can examine whether the Attention
+Problems indicators are adequately captured by the Externalizing factor,
+as assumed in the merged specification.
 
 Following the specification used by Watts et al. (2022), the
 attention-problems indicators were included with Externalizing. We
@@ -1981,8 +1936,19 @@ therefore considered five exploratory factors: two trait factors
 corresponding to Externalizing and Internalizing, where the
 Externalizing label now includes the items of the Attention Problems
 factor, and three method factors corresponding to children, parents, and
-teachers. Each indicator had one expected trait loading and one expected
-method loading in a partially specified target matrix.
+teachers.
+
+Each indicator is expected to reflect both a substantive trait and a
+measurement method, but this allocation need not hold exactly in the
+data. Some indicators may show secondary loadings or may represent their
+designated trait or method less clearly than expected. An exploratory
+partially specified target rotation allows these possibilities to be
+examined without fixing non-target loadings to zero. At the same time,
+the MTMM structure requires trait factors to remain uncorrelated with
+method factors, while correlations may be allowed among trait factors
+and among method factors. Thus, the target criterion provides the
+substantive orientation of the factors, whereas the orthoblique manifold
+constrains all trait--method factor correlations to zero.
 
 The two trait factors and the three method factors form two internally
 oblique blocks such that \[
@@ -2013,10 +1979,11 @@ as follows:
 \end{Shaded}
 
 The results showed that the estimated correlation between Externalizing
-and Internalizing was .251. The correlations among Children, Parents,
-and Teachers were .298, .240, and .302, respectively. In contrast, all
-six correlations between trait and method factors were zero to numerical
-precision as expected by the orthoblique constraints.
+and Internalizing was .251. The correlations were .298 between Children
+and Parents, .240 between Children and Teachers, and .302 between
+Parents and Teachers. In contrast, all six correlations between trait
+and method factors were zero to numerical precision as expected by the
+orthoblique constraints.
 
 The partially specified target rotation produced a sparse loading
 pattern. Among the 162 loadings targeted toward zero, 160 (98.8\%) had
@@ -2044,8 +2011,8 @@ Overall, this exploratory solution revealed that conflating the
 indicators of Externalizing and Attention problems in a single factor
 did not recover the intended broad representation of both sets of
 indicators. As such, retaining the Externalizing label for this merged
-factor was not appropiate as only the original indicators of Attention
-Problems loaded in the factor.
+factor was not appropriate as only the original indicators of Attention
+Problems loaded on the factor.
 
 \begin{figure}[!ht]
 \centering
@@ -2064,22 +2031,23 @@ Problems loaded in the factor.
 From a statistical perspective, the relevant feature of this example is
 that rotation criteria and restrictions on the factor correlation matrix
 are handled separately. Target rotation determines an interpretable
-orientation and permits empirically relevant crossloadings, whereas the
+orientation and permits empirically relevant cross-loadings, whereas the
 orthoblique manifold guarantees the exact block-orthogonality structure
 that disentangles the variance explained by traits and methods. A
 conventional orthogonal rotation would have forced the correlations
 within the trait and method blocks to zero, while a conventional oblique
 rotation would have estimated the six trait-method correlations that
 must be excluded by the MTMM design. In both cases, the results would
-have being uninterpretable. Thus, the orthoblique manifold combined with
-target rotation made possible to test with EFA the adequacy of this MTMM
-analysis, revealing a possible misspecification in Watts et al. (2022).
+have been inconsistent with the theoretical model. Thus, the orthoblique
+manifold combined with target rotation made possible to test with EFA
+the adequacy of this MTMM analysis, revealing a possible modeling
+misspecification in Watts et al. (2022).
 
-Finally, we also consider important to mention that this use of target
-rotation is closely related to the extended target rotation proposed by
-Zhang et al. (2019) for MTMM data. Their method incorporates
+Finally, we also consider it important to mention that this use of
+target rotation is closely related to the extended target rotation
+proposed by Zhang et al. (2019) for MTMM data. Their method incorporates
 expectations about both the loading matrix and the factor correlation
-matrix into the rotation criterion (i.e, extended target rotation), so
+matrix into the rotation criterion (i.e., extended target rotation), so
 that selected trait-method correlations are rotated toward zero.
 Actually, the extended target rotation should be almost equivalent to
 target rotation with the orthoblique manifold. However, the manifold and
@@ -2088,13 +2056,13 @@ is used only to orient the loading matrix, while the orthoblique
 manifold imposes the trait-method orthogonality exactly. Hence, the
 correlations encouraged to be small by extended target rotation in Zhang
 et al. (2019) are represented here as exact structural restrictions of
-the rotation manifold. As such, a benefit of our approach with regards
+the rotation manifold. As such, a benefit of our approach with regard to
 the extended target rotation is that the constant parameter that weights
 the relative contribution of target loadings and target correlations is
 not required.
 
-\subsection{HEXACO with correlated general
-factors}\label{hexaco-with-correlated-general-factors}
+\subsection{HEXACO. A hierarchical mode with multiple oblique general
+factors}\label{hexaco.-a-hierarchical-mode-with-multiple-oblique-general-factors}
 
 The second application uses the \texttt{icases} data obtained from the
 repository accompanying Anglim et al. (2022) at
@@ -2119,9 +2087,10 @@ orthogonal. The resulting factor correlation matrix has the form \[
 \] where \(\boldsymbol{\Psi}_{G}\) contains the correlations among the
 six domain-general factors. Therefore, the general factors can
 correlate, whereas every specific factor is orthogonal to the general
-factors and to all other specific factors. This manner, the specific
-factors would capture only narrow common variance and the general
-factors would absorb any remaining inter-facet dependency that is left.
+factors and to all other specific factors. This manner, common variance
+would be partitioned between specific factors, representing narrow
+facet-level variance, and general factors, representing broader variance
+shared across facets.
 
 This formulation extends the exploratory bifactor approach of Jennrich
 \& Bentler (2011) and Jennrich \& Bentler (2012) to several correlated
