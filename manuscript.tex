@@ -544,9 +544,13 @@ after moving along this direction, the new candidate
 \section{Solution to problem 1: the Riemannian
 gradient}\label{solution-to-problem-1-the-riemannian-gradient}
 
-\textcolor{red}{Introduce the Riemannian gradient}
-
-(Boumal, 2023, Definition 3.58)
+To address the first problem, we replace the unrestricted Euclidean
+gradient with its counterpart on the manifold. For the restricted
+criterion \(f=\tilde{f}|_{\mathcal{M}}\), the Riemannian gradient lies
+in the tangent space and represents how the criterion changes along
+first-order feasible directions. Its negative is a descent direction
+whenever the gradient is nonzero. More precisely, it is characterized as
+follows (Boumal, 2023, Definition 3.58).
 
 \begin{definition}
 The Riemannian gradient of $f$ at $\mathbf{X}\in\mathcal{M}$, denoted by $\text{grad}f(\mathbf{X})$, is the unique element of $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ that satisfies $\mathrm{D}f(\mathbf{X})[\mathbf{V}] = \left\langle \mathbf{V}, \text{grad}f(\mathbf{X}) \right\rangle_{\mathbf{X}}$ for every $\mathbf{V}\in\mathcal{T}_{\mathbf{X}}\mathcal{M}$.
@@ -696,9 +700,8 @@ turning it into a Riemannian manifold. And this definition of inner
 product over the tangent space of \(\mathcal{M}\) allows us to develop a
 definition of orthogonal complements.
 
-Define another complexity function \(f\) with domain on \(\mathcal{M}\)
-such that \(f=\tilde{f}|_{\mathcal{M}}\). In other words, \(f\) is the
-restriction of \(\tilde{f}\) to \(\mathcal{M}\). Then, using
+Recall that \(f=\tilde{f}|_{\mathcal{M}}\) is the restriction of the
+complexity criterion to the manifold. Using
 Equation~\ref{eq-orth_compl_grad} and the Frobenius inner product as
 Riemannian metric, we arrive at the following identities for any
 \(\mathbf{V} \in \mathcal{T}_\mathbf{X}\mathcal{M}\): \[
@@ -758,7 +761,7 @@ f=\tilde{f}|_{\mathcal{M}}
 \end{aligned}
 \]
 
-The last equality follows directly from the definition of Riemmanian
+The last equality follows directly from the definition of the Riemannian
 gradient. And from the preceding identities, this element turns out to
 be \(\text{grad}\tilde{f}(\mathbf{X})_\parallel\), the projection of the
 Euclidean gradient onto the tangent space of \(\mathcal{M}\).
@@ -766,7 +769,7 @@ Euclidean gradient onto the tangent space of \(\mathcal{M}\).
 There can be many ways to find the Riemannian gradient, but a good
 strategy consists of obtaining an expression for
 \(\text{grad}\tilde{f}(\mathbf{X})_\perp \in \mathcal{N}_{\mathbf{X}}\mathcal{M}\)
-and substituting this into Equation (\ref{orth_compl}).
+and substituting this into Equation~\ref{eq-orth_compl_grad}.
 
 In the case of the orthogonal and oblique manifolds, the
 parameterizations of the tangent spaces were \(\mathbf{X\Omega}\) and
@@ -1011,12 +1014,14 @@ $DR_\mathbf{X}(\mathbf{0})$ is the identity map on
 $\mathcal{T}_\mathbf{X}\mathcal{M}$.
 \end{definition}
 
-The first condition ensures that no movement is necessary if the tangent
-step is valid and already belongs to the manifold. The second condition
-recognizes that the tangent step \(\mathbf{X} + t\mathbf{V}\) already
-satisfies the manifold constraints to first order because \(\mathbf{V}\)
-was picked to satisfy the tangent space equations. Therefore it requires
-that \(R_{\mathbf{X}}(t\mathbf{V})\) has the same initial direction
+A local retraction only needs to be defined for sufficiently small
+tangent steps, while satisfying the same two conditions. The first
+condition ensures that taking a zero step leaves the current point
+unchanged. The second condition recognizes that the tangent step
+\(\mathbf{X} + t\mathbf{V}\) already satisfies the manifold constraints
+to first order because \(\mathbf{V}\) was picked to satisfy the tangent
+space equations. Therefore it requires that
+\(R_{\mathbf{X}}(t\mathbf{V})\) has the same initial direction
 \(\mathbf{V}\) as the tangent step. In other words, a retraction
 restores the manifold constraints exactly without changing the
 first-order motion on the manifold so that the Riemannian gradient can
@@ -1031,9 +1036,9 @@ equation that GPA uses becomes
 Hence, the Riemannian gradient determines a valid descent direction in
 the tangent space, whereas the retraction guarantees that the new
 candidate \(\mathbf{X}_{k+1}\) belongs to \(\mathcal{M}\) after
-correcting the higher-order imprecisions of the tangent step.
-\ref{retraction} illustrates how a tangent step is retracted onto the
-manifold.
+correcting the higher-order imprecisions of the tangent step. Figure
+\ref{fig:retraction} illustrates how a tangent step is retracted onto
+the manifold.
 
 \begin{figure}[!ht]
 \centering
@@ -1084,7 +1089,8 @@ the Gram-Schmidt algorithm to the columns of
 \(\mathbf{X} + \mathbf{V}\). Equivalently,
 \(R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{Q}\), where
 \(\mathbf{Q}\) is the orthonormal matrix of the QR decomposition of
-\(\mathbf{X} + \mathbf{V}\). Alternatively, if
+\(\mathbf{X} + \mathbf{V}\), with the triangular factor chosen to have
+positive diagonal entries. Alternatively, if
 \(\mathbf{X}+\mathbf{V}=\mathbf{U}\mathbf{D}\mathbf{W}^\top\) is a
 singular value decomposition, another valid retraction is
 \(R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{U}\mathbf{W}^\top\).
@@ -1611,21 +1617,38 @@ and its columns are then orthonormalized using \[
 \] As a result,
 \(\mathbf{R}_1^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_2^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_3^\top\mathbf{R}_3 = \mathbf{I}\).
 
-A retraction onto the orthoblique manifold after moving along direction
-\(\mathbf{V}\) can therefore be defined as \[
+With \(\mathbf{Z}=\mathbf{X}+\mathbf{V}\), the same blockwise
+construction defines the retracted update \[
 R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
-\] When \(\mathbf{V}=\mathbf{0}\), \(\mathbf{X}\) is unchanged, so
-\(R_{\mathbf{X}}(\mathbf{0}) = \mathbf{X}\). Moreover, the
-normalizations and orthogonal projections of each block satisfies the
-orthoblique constraints and thus the tangent space equations are intact
-and imply
-\(\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}] = \mathbf{V}\). Thus,
-the proposed retraction satisfies both requirements of Definition
-\ref{retraction_definition}.
+\] For nonsingular \(\mathbf{X}\) and sufficiently small tangent steps,
+the required Gram matrices remain positive definite, so the construction
+is smooth. At \(\mathbf{V}=\mathbf{0}\), the normalizations leave all
+blocks unchanged and the projections remove nothing, so
+\(R_{\mathbf{X}}(\mathbf{0})=\mathbf{X}\). To check the second
+condition, take \(\mathbf{Z}=\mathbf{X}+t\mathbf{V}\) with
+\(\mathbf{V}\) tangent. Its blockwise crossproducts satisfy \[
+\mathbf{Z}_i^\top\mathbf{Z}_j
+=\mathbf{X}_i^\top\mathbf{X}_j
++t\left(\mathbf{X}_i^\top\mathbf{V}_j+\mathbf{V}_i^\top\mathbf{X}_j\right)
++t^2\mathbf{V}_i^\top\mathbf{V}_j.
+\] Tangency eliminates the coefficient of \(t\) in every constrained
+entry. Thus, normalizing the first block only adds corrections of
+quadratic or higher order. The crossproduct
+\(\mathbf{R}_1^\top\mathbf{Z}_2\) still begins at quadratic order, and
+hence so does \(\mathbf{P}_1\mathbf{Z}_2\), since the other factors in
+the projector formula are smooth and bounded. The same argument applies
+to normalizing the second block and to projecting and orthonormalizing
+the third. All corrections therefore leave the first-order term
+\(t\mathbf{V}\) unchanged, giving
+\(\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}]=\mathbf{V}\).
 
-\textcolor{red}{Proof that the orthoblique retraction is valid by showing that the normalization and orthogonal projections functions are not proportional to $t$, so the first-order constraints are preserved, its directional derivative remains untouched and thus the second condition is satisfied.}
-
-\textcolor{red}{Make a comment about the order of the operations not affecting the satisfaction of the retraction conditions.}
+Any fixed block order also satisfies these retraction conditions,
+provided each block is projected onto the orthogonal complement of all
+previously processed blocks and then normalized or orthonormalized as
+appropriate. Different orders may produce different finite updates but
+preserve the same initial direction. This does not permit arbitrary
+exchanges of individual operations: projecting an already normalized
+block generally requires normalization again.
 
 \subsection{Generalization to an arbitrary number of oblique
 blocks}\label{generalization-to-an-arbitrary-number-of-oblique-blocks}
@@ -1657,9 +1680,10 @@ oblique blocks and \(r=n\), then
 oblique block with \(p_1=n\) and \(r=0\), then
 \(\mathcal{POB}(\{n\},0)=\mathcal{OB}(n)\).
 
-Now that we have valid gradient projection and retraction formulas for
-the orthoblique rotation, we are ready to implement these in open-source
-software.
+Table \ref{tab:gpa-comparison} brings together the common GPA steps and
+the geometric differences between orthogonal, oblique, and orthoblique
+rotation. It also distinguishes the quantities used to derive the
+projected gradient from the operations used to update \(\mathbf{X}\).
 
 \section{Rotation constraints and standard
 errors}\label{rotation-constraints-and-standard-errors}
@@ -2148,7 +2172,19 @@ provide insights into which facets and items may need further attention.
 Facets whose designated items have small loadings should be subjected to
 a closer examination of their content or item placement.
 
-\textcolor{red}{Hablar del patrón de los factores generales.}
+The general-factor loading patterns also broadly reflected the HEXACO
+domains across the four analyses. The item sets for Emotionality,
+Extraversion, Conscientiousness, Openness, and Agreeableness were
+recognizable in each solution, whereas Honesty--Humility was less
+consistently separated, especially in the target-based specifications.
+Some Honesty--Humility items showed salient cross-loadings on the
+Conscientiousness general factor, and additional general-factor
+cross-loadings remained. Thus, agreement across rotations was
+substantial but did not imply equally clear recovery of every domain.
+Because none of the four specifications targeted the general-factor
+loadings, this broad correspondence was not imposed directly by the
+target, although targeting the specific factors could still alter the
+partitioning of common variance.
 
 For brevity, we interpret further only the oblimin + target
 solution.\footnote{To check the other solutions, see the repository
@@ -2309,8 +2345,8 @@ analysis. \emph{Educational and Psychological Measurement},
 \emph{65}(5), 676--696. \url{https://doi.org/10.1177/0013164404272507}
 
 \bibitem[\citeproctext]{ref-boumal_2023}
-Boumal, N. (2023). \emph{An {Introduction} to {Optimization} on {Smooth
-Manifolds}}. Cambridge University Press.
+Boumal, N. (2023). \emph{An introduction to optimization on smooth
+manifolds}. Cambridge University Press.
 \url{https://doi.org/10.1017/9781009166164}
 
 \bibitem[\citeproctext]{ref-jennrich_2001}
@@ -2324,8 +2360,8 @@ Jennrich, R. I. (2002). A simple general method for oblique rotation.
 \url{https://doi.org/10.1007/BF02294706}
 
 \bibitem[\citeproctext]{ref-jennrich_2011}
-Jennrich, R. I., \& Bentler, P. M. (2011). Exploratory {Bi-Factor
-Analysis}. \emph{Psychometrika}, \emph{76}(4), 537--549.
+Jennrich, R. I., \& Bentler, P. M. (2011). Exploratory bi-factor
+analysis. \emph{Psychometrika}, \emph{76}(4), 537--549.
 \url{https://doi.org/10.1007/s11336-011-9218-4}
 
 \bibitem[\citeproctext]{ref-jennrich_2012}
@@ -2335,7 +2371,7 @@ analysis: {The} oblique case. \emph{Psychometrika}, \emph{77}(3),
 
 \bibitem[\citeproctext]{ref-jimenez_2023a}
 Jiménez, M., Abad, F. J., Garcia-Garzon, E., \& Garrido, L. E. (2023).
-Exploratory {Bi-factor Analysis} with {Multiple General Factors}.
+Exploratory bi-factor analysis with multiple general factors.
 \emph{Multivariate Behavioral Research}, \emph{58}(6), 1072--1089.
 \url{https://doi.org/10.1080/00273171.2023.2189571}
 
@@ -2362,17 +2398,17 @@ Revelle, W. (2022). \emph{Psych: {Procedures} for psychological,
 psychometric, and personality research}. Northwestern University.
 
 \bibitem[\citeproctext]{ref-lavaan}
-Rosseel, Y. (2012). Lavaan: {An R} package for structural equation
-modeling. \emph{Journal of Statistical Software}, \emph{48}(2), 1--36.
+Rosseel, Y. (2012). Lavaan: {An R Package} for {Structural Equation
+Modeling}. \emph{Journal of Statistical Software}, \emph{48}, 1--36.
 \url{https://doi.org/10.18637/jss.v048.i02}
 
 \bibitem[\citeproctext]{ref-watts_2022}
 Watts, A. L., Makol, B. A., Palumbo, I. M., De Los Reyes, A., Olino, T.
 M., Latzman, R. D., DeYoung, C. G., Wood, P. K., \& Sher, K. J. (2022).
-How {Robust Is} the p {Factor}? {Using Multitrait-Multimethod Modeling}
-to {Inform} the {Meaning} of {General Factors} of {Youth
-Psychopathology}. \emph{Clinical Psychological Science}, \emph{10}(4),
-640--661. \url{https://doi.org/10.1177/21677026211055170}
+How robust is the p factor? {Using} multitrait-multimethod modeling to
+inform the meaning of general factors of youth psychopathology.
+\emph{Clinical Psychological Science}, \emph{10}(4), 640--661.
+\url{https://doi.org/10.1177/21677026211055170}
 
 \bibitem[\citeproctext]{ref-zhang_2019}
 Zhang, G., Hattori, M., Trichtinger, L. A., \& Wang, X. (2019). Target
