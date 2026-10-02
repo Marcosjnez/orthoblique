@@ -15,7 +15,7 @@ geometry:
   - right=2.5cm
   - bottom=2.5cm
 indent: true
-date: 2026-09-15
+date: 2026-10-02
 fontsize: 12pt
 number-sections: false
 number-depth: 2
@@ -513,15 +513,17 @@ These are indeed the same projected gradients formulas denoted by \texttt{Gp} in
 
 # Solution to problem 2: the Retraction
 
-With this generalization of gradients to nonlinear manifolds, we are prepared to compute valid descent directions in $\mathcal{T}_{\mathbf{X}}\mathcal{M}$. However, we are not ready yet because the update
+With this generalization of gradients to nonlinear manifolds, we are prepared to compute valid descent directions along the tangent space $\mathcal{T}_{\mathbf{X}}\mathcal{M}$. However, we are not ready to compute valid candidates because the update
 $$
-\mathbf{X}_{k+1} = \mathbf{X}_k-t_k\text{grad}f(\mathbf{X}_k)
+\mathbf{Z}_{k+1} = \mathbf{X}_k-t_k\text{grad}f(\mathbf{X}_k)
 $$
 
-does not generally belong to $\mathcal{M}$, however small $t_k$ is. The tangent direction only provides a first-order linear approximation to the manifold at $\mathbf{X}_k$, as we showed before in @eq-taylor. This means that the condition $\mathrm{D}h(\mathbf{X})[\mathbf{V}]=\mathbf{0}$ does not generally imply that the tangent step $\mathbf{X}+t\mathbf{V}$ lies exactly on $\mathcal{M}$ for a nonzero $t$. It only ensures that the constraints are preserved to first order. To see this, let's take the crossproduct of the tangent step to check how it departs from the orthogonal manifold constraints:
+does not generally belong to $\mathcal{M}$, however small $t_k$ is. The tangent direction only provides a first-order linear approximation to the manifold at $\mathbf{X}_k$, as we showed before in @eq-taylor. This means that the condition $\mathrm{D}h(\mathbf{X})[\mathbf{V}]=\mathbf{0}$ does not generally imply that the tangent step $\mathbf{Z} = \mathbf{X}+t\mathbf{V}$ lies exactly on $\mathcal{M}$ for a nonzero $t$. It only ensures that the constraints are preserved to first order. To see this, let's take the crossproduct of the tangent step $\mathbf{Z}$ to check how it departs from the orthogonal manifold constraints:
 $$
 \begin{aligned}
-(\mathbf{X}+t\mathbf{V})^\top (\mathbf{X}+t\mathbf{V}) &= \mathbf{X}^\top\mathbf{X} + t(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}) + t^2\mathbf{V}^\top\mathbf{V} \\
+\mathbf{Z}^\top \mathbf{Z} &=
+(\mathbf{X}+t\mathbf{V})^\top (\mathbf{X}+t\mathbf{V}) \\
+&= \mathbf{X}^\top\mathbf{X} + t(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}) + t^2\mathbf{V}^\top\mathbf{V} \\
 &= \mathbf{I} + t^2\mathbf{V}^\top\mathbf{V}.
 \end{aligned}
 $$
@@ -529,7 +531,11 @@ Here, the factor $\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}$ vanishe
 
 Thereby, mapping the tangent step back to the manifold is the second problem addressed by the GPA. After taking a step $t$ along the negative Riemannian gradient, the resulting point must be projected back onto the manifold while preserving the initial direction of the tangent step. 
 
-Suppose that we apply some projection $R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}$ that restores the constraints exactly. Because the tangent step is already correct to first order, $R_\mathbf{X}$ only needs to act on the higher-order residuals. This is exactly what a retraction does: it fixes the constraints of the tangent step without modifying the descent direction, which in the GPA is the negative of the Riemannian gradient.
+Suppose that we apply some projection $R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}$ that restores the constraints exactly while preserving the initial direction. Because the tangent step is already correct to first order, $R_\mathbf{X}$ only needs to act on the higher-order residuals. This is exactly what a retraction does: it fixes the constraints of the tangent step without modifying the descent direction, which in the GPA is the negative of the Riemannian gradient.
+
+Therefore, a retraction only needs to be defined for sufficiently small tangent steps, while satisfying two conditions. The first condition ensures that taking a zero step leaves the current point unchanged. In other words, if we do not take a direction, then the projection produce the same point. The second condition recognizes that the tangent step $\mathbf{X} + t\mathbf{V}$ already satisfies the manifold constraints to first order because $\mathbf{V}$ was picked to satisfy the tangent space equations. Therefore it requires that $R_{\mathbf{X}}(t\mathbf{V})$ has the same initial direction $\mathbf{V}$ as the tangent step. In other words, a retraction restores the manifold constraints exactly without changing the first-order motion on the manifold so that the Riemannian gradient can still be used as the descent direction. 
+
+Using these conditions, we can define a retraction ins the following manner [@boumal_2023, Definition 3.47]:
 
 \begin{definition}
 \label{retraction_definition}
@@ -537,12 +543,8 @@ A retraction is a smooth map
 $R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}$ that satisfies the following conditions: \\
 (1) $R_\mathbf{X}(\mathbf{0})=\mathbf{X}$, and \\
 (2) $DR_\mathbf{X}(\mathbf{0})[\mathbf{V}]=\mathbf{V}$ for every
-$\mathbf{V}\in\mathcal{T}_\mathbf{X}\mathcal{M}$, so that
-$DR_\mathbf{X}(\mathbf{0})$ is the identity map on
-$\mathcal{T}_\mathbf{X}\mathcal{M}$.
+$\mathbf{V}\in\mathcal{T}_\mathbf{X}\mathcal{M}$.
 \end{definition}
-
-A local retraction only needs to be defined for sufficiently small tangent steps, while satisfying the same two conditions. The first condition ensures that taking a zero step leaves the current point unchanged. The second condition recognizes that the tangent step $\mathbf{X} + t\mathbf{V}$ already satisfies the manifold constraints to first order because $\mathbf{V}$ was picked to satisfy the tangent space equations. Therefore it requires that $R_{\mathbf{X}}(t\mathbf{V})$ has the same initial direction $\mathbf{V}$ as the tangent step. In other words, a retraction restores the manifold constraints exactly without changing the first-order motion on the manifold so that the Riemannian gradient can still be used as the descent direction. 
 
 <!-- Both requirements can equivalently be stated by considering the curve -->
 <!-- $$ -->
@@ -603,7 +605,7 @@ Hence, the Riemannian gradient determines a valid descent direction in the tange
 \label{fig:retraction}
 \end{figure}
 
-For orthogonal rotation, a suitable retraction is obtained by applying the Gram-Schmidt algorithm to the columns of $\mathbf{X} + \mathbf{V}$. Equivalently, $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{Q}$, where $\mathbf{Q}$ is the orthonormal matrix of the QR decomposition of $\mathbf{X} + \mathbf{V}$, with the triangular factor chosen to have positive diagonal entries. Alternatively, if $\mathbf{X}+\mathbf{V}=\mathbf{U}\mathbf{D}\mathbf{W}^\top$ is a singular value decomposition, another valid retraction is $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{U}\mathbf{W}^\top$. This is actually the orthogonal projection used in the algorithms of @jennrich_2001 and @bernaards_2005. The QR and singular value decomposition retractions need not produce the same finite update, but both preserve tangent directions to first order and both are smooth operations satisfying the conditions in Definition \ref{retraction_definition}.
+For orthogonal rotation, a suitable retraction is obtained by applying the Gram-Schmidt algorithm to the columns of $\mathbf{X} + \mathbf{V}$. Equivalently, $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{Q}$, where $\mathbf{Q}$ is the orthonormal matrix of the QR decomposition of $\mathbf{X} + \mathbf{V}$, with the triangular factor chosen to have positive diagonal entries. Alternatively, if $\mathbf{X}+\mathbf{V}=\mathbf{U}\mathbf{D}\mathbf{W}^\top$ is a singular value decomposition, another valid retraction is $R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{U}\mathbf{W}^\top$. This is actually the orthogonal projection used in the algorithms of @jennrich_2001 and @bernaards_2005. The QR and singular value decomposition retractions need not produce the same finite update, but both are smooth operations that satisfy the conditions in Definition \ref{retraction_definition}, leaving the point $\mathbf{X}$ unchanged when no direction is applied and preserving the tangent direction to first order.
 
 On the other hand, for oblique rotation, a suitable retraction involves just normalizing the columns of $\mathbf{X} + \mathbf{V}$: $R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{V}) = (\mathbf{X}+\mathbf{V}) \left[\mathrm{ddiag}\!\left((\mathbf{X}+\mathbf{V})^\top (\mathbf{X}+\mathbf{V})\right)\right]^{-1/2}$, which is the manifold projection used by @jennrich_2002 [Appendix A.1].
 
@@ -991,7 +993,11 @@ $$
 
 For clarity, let $\mathbf{Z}$ denote the tangent step $\mathbf{X}_{k} - t\mathrm{grad}f(\mathbf{X}_k)$ and let $\mathbf{R}$ be the retracted update $\mathbf{X}_{k+1}$. Let us partition these matrices into blocks $\mathbf{Z} = \begin{bmatrix} \mathbf{Z}_1 & \mathbf{Z}_2 & \mathbf{Z}_3 \end{bmatrix}$ and $\mathbf{R} = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}$ such that the matrices indexed by $1$ and $2$ correspond to the first two oblique blocks, respectively, and those indexed by $3$ correspond to the block of orthogonal factors.
 
-The retraction of the first oblique block can be simply the retraction onto the oblique manifold with normalized columns $\mathbf{R}_1 = \mathbf{Z}_1 \left[ \mathrm{ddiag} \left( \mathbf{Z}_1^\top\mathbf{Z}_1 \right) \right]^{-1/2}$, with $\text{diag}(\mathbf{R}_1^\top \mathbf{R}_1) = \mathbf{1}$.
+The retraction of the first oblique block can be simply the retraction onto the oblique manifold with normalized columns,
+$$
+\mathbf{R}_1 = \mathbf{Z}_1 \left[ \mathrm{ddiag} \left( \mathbf{Z}_1^\top\mathbf{Z}_1 \right) \right]^{-1/2},
+$$
+so that $\text{diag}(\mathbf{R}_1^\top \mathbf{R}_1) = \mathbf{1}$.
 
 The second oblique block only has to be made orthogonal to the first block. We may use the Gram-Schmidt process to orthogonalize each column of $\mathbf{Z}_2$ with respect to all the columns of $\mathbf{Z}_1$ ^[This is like doing a QR decomposition of $\mathbf{Z}_1$ with each column of $\mathbf{Z}_2$ appended to $\mathbf{Z}_1$ in turn.]. This process may be computationally expensive when there are many blocks of factors, so a better retraction is to project $\mathbf{Z}_2$ onto the orthogonal space of $\mathbf{Z}_1$. First, define the orthogonal projector onto the column space of $\mathbf{R}_1$ as $\mathbf{P}_1 = \mathbf{R}_1 \left( \mathbf{R}_1^\top\mathbf{R}_1 \right)^{-1} \mathbf{R}_1^\top$. Then, $\widetilde{\mathbf{Z}}_2 = \left( \mathbf{I}-\mathbf{P}_1 \right) \mathbf{Z}_2$ is orthogonal to $\mathbf{R}_1$. Second, the columns are subsequently normalized to obtain 
 $$
@@ -1005,20 +1011,21 @@ $$
 $$
 As a result, $\mathbf{R}_1^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_2^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_3^\top\mathbf{R}_3 = \mathbf{I}$.
 
-With $\mathbf{Z}=\mathbf{X}+\mathbf{V}$, the same blockwise construction defines the retracted update
+Taking together, the following blockwise construction defines the retracted orthoblique update
 $$
 R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
 $$
-For nonsingular $\mathbf{X}$ and sufficiently small tangent steps, the required Gram matrices remain positive definite, so the construction is smooth. At $\mathbf{V}=\mathbf{0}$, the normalizations leave all blocks unchanged and the projections remove nothing, so $R_{\mathbf{X}}(\mathbf{0})=\mathbf{X}$. To check the second condition, take $\mathbf{Z}=\mathbf{X}+t\mathbf{V}$ with $\mathbf{V}$ tangent. Its blockwise crossproducts satisfy
+
+At $\mathbf{V}=\mathbf{0}$, the normalizations leave all blocks unchanged, $R_{\mathbf{X}}(\mathbf{0})=\mathbf{X}$, so the first condition of the retraction is met. To check the second condition, take $\mathbf{Z}=\mathbf{X}+t\mathbf{V}$. Its blockwise crossproducts satisfy
 $$
 \mathbf{Z}_i^\top\mathbf{Z}_j
 =\mathbf{X}_i^\top\mathbf{X}_j
 +t\left(\mathbf{X}_i^\top\mathbf{V}_j+\mathbf{V}_i^\top\mathbf{X}_j\right)
 +t^2\mathbf{V}_i^\top\mathbf{V}_j.
 $$
-Tangency eliminates the coefficient of $t$ in every constrained entry. Thus, normalizing the first block only adds corrections of quadratic or higher order. The crossproduct $\mathbf{R}_1^\top\mathbf{Z}_2$ still begins at quadratic order, and hence so does $\mathbf{P}_1\mathbf{Z}_2$, since the other factors in the projector formula are smooth and bounded. The same argument applies to normalizing the second block and to projecting and orthonormalizing the third. All corrections therefore leave the first-order term $t\mathbf{V}$ unchanged, giving $\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}]=\mathbf{V}$.
+The tangent space equations eliminates the coefficient of $t$ for every block. Thus, normalizing the first block only adds corrections of quadratic order. The crossproduct $\mathbf{R}_1^\top\mathbf{Z}_2$ still begins at quadratic order, and hence so does $\mathbf{P}_1\mathbf{Z}_2$, since the other factors in the projector formula are smooth and bounded. The same argument applies to normalizing the second block and to projecting and orthonormalizing the third. All corrections therefore leave the first-order term $t\mathbf{V}$ unchanged, giving $\mathrm{D}R_{\mathbf{X}}(\mathbf{0})[\mathbf{V}]=\mathbf{V}$.
 
-Any fixed block order also satisfies these retraction conditions, provided each block is projected onto the orthogonal complement of all previously processed blocks and then normalized or orthonormalized as appropriate. Different orders may produce different finite updates but preserve the same initial direction. This does not permit arbitrary exchanges of individual operations: projecting an already normalized block generally requires normalization again.
+Notice that any block order also satisfies these retraction conditions, provided each block is projected onto the orthogonal complement of all previously processed blocks and then normalized if they are oblique or orthonormalized if it is orthogonal. Different orders may produce different finite updates but preserve the same initial direction.
 
 ## Generalization to an arbitrary number of oblique blocks
 
@@ -1085,6 +1092,10 @@ $$
 \mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \{-\mathbf{\Lambda}\mathbf{\Omega}^\top\mathbf{\Psi}^{-1}, \mathbf{\Omega} + \mathbf{\Omega}^\top \},
 $$
 and $2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}$ must be symmetric, with the submatrices corresponding to the blocks of oblique factors being also diagonal.
+
+# Estimation of the factor scores
+
+\textcolor{red}{To be done...}
 
 # Software: orthoblique rotation with the latent package
 
