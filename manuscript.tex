@@ -974,30 +974,32 @@ imply that the tangent step \(\mathbf{Z} = \mathbf{X}+t\mathbf{V}\) lies
 exactly on \(\mathcal{M}\) for a nonzero \(t\). It only ensures that the
 constraints are preserved to first order. To see this, let's take the
 crossproduct of the tangent step \(\mathbf{Z}\) to check how it departs
-from the orthogonal manifold constraints: \[
+from the manifold constraints: \[
 \begin{aligned}
 \mathbf{Z}^\top \mathbf{Z} &=
 (\mathbf{X}+t\mathbf{V})^\top (\mathbf{X}+t\mathbf{V}) \\
-&= \mathbf{X}^\top\mathbf{X} + t(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}) + t^2\mathbf{V}^\top\mathbf{V} \\
-&= \mathbf{I} + t^2\mathbf{V}^\top\mathbf{V}.
+&= \mathbf{X}^\top\mathbf{X} + t(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}) + t^2\mathbf{V}^\top\mathbf{V}.
 \end{aligned}
-\] Here, the factor
+\] In orthogonal rotation, the term
 \(\mathbf{X}^\top\mathbf{V} + \mathbf{V}^\top\mathbf{X}\) vanishes
 because \(\mathbf{V}\) was chosen precisely to satisfy the tangent
-equation for the orthogonal manifold (Equation~\ref{eq-tangent_space}).
+equation for the orthogonal manifold (Equation~\ref{eq-tangent_space})
+and we are left with \[
+\mathbf{Z}^\top \mathbf{Z} = \mathbf{I} + t^2\mathbf{V}^\top\mathbf{V}.
+\] \#\{eq-cross\_step\_orth\}
+
 The orthogonality constraint is therefore violated by the residual
 \(t^2\mathbf{V}^\top\mathbf{V}\). Following the same argument in the
-case of the oblique manifold, we would have found that the unit norm
-constraint is off by a factor of
-\(t^2\text{ddiag}(\mathbf{V}^\top\mathbf{V})\).
+case of the oblique manifold, \[
+\mathrm{ddiag}(\mathbf{Z}^\top \mathbf{Z}) = \mathbf{I} + t^2\mathrm{ddiag}(\mathbf{V}^\top\mathbf{V}),
+\] \#\{eq-cross\_step\_oblq\} and the unit norm constraint would be off
+by a factor of \(t^2\text{ddiag}(\mathbf{V}^\top\mathbf{V})\).
 
 Thereby, mapping the tangent step back to the manifold is the second
 problem addressed by the GPA. After taking a step \(t\) along the
 negative Riemannian gradient, the resulting point must be projected back
 onto the manifold while preserving the initial direction of the tangent
-step.
-
-Suppose that we apply some projection
+step. Suppose that we apply some projection
 \(R_\mathbf{X}:\mathcal{T}_\mathbf{X}\mathcal{M}\rightarrow\mathcal{M}\)
 that restores the constraints exactly while preserving the initial
 direction. Because the tangent step is already correct to first order,
@@ -1090,15 +1092,14 @@ the manifold.
 \end{figure}
 
 For orthogonal rotation, a suitable retraction is obtained by applying
-the Gram-Schmidt algorithm to the columns of
-\(\mathbf{X} + \mathbf{V}\). Equivalently,
-\(R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{Q}\), where
-\(\mathbf{Q}\) is the orthonormal matrix of the QR decomposition of
-\(\mathbf{X} + \mathbf{V}\), with the triangular factor chosen to have
-positive diagonal entries. Alternatively, if
-\(\mathbf{X}+\mathbf{V}=\mathbf{U}\mathbf{D}\mathbf{W}^\top\) is a
-singular value decomposition, another valid retraction is
-\(R_\mathbf{X}^{\text{orth}}(\mathbf{V}) = \mathbf{U}\mathbf{W}^\top\).
+the Gram-Schmidt algorithm to the columns of \(\mathbf{Z}\).
+Equivalently, \(R_\mathbf{X}^{\text{orth}}(t\mathbf{V}) = \mathbf{Q}\),
+where \(\mathbf{Q}\) is the orthonormal matrix of the QR decomposition
+of \(\mathbf{Z}\), with the triangular factor chosen to have positive
+diagonal entries. Alternatively, if
+\(\mathbf{Z}=\mathbf{U}\mathbf{D}\mathbf{W}^\top\) is a singular value
+decomposition, another valid retraction is
+\(R_\mathbf{X}^{\text{orth}}(T\mathbf{V}) = \mathbf{U}\mathbf{W}^\top\).
 This is actually the orthogonal projection used in the algorithms of
 Jennrich (2001) and Bernaards \& Jennrich (2005). The QR and singular
 value decomposition retractions need not produce the same finite update,
@@ -1107,10 +1108,34 @@ but both are smooth operations that satisfy the conditions in Definition
 when no direction is applied and preserving the tangent direction to
 first order.
 
+Another possible retraction for orthogonal rotation is \[
+R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left(\mathbf{Z}^\top \mathbf{Z}\right)^{-1/2},
+\] \#\{eq-orth\_retraction\} At \(t=0\) we have
+\(R_{\mathbf{X}}^{\mathrm{orth}}(\mathbf{0}) = \mathbf{X}\) because
+\(\mathbf{X}\) is already orthonormal and the first condition is met. To
+check the rigidity condition, we can rewrite the orthonormalization
+using (\textbf{?@eq-cross\_step\_orth}) as \[
+R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = (\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\mathbf{V}^\top \mathbf{V}\right)^{-1/2}.
+\] Then the derivative with respect to \(t\) becomes \[
+\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{V}\left(\mathbf{I}+t^2\mathbf{V}^\top \mathbf{V}\right)^{-1/2}-t(\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\mathbf{V}^\top \mathbf{V}\right)^{-3/2}\mathbf{V}^\top \mathbf{V},
+\] and evaluated at \(t=0\),
+\(\left.\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V})\right|_{t=0} = \mathbf{V}\).
+
 On the other hand, for oblique rotation, a suitable retraction involves
-just normalizing the columns of \(\mathbf{X} + \mathbf{V}\):
-\(R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{V}) = (\mathbf{X}+\mathbf{V}) \left[\mathrm{ddiag}\!\left((\mathbf{X}+\mathbf{V})^\top (\mathbf{X}+\mathbf{V})\right)\right]^{-1/2}\),
-which is the manifold projection used by Jennrich (2002, Appendix A.1).
+normalizing the columns of \(\mathbf{Z}\): \[
+R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left[\mathrm{ddiag}\!\left(\mathbf{Z}^\top \mathbf{Z}\right)\right]^{-1/2},
+\] \#\{eq-oblq\_retraction\} which is the projection used by Jennrich
+(2002, Appendix A.1).
+
+At \(t=0\) we have
+\(R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{0}) = \mathbf{X}\) because the
+columns of \(\mathbf{X}\) are already unit norm. Finally, rewriting the
+normalization using (\textbf{?@eq-cross\_step\_oblq}), we have \[
+R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V}) = (\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\operatorname{ddiag}(\mathbf{V}^\top \mathbf{V})\right)^{-1/2}.
+\] Then the derivative with respect to \(t\) is \[
+\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V}) = \mathbf{V}\left(\mathbf{I}+t^2\operatorname{ddiag}(\mathbf{V}^\top \mathbf{V})\right)^{-1/2}-t(\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\operatorname{ddiag}(\mathbf{V}^\top \mathbf{V})\right)^{-3/2}\operatorname{ddiag}(\mathbf{V}^\top \mathbf{V}),
+\] which evaluated at \(t=0\) becomes
+\(\left.\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V})\right|_{t=0} = \mathbf{V}\).
 
 \section{The orthoblique manifold}\label{the-orthoblique-manifold}
 
@@ -1625,7 +1650,7 @@ and its columns are then orthonormalized using \[
 
 Taking together, the following blockwise construction defines the
 retracted orthoblique update \[
-R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
+R_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
 \]
 
 At \(\mathbf{V}=\mathbf{0}\), the normalizations leave all blocks
