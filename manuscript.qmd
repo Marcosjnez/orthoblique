@@ -613,10 +613,11 @@ Hence, the Riemannian gradient determines a valid descent direction in the tange
 
 For orthogonal rotation, a suitable retraction is obtained by applying the Gram-Schmidt algorithm to the columns of $\mathbf{Z}$ such that $R_\mathbf{X}^{\text{orth}}(t\mathbf{V}) = \mathbf{Q}$, where $\mathbf{Q}$ is the orthonormal matrix of the QR decomposition of the tangent step $\mathbf{Z}$, with the triangular factor chosen to have positive diagonal entries. Alternatively, if $\mathbf{Z}=\mathbf{U}\mathbf{D}\mathbf{W}^\top$ is a singular value decomposition, another valid retraction is $R_\mathbf{X}^{\text{orth}}(t\mathbf{V}) = \mathbf{U}\mathbf{W}^\top$. This is actually the orthogonal projection used in the algorithms of @jennrich_2001 and @bernaards_2005. The QR and singular value decomposition retractions need not produce the same finite update, but both are smooth operations that satisfy the conditions in Definition \ref{retraction_definition}, leaving the point $\mathbf{X}$ unchanged when no direction is applied and preserving the tangent direction to first order.
 
-Another possible retraction for orthogonal rotation is the following:
+Define the retraction for orthogonal rotation as
 $$
-R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left(\mathbf{Z}^\top \mathbf{Z}\right)^{-1/2}.
+R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left(\mathbf{Z}^\top \mathbf{Z}\right)^{-1/2},
 $$ {#eq-orth_retraction}
+which is equivalent to the singular value decomposition method.
 
 The first condition of Definition \ref{retraction_definition} is met because at $t=0$, we have $R_{\mathbf{X}}^{\mathrm{orth}}(\mathbf{0}) = \mathbf{X}$ as $\mathbf{X}$ is already orthonormal. To check the second condition, we can rewrite the retraction in terms of @eq-cross_step_orth as follows:
 $$
@@ -630,7 +631,7 @@ and evaluated at $t=0$, we obtain $\left.\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{ort
 
 In case of oblique rotation, a suitable retraction involves normalizing the columns of $\mathbf{Z}$: 
 $$
-R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left[\mathrm{ddiag}\!\left(\mathbf{Z}^\top \mathbf{Z}\right)\right]^{-1/2},
+R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V}) = \mathbf{Z} \left[\mathrm{ddiag}\!\left(\mathbf{Z}^\top \mathbf{Z}\right)\right]^{-1/2},
 $$ {#eq-oblq_retraction}
 which is the projection used by @jennrich_2002 [Appendix A.1].
 
