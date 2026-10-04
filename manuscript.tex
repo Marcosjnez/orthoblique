@@ -299,7 +299,7 @@ computational tool for rotating loading patterns during the last twenty
 years. The success of GPA is instantiated by its availability in widely
 used and reputed statistical programs such as Mplus (Muthén \& Muthén,
 2017), \texttt{lavaan} (Rosseel, 2012), and \texttt{psych} (Revelle,
-2022). In contrast with previously used rotation procedures like the
+2020). In contrast with previously used rotation procedures like the
 criterion-specific pairwise algorithms discussed by Jennrich (2001), GPA
 is simple and elegant. In fact, a general-purpose optimization based on
 GPA can be written in about 50 lines of code in the R language
@@ -1775,35 +1775,39 @@ projected gradient from the operations used to update \(\mathbf{X}\).
 \section{Rotation constraints and standard
 errors}\label{rotation-constraints-and-standard-errors}
 
-We already know how to impose constraints on \(\mathbf{X}\) in each
+We already know how to impose constraints on \(\mathbf{X}\) in
 orthogonal, oblique, and orthoblique rotation scenarios. A remaining
 matter is how these constraints are translated to the rotated loadings
-\(\mathbf{\Lambda}\) and factor correlation matrix \(\mathbf{\Psi}\).
+\(\mathbf{\Lambda}\) and factor correlation matrix \(\mathbf{\Psi}\) as
+this information is required for computing valid standard errors of
+rotated parameters.
 
-At any tangent direction \(\mathbf{V}\), we should have
+Let \(\zeta\) be the function that transforms the rotation matrix into
+the rotated parameters. By the definition of gradient, at any tangent
+direction \(\mathbf{V}\) we should have
 \begin{equation}\protect\phantomsection\label{eq-differential_rotated}{
 \begin{aligned}
 \text{D}f(\mathbf{X})[\mathbf{V}] &= \langle \Delta f_\mathbf{\Lambda\Psi}, \text{D}\zeta(\mathbf{X})[\mathbf{V}]\rangle, \\
-&= 0, \quad \text{at convergence.}
+&= 0, \quad \text{at convergence,}
 \end{aligned}
 }\end{equation} where \(\Delta f_\mathbf{\Lambda\Psi}\) is the gradient
-of the complexity function with respect to the rotated parameters and
-\(\zeta\) is the function that transform the rotation matrix into the
-rotated parameters. More importantly, the second equality follows
-because at a given solution the complexity criterion must be stationary.
+of the complexity function with respect to the rotated parameters. The
+second equality follows because at a given solution the complexity
+criterion must be stationary.
 
 In orthogonal rotation, the rotated loadings are
-\(\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}\). As we already
-showed, a tangent direction in this manifold can be written as
-\(\mathbf{V} = \mathbf{X}\mathbf{\Omega}\) for an skew-symmetric
-\(\mathbf{\Omega}\). Then, the directional derivative of the rotated
-loadings is
+\(\zeta(\mathbf{X}) = \{ \mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X} \}\).
+As we already showed, a tangent direction in this manifold can be
+written as \(\mathbf{V} = \mathbf{X}\mathbf{\Omega}\) for an
+skew-symmetric \(\mathbf{\Omega}\). Then, the directional derivative of
+the rotated loadings can be written as
 \(\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega}\).
-Substituting these expressions in Equation~\ref{eq-differential_rotated}
-and equaling to zero we have \[
+Plugging this in Equation~\ref{eq-differential_rotated} and equaling to
+zero, we have \[
 \langle \Delta f_\mathbf{\Lambda}, \mathbf{\Lambda}\mathbf{\Omega}\rangle = \langle \mathbf{\Omega}, \mathbf{\Lambda}^\top\Delta f_{\Lambda}\rangle = 0.
 \] Now, because \(\mathbf{\Omega}\) is skew-symmetric, it follows that
-\(\mathbf{\Lambda}^\top\Delta f_{\Lambda}\) must be symmetric.
+\(\mathbf{\Lambda}^\top\Delta f_{\Lambda}\) must be symmetric
+{[}Equation 17; Archer \& Jennrich (1973){]}.
 
 In oblique rotation, the rotated parameters become
 \(\zeta(\mathbf{X}) = \{\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}, \mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}\}\).
@@ -1828,7 +1832,7 @@ Equation~\ref{eq-differential_rotated} and equaling to zero we have \[
 \(\mathbf{\Omega}\) is off-diagonal and its orthogonal complement is any
 diagonal matrix, it follows that
 \(2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\)
-must be diagonal.
+must be diagonal {[}Equation 28; Jennrich (1973){]}.
 
 The rotation constraints of the diagonal blocks of the orthoblique
 manifold are the same than those of the oblique and orthogonal
@@ -2431,6 +2435,11 @@ A. (2022). Personality and intelligence: {A} meta-analysis.
 \emph{Psychological Bulletin}, \emph{148}, 301--336.
 \url{https://doi.org/10.1037/bul0000373}
 
+\bibitem[\citeproctext]{ref-archer_1973}
+Archer, C. O., \& Jennrich, R. I. (1973). Standard {Errors} for {Rotated
+Factor Loadings}. \emph{Psychometrika}, \emph{38}(4), 581--592.
+\url{https://doi.org/10.1007/BF02291496}
+
 \bibitem[\citeproctext]{ref-bernaards_2005}
 Bernaards, C. A., \& Jennrich, R. I. (2005). Gradient projection
 algorithms and software for arbitrary rotation criteria in factor
@@ -2441,6 +2450,11 @@ analysis. \emph{Educational and Psychological Measurement},
 Boumal, N. (2023). \emph{An introduction to optimization on smooth
 manifolds}. Cambridge University Press.
 \url{https://doi.org/10.1017/9781009166164}
+
+\bibitem[\citeproctext]{ref-jennrich_1973}
+Jennrich, R. I. (1973). Standard errors for obliquely rotated factor
+loadings. \emph{Psychometrika}, \emph{38}(4), 593--604.
+\url{https://doi.org/10.1007/BF02291497}
 
 \bibitem[\citeproctext]{ref-jennrich_2001}
 Jennrich, R. I. (2001). A simple general procedure for orthogonal
@@ -2487,12 +2501,12 @@ Muthén, L. K., \& Muthén, B. O. (2017). \emph{Mplus {User}'s {Guide}.
 {Eighth Edition}}.
 
 \bibitem[\citeproctext]{ref-psych}
-Revelle, W. (2022). \emph{Psych: {Procedures} for psychological,
-psychometric, and personality research}. Northwestern University.
+Revelle, W. (2020). \emph{Psych: {Procedures} for psychological,
+psychometric, and personality research} {[}Manual{]}.
 
 \bibitem[\citeproctext]{ref-lavaan}
-Rosseel, Y. (2012). Lavaan: {An R Package} for {Structural Equation
-Modeling}. \emph{Journal of Statistical Software}, \emph{48}, 1--36.
+Rosseel, Y. (2012). Lavaan: {An R} package for structural equation
+modeling. \emph{Journal of Statistical Software}, \emph{48}, 1--36.
 \url{https://doi.org/10.18637/jss.v048.i02}
 
 \bibitem[\citeproctext]{ref-watts_2022}
