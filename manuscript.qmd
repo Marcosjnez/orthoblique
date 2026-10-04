@@ -618,7 +618,7 @@ $$
 R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left(\mathbf{Z}^\top \mathbf{Z}\right)^{-1/2}.
 $$ {#eq-orth_retraction}
 
-The first condition of Definition \ref{retraction_definition} is met because at $t=0$, we have $R_{\mathbf{X}}^{\mathrm{orth}}(\mathbf{0}) = \mathbf{X}$ as $\mathbf{X}$ is already orthonormal. To check the second condition, we can rewrite the retraction in terms of (@eq-cross_step_orth) as follows:
+The first condition of Definition \ref{retraction_definition} is met because at $t=0$, we have $R_{\mathbf{X}}^{\mathrm{orth}}(\mathbf{0}) = \mathbf{X}$ as $\mathbf{X}$ is already orthonormal. To check the second condition, we can rewrite the retraction in terms of @eq-cross_step_orth as follows:
 $$
 R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = (\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\mathbf{V}^\top \mathbf{V}\right)^{-1/2}.
 $$
@@ -634,7 +634,7 @@ R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = \mathbf{Z} \left[\mathrm{ddiag}\!\
 $$ {#eq-oblq_retraction}
 which is the projection used by @jennrich_2002 [Appendix A.1].
 
-At $t=0$ we have $R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{0}) = \mathbf{X}$ because the columns of $\mathbf{X}$ are already unit norm. To prove the second condition, we rewrite the normalization using (@eq-cross_step_oblq) such that
+At $t=0$ we have $R_{\mathbf{X}}^{\mathrm{oblq}}(\mathbf{0}) = \mathbf{X}$ because the columns of $\mathbf{X}$ are already unit norm. To prove the second condition, we rewrite the normalization using @eq-cross_step_oblq such that
 $$
 R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V}) = (\mathbf{X}+t\mathbf{V})\left(\mathbf{I}+t^2\operatorname{ddiag}(\mathbf{V}^\top \mathbf{V})\right)^{-1/2}.
 $$
@@ -1017,26 +1017,17 @@ $$
 
 ## Retraction
 
-After computing the Riemannian gradient, the remaining problem is to map $\mathbf{X} - t\mathrm{grad}f(\mathbf{X})$ back onto the orthoblique manifold. For this, we need to find a function $R_{\mathbf{X}}: \mathcal{T}_{\mathbf{X}}\mathcal{POB} \rightarrow \mathcal{POB}$ that satisfies the conditions of Definition \ref{retraction_definition} such that
-$$
-\mathbf{Z}
-=
-R_{\mathbf{X}}^{\mathcal{POB}}
-\left(
--t
-\mathrm{grad}f(\mathbf{X})
-\right) \in \mathcal{POB}.
-$$
+After computing the Riemannian gradient, the remaining problem is to map $\mathbf{Z} = \mathbf{X} - t\mathrm{grad}f(\mathbf{X})$ back onto the orthoblique manifold. For this, we need to find a function $R_{\mathbf{X}}^{\mathcal{POB}}: \mathcal{T}_{\mathbf{X}}\mathcal{POB} \rightarrow \mathcal{POB}$ that satisfies the conditions of Definition \ref{retraction_definition}.
 
-Let $\mathbf{R}$ be the retracted update $\mathbf{X}_{k+1}$. Let us partition these matrices into blocks $\mathbf{Z} = \begin{bmatrix} \mathbf{Z}_1 & \mathbf{Z}_2 & \mathbf{Z}_3 \end{bmatrix}$ and $\mathbf{R} = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}$ such that the matrices indexed by $1$ and $2$ correspond to the first two oblique blocks, respectively, and those indexed by $3$ correspond to the block of orthogonal factors.
+Let $\mathbf{R}$ be the retracted tangent step $\mathbf{R} = R_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V})$. Let us partition the matrices $\mathbf{Z}$ and $\mathbf{R}$ into blocks $\mathbf{Z} = \begin{bmatrix} \mathbf{Z}_1 & \mathbf{Z}_2 & \mathbf{Z}_3 \end{bmatrix}$ and $\mathbf{R} = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}$ such that the submatrices indexed by $1$ and $2$ correspond to the first two oblique blocks, respectively, and those indexed by $3$ correspond to the block of orthogonal factors.
 
-The retraction of the first oblique block can be simply the retraction onto the oblique manifold with normalized columns,
+The retraction of the first oblique block can be simply the retraction of $\mathbf{Z}_1$ onto the space set of normalized columns,
 $$
 \mathbf{R}_1 = \mathbf{Z}_1 \left[ \mathrm{ddiag} \left( \mathbf{Z}_1^\top\mathbf{Z}_1 \right) \right]^{-1/2},
 $$
 so that $\text{diag}(\mathbf{R}_1^\top \mathbf{R}_1) = \mathbf{1}$. 
 
-The second oblique block only has to be made orthogonal to the first block. We may use the Gram-Schmidt process to orthogonalize each column of $\mathbf{Z}_2$ with respect to all the columns of $\mathbf{Z}_1$ ^[This is like doing a QR decomposition of $\mathbf{Z}_1$ with each column of $\mathbf{Z}_2$ appended to $\mathbf{Z}_1$ in turn.]. This process may be computationally expensive when there are many blocks of factors, so a better retraction is to project $\mathbf{Z}_2$ onto the orthogonal space of $\mathbf{Z}_1$. First, define the orthogonal projector onto the column space of $\mathbf{R}_1$ as $\mathbf{P}_1 = \mathbf{R}_1 \left( \mathbf{R}_1^\top\mathbf{R}_1 \right)^{-1} \mathbf{R}_1^\top$. Then, $\widetilde{\mathbf{Z}}_2 = \left( \mathbf{I}-\mathbf{P}_1 \right) \mathbf{Z}_2$ is orthogonal to $\mathbf{R}_1$. Second, the columns are subsequently normalized to obtain 
+The second oblique block also has to be made orthogonal to the first block. To do this, we first project $\mathbf{Z}_2$ onto the orthogonal space of $\mathbf{Z}_1$ before normalizing the result. First, define the orthogonal projector onto the column space of $\mathbf{R}_1$ as $\mathbf{P}_1 = \mathbf{R}_1 \left( \mathbf{R}_1^\top\mathbf{R}_1 \right)^{-1} \mathbf{R}_1^\top$. Then, $\widetilde{\mathbf{Z}}_2 = \left( \mathbf{I}-\mathbf{P}_1 \right) \mathbf{Z}_2$ is orthogonal to $\mathbf{R}_1$. Second, the columns are subsequently normalized to obtain 
 $$
 \mathbf{R}_2 = \widetilde{\mathbf{Z}}_2 \left[ \mathrm{ddiag} \left( \widetilde{\mathbf{Z}}_2^\top \widetilde{\mathbf{Z}}_2 \right) \right]^{-1/2}.
 $$ 
@@ -1046,14 +1037,14 @@ Finally, to get $\mathbf{R}_3$, combine the two oblique blocks columnwise in $\m
 $$
 \mathbf{R}_3 = \widetilde{\mathbf{Z}}_3 \left( \widetilde{\mathbf{Z}}_3^\top \widetilde{\mathbf{Z}}_3 \right)^{-1/2}
 $$
-As a result, $\mathbf{R}_1^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_2^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_3^\top\mathbf{R}_3 = \mathbf{I}$.
+As a result, $\mathbf{R}_1^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_2^\top\mathbf{R}_3 = \mathbf{0}, \qquad \mathbf{R}_3^\top\mathbf{R}_3 = \mathbf{I}$ and $\mathbf{R}_3$ becomes completely orthogonal.
 
 Taken together, the following blockwise construction defines the retracted orthoblique update
 $$
 R_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) = \begin{bmatrix} \mathbf{R}_1 & \mathbf{R}_2 & \mathbf{R}_3 \end{bmatrix}.
 $$
 
-Notice that we already proved that the orthonormalization [@eq-orth_retraction] and normalization [@eq-oblq_retraction] operations are valid retractions for the orthogonal and oblique manifolds, respectively. To show that $R_{\mathbf{X}}^{\mathcal{POB}}$ is another valid retraction for the orthoblique manifold, we just need to show that the projection of rotation blocks onto the orthogonal space of previous rotation blocks also satisfies the retraction conditions.
+Notice that we already proved that the orthonormalization (\ref{eq-orth_retraction}) and normalization (\ref{eq-oblq_retraction}) operations are valid retractions for the orthogonal and oblique manifolds, respectively. To show that $R_{\mathbf{X}}^{\mathcal{POB}}$ is another valid retraction for the orthoblique manifold, we just need to show that the projection of rotation blocks onto the orthogonal space of previous rotation blocks also satisfies the retraction conditions.
 
 First, define $P_{\mathbf{X}_j}$ to be a function that takes a block $j$ and projects it onto the orthogonal space of a previous retracted block $i$:
 $$
@@ -1063,9 +1054,9 @@ P_{\mathbf{X}_j}(t\mathbf{V}_j) &= (\mathbf{I} - \mathbf{R}_i(\mathbf{R}_i^\top\
 \end{aligned}
 $$ {#eq-orth_compl_proj}
 
-Since $\mathbf{R}_i$ reduces to $\mathbf{X}_i$ and $\mathbf{Z}_j$ reduces to $\mathbf{X}_j$ at $t=0$ and $\mathbf{X}_i^\top \mathbf{X}_j = \mathbf{0}$, the second term of this expression vanishes and we are left with $\left. P_{\mathbf{X}_j}(t\mathbf{V}_j) \right |_{t=0} = \mathbf{X}_j$. Therefore, $R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{0}) = \mathbf{X}$.
+At $t=0$, $\mathbf{R}_i$ reduces to $\mathbf{X}_i$ and $\mathbf{Z}_j$ reduces to $\mathbf{X}_j$. Since $\mathbf{X}_i^\top \mathbf{X}_j = \mathbf{0}$, the second term of this expression vanishes and we are left with $\left. P_{\mathbf{X}_j}(t\mathbf{V}_j) \right |_{t=0} = \mathbf{X}_j$. Therefore, $R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{0}) = \mathbf{X}$, satisfying the first retraction condition.
 
-To proof the second retraction condition differentiate @eq-orth_compl_proj using the product rule,
+To proof the second retraction condition we first differentiate @eq-orth_compl_proj using the product rule,
 $$
 \begin{aligned}
 DP_{\mathbf{X}_j}(t\mathbf{V}_j)
@@ -1088,7 +1079,7 @@ $$
 \right].
 $$
 
-If the previous projected block already satisfies the second retraction condition, then $\left.D\mathbf{R}_i\right|_{t=0}=\mathbf{V}_i$ and we obtain
+If the previous projected block $\mathbf{R}_i$ already satisfies the second retraction condition, then $\left.D\mathbf{R}_i\right|_{t=0}=\mathbf{V}_i$ and we obtain
 $$
 \left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0}
 =
@@ -1100,9 +1091,9 @@ $$
 \right).
 $$
 
-But the tangent-space equations in [@eq-pob_tangent_space] states that $\mathbf{V}_i^\top\mathbf{X}_j+\mathbf{X}_i^\top\mathbf{V}_j=\mathbf{0}$. Hence, $\left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0} = \mathbf{V}_j$.
+But the tangent-space equations (\ref{eq-pob_tangent_space}) states that $\mathbf{V}_i^\top\mathbf{X}_j+\mathbf{X}_i^\top\mathbf{V}_j=\mathbf{0}$. Hence, $\left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0} = \mathbf{V}_j$.
 
-Finally, because doing normalization or orthogonalization after this orthogonal projection onto the column space of a previous rotation block does not change the first-order direction, it follows that $\left. DR_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) \right|_{t=0} = \mathbf{V}$. 
+Finally, because we already showed that doing normalization or orthogonalization preserve first-order directions, it follows that applying these operations afterwards still preserve this direction and hence $\left. DR_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) \right|_{t=0} = \mathbf{V}$. 
 
 Notice that any block order also satisfies these retraction conditions, provided each block is projected onto the orthogonal complement of all previously processed blocks and then normalized if they are oblique or orthonormalized if it is orthogonal. Different orders may produce different finite updates but they always preserve the same first-order direction.
 
