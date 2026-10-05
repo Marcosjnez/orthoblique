@@ -1782,6 +1782,28 @@ matter is how these constraints are translated to the rotated loadings
 this information is required for computing valid standard errors of
 rotated parameters.
 
+Let \(\boldsymbol{\theta}\) be the vector of parameters before rotation
+and \(\mathbf{H}_{\theta}\) be the corresponding Hessian matrix. On the
+other hand, let \(\boldsymbol{\theta}^\ast\) contain the \(r\) model
+parameters after factor rotation and define \(\mathbf{C}_{\theta^\ast}\)
+as the \(r\times c\) matrix whose columns contain the derivatives of
+each constraint with respect to the model parameters, where \(c\)
+denotes the number of rotation constraints. Then
+
+\[
+\mathbf{H}_{\theta^\ast} =
+\begin{pmatrix}
+\mathbf{H}_{\theta} & \mathbf{C}_{\theta^\ast} \\
+\mathbf{C}_{\theta^\ast}^\top & \mathbf{0}
+\end{pmatrix}
+\]
+
+is an augmented hessian matrix whose inverse can be used to obtain a
+variance-covariance estimate in maximum likelihood {[}Equation 17;
+(\textbf{jennrich\_1974?}){]}. Alternatively, the augmented Hessian may
+be used in a sandwich estimator for other discrepancy functions (Zhang,
+2014).
+
 Let \(\zeta\) be the function that transforms the rotation matrix into
 the rotated parameters. By the definition of gradient, at any tangent
 direction \(\mathbf{V}\) we should have
@@ -1801,7 +1823,7 @@ As we already showed, a tangent direction in this manifold can be
 written as \(\mathbf{V} = \mathbf{X}\mathbf{\Omega}\) for an
 skew-symmetric \(\mathbf{\Omega}\). Then, the directional derivative of
 the rotated loadings can be written as
-\(\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega}\).
+\(\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \{ \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega} \}\).
 Plugging this in Equation~\ref{eq-differential_rotated} and equaling to
 zero, we have \[
 \langle \Delta f_\mathbf{\Lambda}, \mathbf{\Lambda}\mathbf{\Omega}\rangle = \langle \mathbf{\Omega}, \mathbf{\Lambda}^\top\Delta f_{\Lambda}\rangle = 0.
@@ -1832,7 +1854,10 @@ Equation~\ref{eq-differential_rotated} and equaling to zero we have \[
 \(\mathbf{\Omega}\) is off-diagonal and its orthogonal complement is any
 diagonal matrix, it follows that
 \(2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\)
-must be diagonal {[}Equation 28; Jennrich (1973){]}.
+must be diagonal. \footnote{Usually, the rotation criteria do not depend
+  on \(\mathbf{\Psi}\), so the requirement simplifies to
+  \(\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\)
+  being diagonal {[}Equation 28; Jennrich (1973){]}.}
 
 The rotation constraints of the diagonal blocks of the orthoblique
 manifold are the same than those of the oblique and orthogonal
@@ -2516,6 +2541,11 @@ How robust is the p factor? {Using} multitrait-multimethod modeling to
 inform the meaning of general factors of youth psychopathology.
 \emph{Clinical Psychological Science}, \emph{10}(4), 640--661.
 \url{https://doi.org/10.1177/21677026211055170}
+
+\bibitem[\citeproctext]{ref-zhang_2014}
+Zhang, G. (2014). Estimating {Standard Errors} in {Exploratory Factor
+Analysis}. \emph{Multivariate Behavioral Research}, \emph{49}(4),
+339--353. \url{https://doi.org/10.1080/00273171.2014.908271}
 
 \bibitem[\citeproctext]{ref-zhang_2019}
 Zhang, G., Hattori, M., Trichtinger, L. A., \& Wang, X. (2019). Target

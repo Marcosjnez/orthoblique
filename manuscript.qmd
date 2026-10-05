@@ -33,7 +33,7 @@ header-includes:
 - \newtheorem{definition}{Definition}
 - \newtheorem{theorem}{Theorem}
 nocite: |
- @bernaards_2005 @jennrich_2011 @jennrich_2012 @marsh_2020 @boumal_2023 
+ @bernaards_2005 @jennrich_2011 @jennrich_2012 @marsh_2020 
 output-file: manuscript.pdf
 keep-tex: true
 abstract-title: "Abstract"
@@ -1122,6 +1122,18 @@ Table \ref{tab:gpa-comparison} brings together the common GPA steps and the geom
 
 We already know how to impose constraints on $\mathbf{X}$ in orthogonal, oblique, and orthoblique rotation scenarios. A remaining matter is how these constraints are translated to the rotated loadings $\mathbf{\Lambda}$ and factor correlation matrix $\mathbf{\Psi}$ as this information is required for computing valid standard errors of rotated parameters.
 
+Let $\boldsymbol{\theta}$ be the vector of parameters before rotation and $\mathbf{H}_{\theta}$ be the corresponding Hessian matrix. On the other hand, let $\boldsymbol{\theta}^\ast$ contain the $r$ model parameters after factor rotation and define $\mathbf{C}_{\theta^\ast}$ as the $r\times c$ matrix whose columns contain the derivatives of each constraint with respect to the model parameters, where $c$ denotes the number of rotation constraints. Then
+
+$$
+\mathbf{H}_{\theta^\ast} =
+\begin{pmatrix}
+\mathbf{H}_{\theta} & \mathbf{C}_{\theta^\ast} \\
+\mathbf{C}_{\theta^\ast}^\top & \mathbf{0}
+\end{pmatrix}
+$$
+
+is an augmented hessian matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood [Equation 17; @jennrich_1974]. Alternatively, the augmented Hessian may be used in a sandwich estimator for other discrepancy functions [@zhang_2014].
+
 Let $\zeta$ be the function that transforms the rotation matrix into the rotated parameters. By the definition of gradient, at any tangent direction $\mathbf{V}$ we should have
 $$
 \begin{aligned}
@@ -1131,7 +1143,7 @@ $$
 $$ {#eq-differential_rotated}
 where $\Delta f_\mathbf{\Lambda\Psi}$ is the gradient of the complexity function with respect to the rotated parameters. The second equality follows because at a given solution the complexity criterion must be stationary.
 
-In orthogonal rotation, the rotated loadings are $\zeta(\mathbf{X}) = \{ \mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X} \}$. As we already showed, a tangent direction in this manifold can be written as $\mathbf{V} = \mathbf{X}\mathbf{\Omega}$ for an skew-symmetric $\mathbf{\Omega}$. Then, the directional derivative of the rotated loadings can be written as $\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega}$. Plugging this in @eq-differential_rotated and equaling to zero, we have
+In orthogonal rotation, the rotated loadings are $\zeta(\mathbf{X}) = \{ \mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X} \}$. As we already showed, a tangent direction in this manifold can be written as $\mathbf{V} = \mathbf{X}\mathbf{\Omega}$ for an skew-symmetric $\mathbf{\Omega}$. Then, the directional derivative of the rotated loadings can be written as $\mathrm{D}\zeta(\mathbf{X})[\mathbf{V}] = \{ \mathbf{\Lambda}_0\mathbf{V} = \mathbf{\Lambda}\mathbf{\Omega} \}$. Plugging this in @eq-differential_rotated and equaling to zero, we have
 $$
 \langle \Delta f_\mathbf{\Lambda}, \mathbf{\Lambda}\mathbf{\Omega}\rangle = \langle \mathbf{\Omega}, \mathbf{\Lambda}^\top\Delta f_{\Lambda}\rangle = 0.
 $$
@@ -1154,7 +1166,7 @@ $$
 &= \mathrm{trace}(-\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\mathbf{\Omega}^\top) + \mathrm{trace}(2\Delta f_\mathbf{\Psi} \mathbf{\Omega}^\top).
 \end{aligned}
 $$
-where $\Delta f_\mathbf{\Psi}$ is symmetric. Now, because $\mathbf{\Omega}$ is off-diagonal and its orthogonal complement is any diagonal matrix, it follows that $2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}$ must be diagonal [Equation 28; @jennrich_1973].
+where $\Delta f_\mathbf{\Psi}$ is symmetric. Now, because $\mathbf{\Omega}$ is off-diagonal and its orthogonal complement is any diagonal matrix, it follows that $2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}$ must be diagonal. ^[Usually, the rotation criteria do not depend on $\mathbf{\Psi}$, so the requirement simplifies to $\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}$ being diagonal [Equation 28; @jennrich_1973].]
 
 The rotation constraints of the diagonal blocks of the orthoblique manifold are the same than those of the oblique and orthogonal manifolds. We only need to derive the constraints for the intersections between the oblique-oblique blocks and oblique-orthogonal blocks.
 
