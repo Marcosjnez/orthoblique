@@ -1171,7 +1171,7 @@ must be symmetric, with the submatrices corresponding to the blocks of oblique f
 
 Following the orthoblique definition in (@eq-orthblq_definition), if $p$ is the number of oblique factors in the first block, $q$ is the number of oblique factors in the second block, and $r$ is the number of completely orthogonal factors in the third block, then there is a total of $d = p+q+pq+pr+qr+ r(r+1)/2$ independent constraints.
 
-\textcolor{Calculate the derivatives of the $d$ constraints in @eq-orthblq_constraints. For the off-diagonal oblique constraints, I think the best way to present this is to write the differentials of @eq-orthblq_constraints. For the oblique-oblique, oblique-orthogonal, and orthogonal-orthogonal constraints, calculate the differentials of @eq-orthblq_constraints minus its transpose.}
+\textcolor{red}{Calculate the derivatives of the $d$ constraints in} @eq-orthblq_constraints. \textcolor{red}{For the off-diagonal oblique constraints, I think the best way to present this is to write the differentials of} @eq-orthblq_constraints. \textcolor{red}{For the oblique-oblique, oblique-orthogonal, and orthogonal-orthogonal constraints, calculate the differentials of} @eq-orthblq_constraints \textcolor{red}{minus its transpose.}
 
 # Estimation of the factor scores
 
