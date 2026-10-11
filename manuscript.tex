@@ -224,6 +224,10 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={The orthoblique rotation for factor analysis},
   colorlinks=true,
@@ -243,28 +247,30 @@
 For the last two decades, the gradient projection algorithm (GPA) has
 been the most used tool to rotate factor solutions. However, GPA is
 currently limited to performing either full orthogonal or oblique
-rotations. This is a shortcoming because in some cases it is known in
-advance that some factor correlations must be zero but keeping
-structural zeros in the factor correlation matrix after rotation is
-currently unavailable in Exploratory Factor Analysis. Thereby, we
-developed a new kind of rotation, the orthoblique rotation, in which
-both oblique and orthogonal relations between factors coexists. Building
-on the orthogonal and oblique algorithms of Jennrich, we provide a
-deeper account of how GPA works and use this account to generalize
-factor rotation to the orthoblique case. We then demonstrate that this
-rotation helps to estimate exploratory bi-factor models with multiple
-general factors in which the general factors may be correlated but must
-remain orthogonal to the group factors, which can be considered a
-generalization of the biquartimin and bigeomin criteria. We also
+rotations. Keeping structural zeros in selected positions of the factor
+correlation matrix after rotation is currently unavailable in
+Exploratory Factor Analysis. This is a shortcoming because in some cases
+it is known in advance that some factor correlations must be zero by
+theory or design. Thereby, we developed a new kind of rotation, the
+orthoblique rotation, in which both oblique and orthogonal relations
+between factors coexists. Building on the orthogonal and oblique
+algorithms of Jennrich, we provide a deeper account of how GPA works and
+use this account to generalize factor rotation to the orthoblique case.
+We then demonstrate that this rotation helps to estimate exploratory
+bi-factor models with multiple general factors in which the general
+factors may be correlated but must remain orthogonal to the group
+factors, which can be considered a generalization of the biquartimin and
+bigeomin criteria of Jennrich and Bentler (2011; 2012). We also
 illustrate its application to exploratory multitrait-multimethod models,
 where trait and method factors may correlate within their respective
-sets but trait--method correlations are constrained to zero. Taken
-together, this work can be seen as a continuation of the efforts of
-Jennrich to broaden the reach and flexibility of Exploratory Factor
-Analysis. Finally, we made available the new orthoblique rotation in the
-R package \texttt{latent}, whose \texttt{lrotate()} function serves the
-same purpose as the \texttt{GPArotation} package of Bernaards and
-Jennrich (2005).
+sets but trait--method correlations are constrained to zero by design.
+Finally, we made available the new orthoblique rotation in the R package
+\texttt{latent}, whose \texttt{lrotate()} function serves the same
+purpose as the \texttt{GPArotation} package of Bernaards and Jennrich
+(2005). Taken together, this work contributes to filling the gap between
+the confirmatory--exploratory continuum and can be seen as a
+continuation of the efforts of Jennrich to broaden the flexibility and
+reach of Exploratory Factor Analysis.
 \end{abstract}
 
 
@@ -275,16 +281,14 @@ Jennrich (2005).
 
 \section{Introduction}\label{introduction}
 
-Exploratory factor analysis (EFA) is an increasingly popular framework
-for estimating large and complex factor structures. It was developed to
-overcome the overly restrictive measurement models and the unacceptable
-model fit indices often encountered in real applications of confirmatory
-factor analysis {[}CFA; Marsh et al. (2020){]}. The particular feature
-of EFA is that it permits the estimation of all the loading parameters
-of the measurement models by means of a rotation step, reducing the risk
-of model misspecification. This way, EFA avoids incorrectly fixing
-cross-loadings to zero in the measurement model, which is an important
-caveat of CFA.
+Exploratory factor analysis (EFA) is a popular framework for estimating
+large and complex factor structures. It surpasses the overly restrictive
+measurement models and the unacceptable model fit indices often
+encountered in real applications of confirmatory factor analysis {[}CFA;
+Marsh et al. (2020){]}. In CFA, incorrectly fixing cross-loadings to
+zero is an important caveat whereas EFA permits the estimation of all
+the loading parameters of the measurement model by means of a rotation
+step, reducing the risk of model misspecification.
 
 However, the flexibility of EFA comes at the expense of specifying a
 suitable simplicity or parsimony criterion to be optimized, so that a
@@ -298,72 +302,78 @@ Mplus (Muthén \& Muthén, 2017), \texttt{lavaan} (Rosseel, 2012), and
 \texttt{psych} (Revelle, 2020). In contrast with previously used
 rotation procedures like the criterion-specific pairwise algorithms
 discussed by Jennrich (2001), GPA is simple and elegant. In fact, a
-general-purpose optimization based on GPA can be written in about 50
-lines of code in the R language \footnote{See the \texttt{GPForth} and
-  \texttt{GPFoblq} functions from the \texttt{GPArotation} R package
-  (Bernaards \& Jennrich, 2005) for orthogonal and oblique rotation,
-  respectively}. Moreover, GPA is based on an optimization framework
-where traditional step-size selection techniques (e.g., backtracking
-line-search or trust-region) and search directions based on first- and
-second-order derivatives can be used (Liu, 2020).
+general-purpose optimization routine based on GPA can be written in
+about 50 lines of code in the R language \footnote{See the
+  \texttt{GPForth} and \texttt{GPFoblq} functions from the
+  \texttt{GPArotation} R package (Bernaards \& Jennrich, 2005) for
+  orthogonal and oblique rotation, respectively}. Moreover, GPA is based
+on an optimization framework where traditional step-size selection
+techniques like backtracking line-search and search directions based on
+first- and second-order derivatives can be used (Liu, 2020).
 
 The generality of GPA for factor rotation was the main contribution of
 Jennrich (2001) and Jennrich (2002). Rather than developing a different
-algorithm for every simplicity criterion, these papers showed that a
-common computational procedure could optimize many criteria under the
-same rotation constraints. Bernaards \& Jennrich (2005) developed this
-idea into general-purpose software and separated the evaluation of the
-criterion and its gradient from the operations that enforce the rotation
-constraints. They also provided derivations, proofs, and software
-implementation details. Thus, their work provides both the computational
-starting point and the motivation for the present generalization.
-However, our purpose is to give a deeper and more explicit geometric
-account of all the mathematical objects involving factor rotation and
-the connections between them. Explaining why these operations are
-needed, how they are derived from the constraints of the rotation
-matrix, and how they work together provides a constructive route from
-the orthogonal and oblique cases to other rotation geometries.
+algorithm for every simplicity criterion, they showed that a common
+computational procedure could optimize many criteria under the same
+rotation constraints. Bernaards and Jennrich (2005) developed this idea
+into general-purpose software and separated the evaluation of the
+criterion and the gradient of the parameters from the operations that
+enforce the rotation constraints. They also provided derivations,
+proofs, and software implementation details. Thus, their work provided
+both the motivation and the computational starting point for the present
+generalization to a new rotation method. Our purpose is to give a deeper
+and more explicit geometric account of all the mathematical objects
+involving factor rotation and the connections between them. Explaining
+why they are needed, how they are derived from the constraints of the
+rotation matrix, and how they work together provides a constructive
+route from the orthogonal and oblique cases to other rotation
+geometries.
 
 This generalization is very important because in EFA, the applications
 of GPA are currently limited to either orthogonal and oblique rotation.
-In other words, all the factors in EFA are currenlty either constrained
+In other words, all the factors in EFA are currently either constrained
 to be orthogonal or allowed to correlate. This circumstance is
 problematic in cases where the researchers know in advance that two sets
 of factors may be correlated within each set but orthogonal between
 sets. For example, consider multitrait-multimethod models, in which
 trait and method factors may correlate within their respective sets but
-trait--method correlations are constrained to zero. In this scenario,
-there should be structural zeros in the factor correlation matrix to
-effectively separate the variance explained by traits and methods. In
-other cases, it may be desirable to constrain one factor, or a group of
-factors, to be orthogonal to the remaining factors in order to obtain a
-more parsimonious pattern structure. For instance, consider applications
-of exploratory bi-factor modeling with one or multiple general factors
-in which all the general factors must be orthogonal to the group
-factors, but may be correlated among themselves (Jennrich \& Bentler,
-2012; Jiménez et al., 2023). If the general factors were allowed to
-correlate with the group factors in an oblique rotation analysis, then
-the variance explained by each kind of factor could not be correctly
-disentangled, with the consequence that cross-loadings across the
-general factors would be biased.
+trait--method correlations must be constrained to zero by design. In
+this scenario, there should be structural zeros in the factor
+correlation matrix to effectively separate the variance explained by
+traits and methods. In other cases, it may be desirable to constrain one
+factor, or a group of factors, to be orthogonal to the remaining factors
+in order to obtain a more parsimonious pattern structure. For this,
+consider applications of exploratory bifactor modeling with one or
+multiple general factors in which all the general factors must be
+orthogonal to the group factors, but may be correlated among themselves
+(Jennrich \& Bentler, 2012; Jiménez et al., 2023). If the general
+factors were allowed to correlate with the group factors in an oblique
+rotation analysis, then the variance explained by each kind of factor
+could not be correctly disentangled, with the consequence that
+cross-loadings across the general factors would be biased.
 
 Thereby, a generalization of the oblique and orthogonal rotations that
-allows for a mix of oblique and orthogonal factors within the same EFA
-model could aid the correct estimation of such factor structures.
+allows for a mix of oblique and orthogonal factors could aid the correct
+estimation of such factor structures.
 
 The objectives of this work are fourfold. First, we give a coherent and
-self-contained explanation of GPA for orthogonal and oblique rotation,
-connecting the matrix formulas of Jennrich (2001), Jennrich (2002), and
-Bernaards \& Jennrich (2005) with their underlying geometry. Second,
-using these explanations, we derive the orthoblique manifold and show
-how the conventional rotations are obtained as special cases. Third, we
-make these new rotation capabilities available in the \texttt{latent}
-package and explain how \texttt{lrotate()} extends the rotation
-framework represented by \texttt{GPArotation}. Lastly, we illustrate the
-usefulness of this generalization in exploratory multitrait-multimethod
-and bifactor models with the idea of retaining the flexibility of EFA to
-uncover cross-loadings and wrong theoretical expectations while
-retaining certain factor-correlation restrictions.
+self-contained explanation of EFA and GPA for orthogonal and oblique
+rotation, connecting the matrix formulas of Jennrich (2001) and Jennrich
+(2002) with their underlying geometry. Second, using these explanations,
+we derive the orthoblique rotation, a generalization in which both
+oblique and orthogonal relations between factors coexists, and show how
+the conventional rotations are obtained as special cases. Standard
+errors for the new rotated parameters and correlation-preserving factor
+scores are also provided. Third, we make this new rotation available in
+the \texttt{latent} R package and explain how the function
+\texttt{lrotate()} extends the rotation framework used in
+\texttt{GPArotation}. Lastly, we illustrate the usefulness of this
+generalization in two empirical examples concerning exploratory
+multitrait-multimethod and bifactor models with multiple general
+factors. In the end, we discuss the benefits of the orthoblique rotation
+for preserving the flexibility of EFA to uncover cross-loadings and
+wrong theoretical expectations while retaining specific
+factor-correlation restrictions.
 
 \section{Factor rotation}\label{factor-rotation}
 
@@ -948,7 +958,7 @@ and the Riemannian gradient for oblique rotation becomes \[
 
 These are indeed the same projected gradients formulas denoted by
 \texttt{Gp} in the orthogonal and oblique implementations of Bernaards
-\& Jennrich (2005, pp. 692--695) and in the \texttt{GPArotation}
+and Jennrich (pp.~692--695; 2005) and in the \texttt{GPArotation}
 package.
 
 \section{Solution to problem 2: the
@@ -1098,7 +1108,7 @@ positive diagonal entries. Alternatively, if
 decomposition, another valid retraction is
 \(R_\mathbf{X}^{\text{orth}}(t\mathbf{V}) = \mathbf{U}\mathbf{W}^\top\).
 This is actually the orthogonal projection used in the algorithms of
-Jennrich (2001) and Bernaards \& Jennrich (2005). The QR and singular
+Jennrich (2001) and Bernaards and Jennrich (2005). The QR and singular
 value decomposition retractions need not produce the same finite update,
 but both are smooth operations that satisfy the conditions in Definition
 \ref{retraction_definition}, leaving the point \(\mathbf{X}\) unchanged
@@ -1216,7 +1226,7 @@ factors.
 Let \(\mathcal{POB}\big(\{p,q\},r\big)\) denote the set of orthoblique
 matrices in \(\mathbb{R}^{n\times n}\) defined by
 
-\[
+\begin{equation}\protect\phantomsection\label{eq-orthblq_definition}{
 \mathcal{POB}\big(\{p,q\},r\big)
 =
 \left\{
@@ -1231,10 +1241,10 @@ matrices in \(\mathbb{R}^{n\times n}\) defined by
 \mathrm{diag}(\mathbf{Y}_1)=\mathbf{1},
 \mathrm{diag}(\mathbf{Y}_2)=\mathbf{1}
 \right\},
-\] where \(p\) is the number of oblique factors in the first block,
-\(q\) is the number of oblique factors in the second block, \(r\) is the
-number of completely orthogonal factors in the third block, and thus
-\(n=p+q+r\). Let's partition \(\mathbf{X}\) accordingly as
+}\end{equation} where \(p\) is the number of oblique factors in the
+first block, \(q\) is the number of oblique factors in the second block,
+\(r\) is the number of completely orthogonal factors in the third block,
+and thus \(n=p+q+r\). Let's partition \(\mathbf{X}\) accordingly as
 \(\mathbf{X}=\begin{bmatrix}\mathbf{X}_1 & \mathbf{X}_2 & \mathbf{X}_3 \end{bmatrix}\),
 where \(\mathbf{X}_1\in\mathbb{R}^{n\times p}\),
 \(\mathbf{X}_2\in\mathbb{R}^{n\times q}\), and
@@ -1778,18 +1788,16 @@ matter is how these constraints are translated to the rotated loadings
 this information is required for computing valid standard errors of
 rotated parameters.
 
-Let \(\boldsymbol{\theta}\) be the vector of parameters before rotation
-and \(\mathbf{H}_{\theta}\) be the corresponding Hessian matrix. On the
-other hand, let \(\boldsymbol{\theta}^\ast\) contain the \(r\) model
-parameters after factor rotation and define \(\mathbf{C}_{\theta^\ast}\)
-as the \(r\times c\) matrix whose columns contain the derivatives of
-each constraint with respect to the model parameters, where \(c\)
-denotes the number of rotation constraints. Then
+Let \(\boldsymbol{\theta}^\ast\) contain the \(r\) model parameters
+after factor rotation and \(\mathbf{H}_{\theta}\) be the corresponding
+Hessian matrix. Define \(\mathbf{C}_{\theta^\ast}\) as the \(r\times c\)
+matrix whose columns contain the derivatives of each constraint with
+respect to the model parameters, where \(c\) denotes the number of
+rotation constraints. Then
 
 \[
-\mathbf{H}_{\theta^\ast} =
 \begin{pmatrix}
-\mathbf{H}_{\theta} & \mathbf{C}_{\theta^\ast} \\
+\mathbf{H}_{\theta^\ast} & \mathbf{C}_{\theta^\ast} \\
 \mathbf{C}_{\theta^\ast}^\top & \mathbf{0}
 \end{pmatrix}
 \]
@@ -1848,9 +1856,25 @@ Equation~\ref{eq-differential_rotated} and equaling to zero we have \[
 &= \mathrm{trace}(-\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\mathbf{\Omega}^\top) + \mathrm{trace}(2\Delta f_\mathbf{\Psi} \mathbf{\Omega}^\top).
 \end{aligned}
 \] Therefore,
-\(2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}\)
-must be symmetric, with the submatrices corresponding to the blocks of
-oblique factors being also diagonal.
+\begin{equation}\protect\phantomsection\label{eq-orthblq_constraints}{
+2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}
+}\end{equation} must be symmetric, with the submatrices corresponding to
+the blocks of oblique factors being also diagonal.
+
+Following the orthoblique definition in
+(Equation~\ref{eq-orthblq_definition}), if \(p\) is the number of
+oblique factors in the first block, \(q\) is the number of oblique
+factors in the second block, and \(r\) is the number of completely
+orthogonal factors in the third block, then there is a total of
+\(d = p+q+pq+pr+qr+ r(r+1)/2\) independent constraints.
+
+\textbackslash textcolor\{Calculate the derivatives of the \(d\)
+constraints in Equation~\ref{eq-orthblq_constraints}. For the
+off-diagonal oblique constraints, I think the best way to present this
+is to write the differentials of Equation~\ref{eq-orthblq_constraints}.
+For the oblique-oblique, oblique-orthogonal, and orthogonal-orthogonal
+constraints, calculate the differentials of
+Equation~\ref{eq-orthblq_constraints} minus its transpose.\}
 
 \section{Estimation of the factor
 scores}\label{estimation-of-the-factor-scores}
@@ -1890,6 +1914,11 @@ As it can be seen, the choice of criterion is separated from the choice
 of geometry: \texttt{rotation} specifies the criterion, whereas
 \texttt{projection} selects between orthogonal (\texttt{"orth"}),
 oblique (\texttt{"oblq"}), and orthoblique (\texttt{"poblq"}) manifolds.
+\footnote{To call the orthoblique rotation we chose the label
+  \texttt{"poblq"}, which stands for ``partially oblique'', because we
+  did not found a convenient alternative that stands for
+  ``orthoblique''. Options like \texttt{"orblq"} were considered but
+  discarded for similarity with the oblique option.}
 
 For the block structure developed in this paper, consider the following
 orthoblique target rotation:
@@ -2088,7 +2117,7 @@ as follows:
 \NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{sample.cov =}\NormalTok{ R, }\AttributeTok{sample.nobs =} \DecValTok{2119}\NormalTok{,}
             \AttributeTok{nfactors =} \DecValTok{5}\NormalTok{, }\AttributeTok{estimator =} \StringTok{"uls"}\NormalTok{,}
             \AttributeTok{projection =} \StringTok{"poblq"}\NormalTok{, }\AttributeTok{oblique =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{),}
-            \AttributeTok{rotation =} \StringTok{"target"}\NormalTok{, }\AttributeTok{target =}\NormalTok{ Target)}
+            \AttributeTok{rotation =} \StringTok{"target"}\NormalTok{, }\AttributeTok{target =}\NormalTok{ target)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2289,7 +2318,7 @@ was fitted as follows:
 \begin{Highlighting}[]
 \NormalTok{rotation\_model }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
   \AttributeTok{oblimin =} \FunctionTok{list}\NormalTok{(}\AttributeTok{gamma =} \DecValTok{0}\NormalTok{, }\AttributeTok{factors =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
-  \AttributeTok{target =} \FunctionTok{list}\NormalTok{(}\AttributeTok{target =}\NormalTok{ Target[, }\DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{], }\AttributeTok{factors =} \DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{)}
+  \AttributeTok{target =} \FunctionTok{list}\NormalTok{(}\AttributeTok{target =}\NormalTok{ target[, }\DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{], }\AttributeTok{factors =} \DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{)}
 \NormalTok{)}
 \NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{data =}\NormalTok{ mooc, }\AttributeTok{nfactors =} \DecValTok{30}\NormalTok{,}
             \AttributeTok{ordered =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{estimator =} \StringTok{"dwls"}\NormalTok{,}
@@ -2349,7 +2378,7 @@ factor-correlation geometry exactly. The two mechanisms can therefore be
 combined without turning the factor model into a confirmatory
 simple-structure model.
 
-\section{Conclusion}\label{conclusion}
+\section{Discussion}\label{discussion}
 
 Until now, conventional GPA-based factor rotation has generally treated
 factors as either completely orthogonal or completely oblique. We
@@ -2450,10 +2479,10 @@ loadings. \emph{Psychometrika}, \emph{38}(4), 593--604.
 \url{https://doi.org/10.1007/BF02291497}
 
 \bibitem[\citeproctext]{ref-jennrich_1974}
-Jennrich, R. I. (1974). SIMPLIFIED FORMULAE FOR STANDARD ERRORS IN
-MAXIMUM-LIKELIHOOD FACTOR ANALYSIS. \emph{British Journal of
+Jennrich, R. I. (1974). Simplified formulae for standard errors in
+maximum-likelihood factor analysis. \emph{British Journal of
 Mathematical and Statistical Psychology}, \emph{27}(1), 122--131.
-https://doi.org/\url{https://doi.org/10.1111/j.2044-8317.1974.tb00533.x}
+\url{https://doi.org/10.1111/j.2044-8317.1974.tb00533.x}
 
 \bibitem[\citeproctext]{ref-jennrich_2001}
 Jennrich, R. I. (2001). A simple general procedure for orthogonal
