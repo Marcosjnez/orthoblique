@@ -5,6 +5,7 @@ format: pdf
 execute:
   eval: false
 pdf-engine: pdflatex
+
 margin-left: 2.5cm
 margin-right: 2.5cm
 margin-bottom: 2.5cm
@@ -14,29 +15,82 @@ geometry:
   - left=2.5cm
   - right=2.5cm
   - bottom=2.5cm
+
 indent: true
-date: 2026-19-04
+date: 2026-10-19
+date-format: "D MMMM YYYY"
 fontsize: 12pt
 number-sections: false
 number-depth: 2
 editor: visual
+
 bibliography:
   - references.bib
 csl: apa_7.csl
+
 header-includes:
-- \usepackage[utf8]{inputenc}
-- \usepackage{amsmath, amsfonts, amssymb, lmodern, fontenc, babel, setspace}
-- \usepackage{mathtools}
-- \usepackage{xcolor} # Added for red/green revision markup
-- \usepackage{graphicx, caption}
-- \usepackage{tikz}
-- \usepackage{tikz-3dplot}
-- \newtheorem{definition}{Definition}
-- \newtheorem{theorem}{Theorem}
+  - \usepackage[utf8]{inputenc}
+  - \usepackage{amsmath, amsfonts, amssymb, lmodern, fontenc, babel, setspace}
+  - \usepackage{mathtools}
+  - \usepackage{xcolor}
+  - \usepackage{graphicx, caption}
+  - \usepackage{tikz}
+  - \usepackage{tikz-3dplot}
+  - \newtheorem{definition}{Definition}
+  - \newtheorem{theorem}{Theorem}
+  - |
+      \AtBeginDocument{%
+        \author{%
+          \parbox{0.96\textwidth}{\centering
+          Marcos Jiménez\textsuperscript{1,4},
+          Mauricio Garnier-Villarreal\textsuperscript{1},
+          Vithor R. Franco\textsuperscript{2},
+          Luis E. Garrido\textsuperscript{3}, and
+          Francisco J. Abad\textsuperscript{4}\\[1em]
+          {\small
+          \textsuperscript{1} Vrije Universiteit Amsterdam\\
+          \textsuperscript{2} Universidade São Francisco\\
+          \textsuperscript{3} Pontificia Universidad Católica Madre y Maestra\\
+          \textsuperscript{4} Universidad Autónoma de Madrid
+          }%
+          }%
+        }%
+      }
+
 nocite: |
- @bernaards_2005 
+  @bernaards_2005
+
 output-file: manuscript.pdf
 keep-tex: true
+
+author:
+  - name: "Marcos Jiménez"
+    affiliation:
+      - ref: vu
+      - ref: uam
+  - name: "Mauricio Garnier-Villarreal"
+    affiliation:
+      - ref: vu
+  - name: "Vithor R. Franco"
+    affiliation:
+      - ref: usf
+  - name: "Luis E. Garrido"
+    affiliation:
+      - ref: pucmm
+  - name: "Francisco J. Abad"
+    affiliation:
+      - ref: uam
+
+affiliations:
+  - id: vu
+    name: "Vrije Universiteit Amsterdam"
+  - id: usf
+    name: "Universidade São Francisco"
+  - id: pucmm
+    name: "Pontificia Universidad Católica Madre y Maestra"
+  - id: uam
+    name: "Universidad Autónoma de Madrid"
+
 abstract-title: "Abstract"
 abstract: |
   For the last two decades, the gradient projection algorithm (GPA) has been the most used tool to rotate factor solutions. However, GPA is currently limited to performing either full orthogonal or oblique rotations. Keeping structural zeros in selected positions of the factor correlation matrix after rotation is currently unavailable in Exploratory Factor Analysis. This is a shortcoming because in some cases it is known in advance that some factor correlations must be zero by theory or design. Thereby, we developed a new kind of rotation, the orthoblique rotation, in which both oblique and orthogonal relations between factors coexists. Building on the orthogonal and oblique algorithms of Jennrich, we provide a deeper account of how GPA works and use this account to generalize factor rotation to the orthoblique case. We then demonstrate that this rotation helps to estimate exploratory bi-factor models with multiple general factors in which the general factors may be correlated but must remain orthogonal to the group factors, which can be considered a generalization of the biquartimin and bigeomin criteria of Jennrich and Bentler (2011; 2012). We also illustrate its application to exploratory multitrait-multimethod models, where trait and method factors may correlate within their respective sets but trait–method correlations are constrained to zero by design. Finally, we made available the new orthoblique rotation in the R package \texttt{latent}, whose \texttt{lrotate()} function serves the same purpose as the \texttt{GPArotation} package of Bernaards and Jennrich (2005). Taken together, this work contributes to filling the gap between the confirmatory--exploratory continuum and can be seen as a continuation of the efforts of Jennrich to broaden the flexibility and reach of Exploratory Factor Analysis.
