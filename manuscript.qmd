@@ -1123,26 +1123,20 @@ Table \ref{tab:gpa-comparison} brings together the common GPA steps and the geom
 
 We already know how to impose constraints on $\mathbf{X}$ in orthogonal, oblique, and orthoblique rotation scenarios. A remaining matter is how these constraints are translated to the rotated loadings $\mathbf{\Lambda}$ and factor correlation matrix $\mathbf{\Psi}$ as this information is required for computing valid standard errors of rotated parameters.
 
-Let $\boldsymbol{\theta}^\ast$ contain the $r$ model parameters after factor rotation and $\mathbf{H}_{\theta}$ be the corresponding Hessian matrix. Define $\mathbf{C}_{\theta^\ast}$ as the $r\times c$ matrix whose columns contain the derivatives of each constraint with respect to the model parameters, where $c$ denotes the number of rotation constraints. Then
-
-Let $\boldsymbol{\theta}^\ast$ contain the $k$ model parameters after factor rotation, with the unit diagonal and structural zeros of $\mathbf{\Psi}$ treated as fixed rather than free coordinates. Let $\mathbf{H}_{\theta^\ast}$ be the Hessian of the negative log-likelihood per observation, not the Hessian of the rotation criterion. Define $\mathbf{C}_{\theta^\ast}$ as the $k\times c$ matrix whose columns contain the derivatives of the $c$ rotational stationarity constraints with respect to these parameters. Then
+Let $\theta$ be a vector collecting the $k$ factor model parameters after factor rotation and $\mathbf{H}_{\theta}$ be the corresponding Hessian matrix of the log-likelihood. Define $\mathbf{C}_{\theta}$ as the $k\times c$ matrix whose columns contain the derivatives of the $c$ constraints with respect to these parameters that must be satisfied at the stationary point. Then,
 
 $$
 \begin{pmatrix}
-\mathbf{H}_{\theta^\ast} & \mathbf{C}_{\theta^\ast} \\
-\mathbf{C}_{\theta^\ast}^\top & \mathbf{0}
+\mathbf{H}_{\theta} & \mathbf{C}_{\theta} \\
+\mathbf{C}_{\theta}^\top & \mathbf{0}
 \end{pmatrix}
-$$
+$$ {#eq-augmented-hessian}
 
-is an augmented hessian matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood [Equation 17; @jennrich_1974]. Alternatively, the augmented Hessian may be used in a sandwich estimator for other non-maximum likelihood methods [@zhang_2014].
+is an augmented hessian matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood estimation [Equation 17; @jennrich_1974]. Alternatively, this augmented Hessian may be used in a sandwich estimator for non-maximum likelihood methods [@zhang_2014].
 
-is an augmented Hessian matrix. Under correct specification and the usual regularity conditions for maximum likelihood, the upper-left $k\times k$ block of its inverse, divided by the sample size $N$, estimates the covariance matrix of the rotated parameters [Equation 17; @jennrich_1974]. The division by $N$ is omitted if the Hessian is defined for the full-sample negative log-likelihood. For least-squares estimation or inference robust to nonnormality or model misspecification, the corresponding sensitivity matrix and the constraint derivatives enter an appropriate sandwich estimator instead [@zhang_2014].
+For orthogonal and oblique rotation, the derivatives of the constraints can be found elsewhere [@archer_1973; @jennrich_1973]. $\mathbf{C}_{\theta}$. For orthoblique rotation, we first derive the constraints and then compute their corresponding derivatives. 
 
-We now show the hidden constraints over the rotated parameters and their corresponding derivatives. For orthogonal and oblique rotation, the derivatives of the constraints can be found elsewhere [@archer_1973; @jennrich_1973].
-
-Assume that the rotation criterion is twice continuously differentiable near the solution and that $\mathbf{X}$ is nonsingular, so that $\mathbf{\Psi}=\mathbf{X}^\top\mathbf{X}$ is positive definite. All targets, weights, and factor-block memberships are held fixed. We retain the notation $\Delta f_{\mathbf{\Lambda}}$ and $\Delta f_{\mathbf{\Psi}}$ for the criterion gradients. Because $\mathbf{\Psi}$ is symmetric, $\Delta f_{\mathbf{\Psi}}$ is understood as a symmetric Frobenius gradient. An unconstrained matrix gradient can always be replaced by its symmetric part without changing its inner product with a symmetric perturbation of $\mathbf{\Psi}$. Consequently, a derivative with respect to one free off-diagonal correlation $\psi_{jk}$ is $2(\Delta f_{\mathbf{\Psi}})_{jk}$, because that parameter appears in both positions $(j,k)$ and $(k,j)$.
-
-Let $\zeta$ be the function that transforms the rotation matrix into the rotated parameters. By the definition of gradient, at any tangent direction $\mathbf{V}$ we should have
+First, let $\zeta$ be the function that transforms the rotation matrix into the rotated parameters. In orthoblique rotation, $\zeta(\mathbf{X}) = \{\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}, \mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}\}$. By the definition of gradient, at any tangent direction $\mathbf{V}$ we should have
 $$
 \begin{aligned}
 \text{D}f(\mathbf{X})[\mathbf{V}] &= \langle \Delta f_\mathbf{\Lambda\Psi}, \text{D}\zeta(\mathbf{X})[\mathbf{V}]\rangle, \\
@@ -1151,11 +1145,9 @@ $$
 $$ {#eq-differential_rotated}
 where $\Delta f_\mathbf{\Lambda\Psi}$ is the gradient of the complexity function with respect to the rotated parameters. The second equality follows because at a given solution the complexity criterion must be stationary.
 
-In orthoblique rotation, $\zeta(\mathbf{X}) = \{\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}, \mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}\}$. The tangent space of the orthoblique manifold has the form $\mathbf{V} = \mathbf{X}^{-\top}\mathbf{\Omega}$, where the blocks of oblique factors in $\mathbf{\Omega}$ are arbitrary off-diagonal matrices, the block of orthogonal factors is skew-symmetric, and the intersections in $\mathbf{\Omega}$ between different blocks of factors $i$ and $j$ satisfy $\mathbf{\Omega}_{ij}=-\mathbf{\Omega}_{ji}^\top$ (i.e., they are arbitrary but skew-symmetric in the full $\mathbf{\Omega}$). 
+As showed before, the tangent space of the orthoblique manifold has the form $\mathbf{V} = \mathbf{X}^{-\top}\mathbf{\Omega}$, where the blocks of oblique factors in $\mathbf{\Omega}$ are arbitrary off-diagonal matrices, the block of orthogonal factors is skew-symmetric, and the intersections in $\mathbf{\Omega}$ between different blocks of factors $i$ and $j$ satisfy $\mathbf{\Omega}_{ij}=-\mathbf{\Omega}_{ji}^\top$. 
 
-Plugging this in @eq-differential_rotated and equaling to zero, we have
-
-Substituting this tangent parameterization into the derivative of $\zeta$ gives
+Substituting this tangent parameterization into the differential of $\zeta$ gives
 
 $$
 \begin{aligned}
@@ -1166,9 +1158,7 @@ $$
 \end{aligned}
 $$
 
-Finally, substituting these expressions in @eq-differential_rotated and equaling to zero we have
-
-At a stationary solution, substituting these derivatives into @eq-differential_rotated gives
+At the stationary solution, substituting these derivatives into @eq-differential_rotated then gives
 
 $$
 \begin{aligned}
@@ -1178,60 +1168,19 @@ $$
 \end{aligned}
 $$
 
-Therefore, 
+Therefore, the orthoblique constraints imply that the matrix
 $$
-2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}
-$$
-must be symmetric, with the submatrices corresponding to the blocks of oblique factors being also diagonal.
-
-Therefore, the matrix
-$$
-\mathbf{K}
-=
-2\Delta f_{\mathbf{\Psi}}
--\mathbf{\Psi}^{-1}\Delta f_{\mathbf{\Lambda}}^\top\mathbf{\Lambda}
+\mathbf{K} = 2\Delta f_\mathbf{\Psi} -\mathbf{\Psi}^{-1}\Delta f_\mathbf{\Lambda}^\top \mathbf{\Lambda}
 $$ {#eq-orthblq_constraints}
-must be symmetric, with each principal submatrix corresponding to an oblique block also diagonal. There is no requirement that the diagonal entries of $\mathbf{K}$ vanish.
+must be symmetric, with the submatrices corresponding to the blocks of oblique factors being also required to be diagonal.
 
-Following the orthoblique definition in (@eq-orthblq_definition), if $p$ is the number of oblique factors in the first block, $q$ is the number of oblique factors in the second block, and $r$ is the number of completely orthogonal factors in the third block, then there is a total of $d = p+q+pq+pr+qr+ r(r+1)/2$ independent constraints.
+Following the orthoblique definition in (@eq-orthblq_definition), if $p$ is the number of oblique factors in the first block, $q$ is the number of oblique factors in the second block, and $r$ is the number of completely orthogonal factors in the third block, then the number of stationarity equations is the dimension of the tangent space,
+$$
+c = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2.
+$$ 
 
-The number of rotational stationarity equations must be distinguished from the number of constraints defining the manifold. In @eq-orthblq_definition, the latter is
-$$
-d=p+q+pq+pr+qr+\frac{r(r+1)}{2}.
-$$
-The number of stationarity equations is instead the dimension of the tangent space,
-$$
-\begin{aligned}
-c&=n^2-d\\
- &=p(p-1)+q(q-1)+pq+pr+qr+\frac{r(r-1)}{2},
-\qquad n=p+q+r.
-\end{aligned}
-$$ {#eq-rotation_constraint_count}
-The first two terms count both off-diagonal entries for each pair of factors within an oblique block. The next three terms count one symmetry equation for each pair of factors from different blocks, and the final term counts one symmetry equation for each pair within the orthogonal block. These are $c$ distinct scalar equations; their derivatives are independent only when the chosen criterion locally identifies the rotation.
+The first two terms count both off-diagonal entries for each pair of factors within an oblique block. The next three terms count one symmetry equation for each pair of factors from different blocks, and the final term counts one symmetry equation for each pair within the orthogonal block. These are $c$ independent equations that become zero at convergence and whose derivatives with respect to the rotated parameters are in the $\mathbf{C}_\theta$ term of the augmented Hessian representation (@eq-augmented-hessian).
 
-More explicitly, let $\mathcal{B}_1,\ldots,\mathcal{B}_m$ denote the index sets of the oblique blocks. A nonredundant way to collect the stationarity equations is
-$$
-\begin{aligned}
-K_{jk}&=0,
-&&j\ne k,\quad j,k\in\mathcal{B}_a\text{ for some }a,\\
-K_{jk}-K_{kj}&=0,
-&&j<k,\quad j,k\text{ not in the same oblique block}.
-\end{aligned}
-$$ {#eq-rotation_scalar_constraints}
-The second line includes pairs from different oblique blocks, oblique--orthogonal pairs, and pairs of completely orthogonal factors. Both ordered pairs are retained in the first line, but only one ordering is retained in the second. No additional symmetry equations are needed within an oblique block because its two off-diagonal entries are already constrained to zero. For arbitrary oblique-block sizes $p_1,\ldots,p_m$, the same rule gives
-$$
-c=\sum_{a=1}^m p_a(p_a-1)
-+\sum_{a<b}p_ap_b
-+r\sum_{a=1}^m p_a
-+\frac{r(r-1)}{2}.
-$$
-This reduces to $n(n-1)$ equations for fully oblique rotation and $n(n-1)/2$ for fully orthogonal rotation.
-
-The derivatives follow directly from the product rule and
-$$
-\mathrm{d}(\mathbf{\Psi}^{-1})
-=-\mathbf{\Psi}^{-1}(\mathrm{d}\mathbf{\Psi})\mathbf{\Psi}^{-1}.
-$$
 Differentiating @eq-orthblq_constraints yields
 $$
 \begin{aligned}
@@ -1246,7 +1195,8 @@ $$
   \right].
 \end{aligned}
 $$ {#eq-rotation_constraint_differential}
-Here, $\mathrm{d}(\Delta f_{\mathbf{\Lambda}})$ and $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ are the total differentials of the criterion gradients. They retain any dependence on both $\mathbf{\Lambda}$ and $\mathbf{\Psi}$, including mixed second derivatives. Thus, no criterion-specific expansion is required. These differentials are taken with respect to the rotated model parameters, not just along a tangent rotation step.
+
+Here, $\mathrm{d}(\Delta f_{\mathbf{\Lambda}})$ and $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ are the total differentials of the criterion gradients.
 
 For the symmetry equations, we simply subtract the transpose of @eq-rotation_constraint_differential. To keep the expression short, write
 $$
@@ -1268,124 +1218,6 @@ $$
 $$ {#eq-rotation_symmetry_differential}
 The $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ terms cancel because this gradient and its differential are symmetric. Nevertheless, a criterion's dependence on $\mathbf{\Psi}$ can still enter the symmetry equations through $\Delta f_{\mathbf{\Lambda}}$ and its differential.
 
-The scalar constraint derivatives are therefore obtained by the same entry selection as in @eq-rotation_scalar_constraints:
-$$
-\begin{aligned}
-\mathrm{d}K_{jk}&=(\mathrm{d}\mathbf{K})_{jk},
-&&j\ne k,\quad j,k\in\mathcal{B}_a\text{ for some }a,\\
-\mathrm{d}(K_{jk}-K_{kj})
-&=\big\{\mathrm{d}(\mathbf{K}-\mathbf{K}^\top)\big\}_{jk},
-&&j<k,\quad j,k\text{ not in the same oblique block}.
-\end{aligned}
-$$ {#eq-rotation_scalar_derivatives}
-If $\boldsymbol{g}(\boldsymbol{\theta}^\ast)$ stacks these $c$ constraints, then
-$$
-\mathrm{d}\boldsymbol{g}
-=\mathbf{C}_{\theta^\ast}^\top\mathrm{d}\boldsymbol{\theta}^\ast,
-\qquad
-(\mathbf{C}_{\theta^\ast})_{\ell a}
-=\frac{\partial g_a}{\partial\theta^\ast_\ell}.
-$$
-Each row of $\mathbf{C}_{\theta^\ast}$ can be obtained by perturbing one model parameter at a time in the formulas above. For a loading $\lambda_{ij}$, set $\mathrm{d}\mathbf{\Lambda}=\mathbf{E}_{ij}$ and $\mathrm{d}\mathbf{\Psi}=\mathbf{0}$. For a free factor correlation $\psi_{jk}$, set $\mathrm{d}\mathbf{\Psi}=\mathbf{E}_{jk}+\mathbf{E}_{kj}$ and $\mathrm{d}\mathbf{\Lambda}=\mathbf{0}$, where $\mathbf{E}_{ij}$ is the matrix of the appropriate dimensions with a single one in position $(i,j)$. Evaluate the gradient differentials for that same perturbation. For criteria depending only on the loadings, $\Delta f_{\mathbf{\Psi}}=\mathbf{0}$ and $\mathrm{d}(\Delta f_{\mathbf{\Psi}})=\mathbf{0}$; the remaining formulas are unchanged. Parameters, such as uniquenesses, on which neither the loadings, factor correlations, nor the criterion depend have zero entries in these constraint derivatives.
-
-The $d$ explicit restrictions on $\mathbf{\Psi}$ also have simple derivatives. Let $\mathcal{Z}$ contain the pairs $(j,k)$, with $j<k$, whose factor correlations are fixed to zero. These restrictions and their differentials are
-$$
-\begin{aligned}
-\psi_{jj}-1&=0,
-&\mathrm{d}(\psi_{jj}-1)&=\mathrm{d}\psi_{jj},
-&&j=1,\ldots,n,\\
-\psi_{jk}&=0,
-&\mathrm{d}\psi_{jk}&=(\mathrm{d}\mathbf{\Psi})_{jk},
-&&(j,k)\in\mathcal{Z}.
-\end{aligned}
-$$ {#eq-factor_correlation_restriction_derivatives}
-For two oblique blocks, $|\mathcal{Z}|=pq+pr+qr+r(r-1)/2$, so that $n+|\mathcal{Z}|=d$. If these fixed entries are omitted from $\boldsymbol{\theta}^\ast$, as above, their constraint columns are unnecessary. If all distinct entries of $\mathbf{\Psi}$ are retained as coordinates instead, append these $d$ constraint columns to the $c$ stationarity columns, giving $c+d=n^2$ constraints in total. Fixed correlations then have zero sampling variance under the imposed model.
-
-Finally, these calculations require a locally isolated, regular rotated solution: $\mathbf{C}_{\theta^\ast}$ must have full column rank and the augmented matrix must be nonsingular. Factor signs and order must be fixed consistently. Stationarity alone does not establish that a solution is a minimum, and a criterion that leaves some rotational directions unidentified cannot yield valid standard errors merely by supplying the nominal number of equations.
-
-# Estimation of the factor scores
-
-The restrictions imposed on $\mathbf{\Psi}$ need not be inherited by conventional factor-score estimates. Regression and Bartlett scores generally have a covariance matrix different from the estimated factor covariance matrix. Consequently, scores for factors constrained to be orthogonal can still be correlated. When preserving the orthoblique structure is the objective, existing correlation-preserving, or more precisely covariance-preserving, predictors can be used. Relevant methods include those of @green_1969, @mcdonald_1981, and @krijnen_1996; no new factor-score estimator is required specifically for the orthoblique manifold.
-
-For continuous indicators, let $\mathbf{y}_i$ be the observed response vector for individual $i$, and consider centered linear scores
-$$
-\widehat{\boldsymbol{\eta}}_i
-=\mathbf{A}(\mathbf{y}_i-\overline{\mathbf{y}}),
-\qquad
-\widehat{\mathbf{\Sigma}}
-=\widehat{\mathbf{\Lambda}}\widehat{\mathbf{\Psi}}
- \widehat{\mathbf{\Lambda}}^\top+\widehat{\mathbf{\Theta}}.
-$$
-Here, $\mathbf{A}$ is a factor-score coefficient matrix. All parameter matrices are evaluated at the rotated estimates. Two familiar choices are
-$$
-\begin{aligned}
-\mathbf{A}_{\mathrm{reg}}
-&=\widehat{\mathbf{\Psi}}\widehat{\mathbf{\Lambda}}^\top
-  \widehat{\mathbf{\Sigma}}^{-1},\\
-\mathbf{A}_{\mathrm{bar}}
-&=\big(\widehat{\mathbf{\Lambda}}^\top\widehat{\mathbf{\Theta}}^{-1}
-       \widehat{\mathbf{\Lambda}}\big)^{-1}
-       \widehat{\mathbf{\Lambda}}^\top\widehat{\mathbf{\Theta}}^{-1}.
-\end{aligned}
-$$
-Neither generally satisfies
-$\mathbf{A}\widehat{\mathbf{\Sigma}}\mathbf{A}^\top =\widehat{\mathbf{\Psi}}$ [@bogaert_2026].
-
-Two covariance-preserving alternatives are the regression-based predictor of @green_1969 and the determinant-best predictor of @krijnen_1996. Define
-$\mathbf{M}=\widehat{\mathbf{\Lambda}}^\top\widehat{\mathbf{\Sigma}}^{-1} \widehat{\mathbf{\Lambda}}$. Their coefficient matrices can be written as
-$$
-\begin{aligned}
-\mathbf{A}_{\mathrm{G}}
-&=\widehat{\mathbf{\Psi}}^{1/2}
-  \big(\widehat{\mathbf{\Psi}}^{3/2}\mathbf{M}
-       \widehat{\mathbf{\Psi}}^{3/2}\big)^{-1/2}
-  \widehat{\mathbf{\Psi}}^{3/2}\widehat{\mathbf{\Lambda}}^\top
-  \widehat{\mathbf{\Sigma}}^{-1},\\
-\mathbf{A}_{\mathrm{D}}
-&=\widehat{\mathbf{\Psi}}^{1/2}
-  \big(\widehat{\mathbf{\Psi}}^{1/2}\mathbf{M}
-       \widehat{\mathbf{\Psi}}^{1/2}\big)^{-1/2}
-  \widehat{\mathbf{\Psi}}^{1/2}\widehat{\mathbf{\Lambda}}^\top
-  \widehat{\mathbf{\Sigma}}^{-1}.
-\end{aligned}
-$$ {#eq-covariance_preserving_score_matrices}
-All matrix powers here are symmetric positive-definite powers. The formulas assume positive-definite $\widehat{\mathbf{\Psi}}$ and $\widehat{\mathbf{\Sigma}}$, and full column rank of $\widehat{\mathbf{\Lambda}}$. Direct multiplication gives
-$$
-\mathbf{A}_{\mathrm{G}}\widehat{\mathbf{\Sigma}}\mathbf{A}_{\mathrm{G}}^\top
-=
-\mathbf{A}_{\mathrm{D}}\widehat{\mathbf{\Sigma}}\mathbf{A}_{\mathrm{D}}^\top
-=
-\widehat{\mathbf{\Psi}}.
-$$
-Thus, under the fitted covariance model, both predictors preserve the estimated within-block correlations and the zero correlations between blocks. The orthogonal factors retain unit variances and zero covariances with all other factors. Because $\operatorname{diag}(\widehat{\mathbf{\Psi}})=\mathbf{1}$, covariance preservation also implies correlation preservation.
-
-Preservation under the fitted model must be distinguished from exact preservation in a finite sample. If $\mathbf{S}$ is the observed sample covariance matrix, the sample covariance of linear scores is $\mathbf{A}\mathbf{S}\mathbf{A}^\top$, which need not equal $\widehat{\mathbf{\Psi}}$ when $\mathbf{S}\ne\widehat{\mathbf{\Sigma}}$. For exact sample preservation, a simple general construction is to transform preliminary scores using their empirical covariance. Let $\mathbf{s}_i$ be preliminary scores, for example regression or Bartlett scores, and let
-$$
-\mathbf{C}_s
-=\frac{1}{N-1}\sum_{i=1}^N
- (\mathbf{s}_i-\overline{\mathbf{s}})
- (\mathbf{s}_i-\overline{\mathbf{s}})^\top.
-$$
-Provided $\mathbf{C}_s$ is positive definite, define
-$$
-\widehat{\boldsymbol{\eta}}_{i,\mathrm{cp}}
-=\widehat{\mathbf{\Psi}}^{1/2}\mathbf{C}_s^{-1/2}
- (\mathbf{s}_i-\overline{\mathbf{s}}).
-$$ {#eq-empirical_covariance_preserving_scores}
-Its sample covariance, using the same divisor, is exactly
-$$
-\widehat{\operatorname{Cov}}
- (\widehat{\boldsymbol{\eta}}_{\mathrm{cp}})
-=\widehat{\mathbf{\Psi}}^{1/2}\mathbf{C}_s^{-1/2}
- \mathbf{C}_s\mathbf{C}_s^{-1/2}\widehat{\mathbf{\Psi}}^{1/2}
-=\widehat{\mathbf{\Psi}}.
-$$
-An estimated latent mean vector can be added when nonzero factor means are required. This construction expresses the covariance-matching principle directly; it is not a claim that every transformation of preliminary scores coincides with either named predictor in @eq-covariance_preserving_score_matrices or shares its optimality properties. The exact sample identity also does not guarantee exact covariance preservation in a different sample to which the fitted transformation is applied.
-
-The target of preservation is the estimated factor structure, not error-free individual factor values. Covariance-preserving scores do not eliminate factor-score indeterminacy, guarantee conditional unbiasedness, or automatically preserve associations with external variables omitted from the fitted model. Their use in subsequent regression is discussed by @bogaert_2026. Inference in such analyses must account for the uncertainty from estimating and rotating the measurement model, for example through an appropriate two-step correction or a bootstrap that repeats both steps and aligns factor signs and order across replications. Treating estimated scores as observed variables without this adjustment generally gives inappropriate standard errors.
-
-Finally, the linear predictor formulas above concern continuous indicators. For ordinal indicators, fitting a polychoric correlation matrix does not justify treating the numerical category codes as continuous responses with that covariance. Suitable preliminary scores from the categorical measurement model are needed; the empirical covariance transformation can then be applied if their covariance is full rank. Individual responses are necessary to obtain individual scores: a supplied correlation matrix alone is insufficient.
-
 # Software: orthoblique rotation with the latent package
 
 A general rotation framework should allow researchers to compare and use different factor structures without developing a new optimization routine for each application. The \texttt{GPArotation} package already provides this framework for conventional orthogonal and oblique rotation, with a wide catalogue of rotation criteria. These are features retained in our \texttt{latent} package, with some additional capabilities. The relevant innovation here is the addition of the orthoblique manifold to restrict the factor-correlation structure as desired and the application of different rotation criteria to different blocks of factors.
@@ -1402,40 +1234,7 @@ fit_rotation <- lrotate(lambda = unrotated_lambda,
                         rotation = "varimax")
 ```
 
-
-
-```{=latex}
-\begingroup
-\color{red}
-```
-
-As it can be seen, the choice of criterion is separated from the choice of geometry: \texttt{rotation} specifies the criterion, whereas \texttt{projection} selects between orthogonal (\texttt{"orth"}), oblique (\texttt{"oblq"}), and orthoblique (\texttt{"poblq"}) manifolds. ^[\textcolor{red}{To call the orthoblique rotation we chose the label \texttt{"poblq"}, which stands for "partially oblique", because we did not found a convenient alternative that stands for "orthoblique". Options like \texttt{"orblq"} were considered but discarded for similarity with the oblique option.}]
-
-```{=latex}
-\endgroup
-```
-
-
-
-
-
-```{=latex}
-\begingroup
-\color{green!40!black}
-```
-
-The choice of criterion is separate from the choice of geometry: \texttt{rotation} specifies the criterion, whereas \texttt{projection} selects the orthogonal (\texttt{"orth"}), oblique (\texttt{"oblq"}), or orthoblique (\texttt{"poblq"}) manifold. ^[\textcolor{green!40!black}{The software label \texttt{"poblq"} abbreviates "partially oblique" and denotes the orthoblique geometry developed here. We chose this label rather than \texttt{"orblq"} to distinguish it more clearly from \texttt{"oblq"}.}]
-
-```{=latex}
-\endgroup
-```
-
- 
-
-<!-- MGV: why is orthoblique poblq? instead of something like orblq?  -->
-<!-- RESOLVED 2026-10-11: The existing explanation was retained substantively and its wording polished in the preceding footnote. -->
-
-<!-- The implemented criteria include the Crawford--Ferguson family, oblimin, geomin, and target rotations.  -->
+The choice of criterion is separate from the choice of geometry: \texttt{rotation} specifies the criterion, whereas \texttt{projection} selects the orthogonal (\texttt{"orth"}), oblique (\texttt{"oblq"}), or orthoblique (\texttt{"poblq"}) manifold. ^[The software label \texttt{"poblq"} abbreviates "partially oblique" and denotes the orthoblique geometry developed here. We chose this label rather than \texttt{"orblq"} to distinguish it more clearly from \texttt{"oblq"}.]
 
 For the block structure developed in this paper, consider the following orthoblique target rotation:
 ```{r}
@@ -1447,28 +1246,6 @@ library(latent)
 fit_rotation <- lrotate(lambda = unrotated_lambda,
                         projection = "poblq", oblique = c(3, 3),
                         rotation = "target", target = target)
-```
-
-
-
-```{=latex}
-\begingroup
-\color{red}
-```
-
-Here, the \texttt{"poblq"} permits correlations within prespecified blocks of factors while retaining exact orthogonality between blocks, whereas \texttt{oblique} specifies the sizes of consecutive oblique blocks. For instance, with six factors, \texttt{oblique = c(3, 3)} gives two different oblique blocks of three factors with zero between-block correlations. If $\texttt{unrotated\_lambda}$ contained more than 6 columns, then any remaining factor would automatically be treated as orthogonal.
-
-```{=latex}
-\endgroup
-```
-
-
-
-
-
-```{=latex}
-\begingroup
-\color{green!40!black}
 ```
 
 Here, \texttt{projection = "poblq"} selects the orthoblique geometry, and the numeric vector \texttt{oblique = c(3, 3)} partitions the factor positions into consecutive blocks: positions 1--3 form the first oblique block, and positions 4--6 form the second. With six factors, the column ordering and the permitted correlation structure of the rotated solution are therefore
@@ -1498,15 +1275,6 @@ $$ {#eq-software_two_oblique_blocks}
 The symbolic correlations are free within their respective blocks, subject to positive definiteness, whereas the displayed zeros are fixed. The column positions correspond to the ordering used in \texttt{unrotated\_lambda} and the target matrix, but the input loading submatrices are not rotated independently: all rotated columns are obtained through the common transformation $\mathbf{\Lambda}=\mathbf{\Lambda}_0\mathbf{X}^{-\top}$. If the input has more than six factors, every remaining factor is orthogonal to both oblique blocks and to every other remaining factor.
 
 The same partition can be specified more explicitly as \texttt{oblique = list(1:3, 4:6)}. A list also allows nonconsecutive memberships; for example, \texttt{oblique = list(c(1, 3, 5), c(2, 4, 6))} puts factors 1, 3, and 5 in one oblique block and factors 2, 4, and 6 in the other, without reordering the factor columns. These memberships restrict factor correlations. They are conceptually separate from the \texttt{factors} selectors inside a \texttt{rotation} list, which select the columns to which each complexity criterion is applied.
-
-```{=latex}
-\endgroup
-```
-
-
-
-<!-- MGV: add a matrix to clarify what is oblique = c(3, 3) doing, which 3 factors go toegther?. This is not clear on how to use this functionality. Can help to present the matrix that is being rotated and which column goes into each block -->
-<!-- RESOLVED 2026-10-11: Added the column partition, 6-by-6 correlation matrix, explicit-index list equivalents, and the distinction between geometry and criterion selectors. List syntax checked against latent/R/lrotate.R. -->
 
 As an alternative to \texttt{lrotate()}, the function \texttt{lefa()} for exploratory factor analysis takes the raw data or a covariance matrix as inputs and performs factor extraction first and rotation later. \texttt{lefa()} allows all the same arguments as \texttt{lrotate()} but contains additional choices for factor extraction with either maximum likelihood (\texttt{"ml"}), unweighted least-squares (\texttt{"uls"}), or diagonally-weighted least-squares (\texttt{"dwls"}) for ordinal data.
 ```{r}
@@ -1538,6 +1306,17 @@ fit_efa <- lefa(data = data.matrix,
 ```
 
 Notice that we only had to specify a single number in the \texttt{oblique} argument to let GPA know that only the first three factors are indeed oblique and every other factor is orthogonal. Then, in the \texttt{rotation} argument the oblimin criterion is applied to the first three columns of $\mathbf{\Lambda}$, which corresponds to the oblique factors, whereas the varimax is applied to the last three columns, corresponding to the orthogonal factors.
+
+By default, \texttt{lrotate()} and \texttt{lefa()} computes the variance-covariance matrix and standard errors of the rotated parameters and uniquenesses using the corresponding rotation constraints derivatives. To extract only the matrix of rotation constraint derivatives $\mathbf{C}_\theta$ in the augmented Hessian representation (@eq-augmented-hessian), the user can employ the \texttt{constraints\_derivs} function:
+```{r}
+#| label: software-constraints_derivs
+#| eval: false
+#| echo: true
+# Compute the matrix of rotation constraint derivatives:
+C_theta <- constraints_derivs(fit_efa)
+```
+
+The \texttt{constraints\_derivs} function computes the appropriate derivatives for all currenlty available rotation criteria and it also supports orthogonal and oblique rotation models.
 
 The development version of \texttt{latent}, including the source and documentation of \texttt{lrotate()} and \texttt{lefa()} functions, is available at \url{https://github.com/Marcosjnez/latent}. You can install the package with the command \texttt{pak::pak("marcosjnez/latent")}.
 
