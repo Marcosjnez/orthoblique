@@ -49,9 +49,13 @@ Target[Teachers, 5] <- 1
 PsiTarget <- diag(5); PsiTarget[1:2, 1:2] <- 1; PsiTarget[3:5, 3:5] <- 1
 diag(PsiTarget) <- 0
 
+file_dir0 <- paste("examples/multitrait_multimethod/target.pdf", sep = "")
+pdf(file_dir0, width = 8, height = 6)
+par(mar = c(5.1, 4.1, 4.1, 4.1))
 plot(Target, breaks = c(0, 0.5, 1),
      main = "Target on factor loadings",
      col = c("black", "yellow"))
+dev.off()
 plot(PsiTarget, breaks = c(0, 0.5, 1),
      main = "Target on factor correlations",
      col = c("black", "yellow"))
@@ -86,7 +90,7 @@ model_name <- "target"
 # Plot absolute loadings:
 file_dir1 <- paste("examples/multitrait_multimethod/",
                    model_name, " (loadings).pdf", sep = "")
-pdf(file_dir1, width = 8, height = 6)
+pdf(file_dir1, width = 9, height = 6)
 par(mar = c(5.1, 4.1, 4.1, 4.1))
 plot(abs(lambda),
      breaks = c(0, 0.20, 0.50, 1),
@@ -98,7 +102,7 @@ dev.off()
 # Plot absolute factor correlations:
 file_dir2 <- paste("examples/multitrait_multimethod/",
                    model_name, " (correlations).pdf", sep = "")
-pdf(file_dir2, width = 8, height = 6)
+pdf(file_dir2, width = 9, height = 7.5)
 par(mar = c(5.1, 4.1, 4.1, 4.1))
 plot(abs(psi),
      breaks = c(0, 0.15, 0.30, 1),
