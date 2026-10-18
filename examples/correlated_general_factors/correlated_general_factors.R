@@ -87,7 +87,7 @@ for(i in seq_len(nmodels)) {
   
   efa <- lefa(data = mooc, nfactors = 30,
               ordered = TRUE, estimator = "dwls",
-              projection = "poblq", oblique = 6,
+              projection = "oblq", oblique = 6,
               rotation = rotation_model[[i]],
               control.efa = list(maxit = 5000L, rstarts = 3L, cores = 3L),
               control.rotation = list(rstarts = 10L, cores = 10L),

@@ -1243,7 +1243,7 @@ $$
 c = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2.
 $$ 
 
-The first two terms count both off-diagonal entries for each pair of factors within an oblique block. The next three terms count one symmetry equation for each pair of factors from different blocks, and the final term counts one symmetry equation for each pair within the orthogonal block. These are $c$ independent equations that become zero at convergence and whose derivatives with respect to the rotated parameters are in the $\mathbf{C}_\theta$ term of the augmented Hessian representation (@eq-augmented-hessian).
+The first two terms count the off-diagonal entries of each oblique block. The next three terms count the number of symmetric entries different blocks, and the final term counts symmetric entries within the orthogonal block. These are $c$ independent equations that become zero at convergence and whose derivatives with respect to the rotated parameters are collected in the $\mathbf{C}_\theta$ term of the augmented Hessian representation (@eq-augmented-hessian).
 
 Differentiating @eq-orthblq_constraints yields
 $$
@@ -1280,7 +1280,26 @@ $$
  +(\mathrm{d}\mathbf{B})^\top\mathbf{\Psi}^{-1}.
 \end{aligned}
 $$ {#eq-rotation_symmetry_differential}
-The $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ terms cancel because this gradient and its differential are symmetric. Nevertheless, a criterion's dependence on $\mathbf{\Psi}$ can still enter the symmetry equations through $\Delta f_{\mathbf{\Lambda}}$ and its differential.
+The $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ terms cancel because this gradient and its differential are symmetric.
+
+To obtain the constraint derivative matrix $\mathbf{C}_\theta$ in @eq-augmented-hessian, let $\boldsymbol{\theta}=(\theta_1,\ldots,\theta_k)^\top$ collect the $k$ independently estimated parameters of the rotated model. Define $\mathbf{h}(\boldsymbol{\theta})\in\mathbb{R}^c$ as the vector of the $c$ independent stationarity equations obtained from $\mathbf{K}$: the off-diagonal entries within the oblique blocks and the symmetry equations for all remaining pairs of factors.
+
+The derivatives of these constraints can be calculated by evaluating $\mathrm{d}\mathbf{K}$ along successive coordinate directions. Specifically, let $\mathbf{e}_i\in\mathbb{R}^k$ denote the $i$th standard basis vector, whose $i$th element is one and whose remaining elements are zero. For each $i=1,\ldots,k$, we set $\mathrm{d}\boldsymbol{\theta}=\mathbf{e}_i$ and evaluate @eq-rotation_constraint_differential, extracting the corresponding $c$ stationarity equations. Denoting this extraction by $\mathcal{S}$, the constraint derivative matrix is
+
+$$
+\mathbf{C}_\theta =
+\begin{bmatrix}
+\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_1]\big)^\top\\
+\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_2]\big)^\top\\
+\vdots\\
+\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_k]\big)^\top
+\end{bmatrix}
+=
+\left(\frac{\partial\mathbf{h}}{\partial\boldsymbol{\theta}}\right)^\top
+\in\mathbb{R}^{k\times c}.
+$$
+
+Here, $\mathcal{S}$ selects the off-diagonal entries of $\mathrm{d}\mathbf{K}$ within the oblique blocks and one independent entry of $\mathrm{d}(\mathbf{K}-\mathbf{K}^\top)$ for each remaining pair of factors. Thus, each row of $\mathbf{C}_\theta$ contains the derivatives of all $c$ rotation constraints with respect to one parameter $\theta_i$.
 
 # Software: orthoblique rotation with the latent package
 
@@ -1371,16 +1390,18 @@ fit_efa <- lefa(data = data.matrix,
 
 Notice that we only had to specify a single number in the \texttt{oblique} argument to let GPA know that only the first three factors are indeed oblique and every other factor is orthogonal. Then, in the \texttt{rotation} argument the oblimin criterion is applied to the first three columns of $\mathbf{\Lambda}$, which corresponds to the oblique factors, whereas the varimax is applied to the last three columns, corresponding to the orthogonal factors.
 
-By default, \texttt{lrotate()} and \texttt{lefa()} computes the variance-covariance matrix and standard errors of the rotated parameters and uniquenesses using the corresponding rotation constraints derivatives. To extract only the matrix of rotation constraint derivatives $\mathbf{C}_\theta$ in the augmented Hessian representation (@eq-augmented-hessian), the user can employ the \texttt{constraints\_derivs} function:
-```{r}
-#| label: software-constraints_derivs
-#| eval: false
-#| echo: true
-# Compute the matrix of rotation constraint derivatives:
-C_theta <- constraints_derivs(fit_efa)
-```
+By default, \texttt{lrotate()} and \texttt{lefa()} computes the variance-covariance matrix and standard errors of the rotated parameters and uniquenesses using the corresponding rotation constraints derivatives.
 
-The \texttt{constraints\_derivs} function computes the appropriate derivatives for all currenlty available rotation criteria and it also supports orthogonal and oblique rotation models.
+<!-- To extract only the matrix of rotation constraint derivatives $\mathbf{C}_\theta$ in the augmented Hessian representation (@eq-augmented-hessian), the user can employ the \texttt{constraints\_derivs} function: -->
+<!-- ```{r} -->
+<!-- #| label: software-constraints_derivs -->
+<!-- #| eval: false -->
+<!-- #| echo: true -->
+<!-- # Compute the matrix of rotation constraint derivatives: -->
+<!-- C_theta <- constraints_derivs(fit_efa) -->
+<!-- ``` -->
+
+<!-- The \texttt{constraints\_derivs} function computes the appropriate derivatives for all currenlty available rotation criteria and it also supports orthogonal and oblique rotation models. -->
 
 Finally, \texttt{latent} can also estimate factor scores that preserve the orthoblique factor correlations. Currently, two existing methods implemented in the function \texttt{latscores} allow this: the constrained regression method of @green_1969 that finds the best correlation-preserving scores in the least-squares sense, and the method of @tenberge_1999 that minimizes the determinant of the residual covariance matrix:
 
@@ -1431,7 +1452,7 @@ $$
 
 However, in this scenario the number of estimated parameters is smaller than in the more general orthoblique rotation framework presented here. Orthoblique rotation finds a dense rotation matrix $\mathbf{X}$ that yields the desired orthoblique pattern whereas ESEM solves a more restricted optimization problem with structural zeros in the intersections of different exploratory blocks of factors. Consequently, orthoblique rotation searches over a larger set of rotation matrices and can attain a lower value of the rotation criterion than the more restrictive block-diagonal approach took in ESEM. In these regards, orthoblique rotation is a more exploratory approach than ESEM.
 
-Second, we also highlight that using orthoblique rotation in tandem with target rotation is closely related to the extended target rotation proposed by @zhang_2019. Their method incorporates expectations about both the loading matrix and the factor correlation matrix into the rotation criterion, so that selected trait-method correlations are rotated toward zero. More precisely, the extended target rotation minimizes the following criterion:
+Second, we also highlight that using orthoblique rotation in tandem with target rotation is closely related to the extended target rotation proposed by @zhang_2019. Their method incorporates expectations about both the loading matrix and the factor correlation matrix into the rotation criterion, so that selected trait-method correlations are rotated toward zero. More precisely, the extended target rotation minimizes the following criterion using oblique rotation:
 
 $$
 \frac{1}{2}\| \mathbf{W}_{\Lambda} \odot (\boldsymbol{\Lambda} - \mathbf{T}_{\Lambda})\|^2 + \frac{w}{4}\|\mathbf{W}_{\Psi} \odot (\boldsymbol{\Psi} - \mathbf{T}_{\Psi})\|^2,

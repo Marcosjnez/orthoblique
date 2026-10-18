@@ -86,7 +86,7 @@ plot(PsiTarget, breaks = c(0, 0.5, 1),
 set.seed(2026)
 efa <- lefa(sample.cov = R, sample.nobs = 2119,
             nfactors = 5, estimator = "uls",
-            projection = "poblq", oblique = c(2, 3),
+            projection = "oblq", oblique = c(2, 3),
             rotation = "target", target = Target,
             se = FALSE)
 
