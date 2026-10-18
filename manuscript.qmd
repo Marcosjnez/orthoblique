@@ -117,7 +117,7 @@ Thereby, a generalization of the oblique and orthogonal rotations that allows fo
 \centering
 \captionsetup{width=1\textwidth}
 \includegraphics[width=\textwidth]{"figures/manifolds.pdf"}
-\caption{\fontsize{12}{12}\selectfont Factor correlation matrices expected for orthogonal, oblique, and orthoblique rotations with six factors. Asterisks indicate freely estimated correlations.}
+\caption{\fontsize{12}{12}\selectfont Factor correlation matrices expected for six factors after orthogonal, oblique, and orthoblique rotations. Asterisks indicate freely estimated correlations.}
 \label{fig:rotations}
 \end{figure}
 
@@ -1523,9 +1523,31 @@ Overall, this exploratory solution revealed that conflating the indicators of Ex
 
 \begin{figure}[!ht]
 \centering
+\begin{minipage}[c]{0.49\textwidth}
+\centering
+\includegraphics[width=\linewidth]{"examples/multitrait_multimethod/target.pdf"}
+\vspace{0.2cm}
+
+(a) Theoretical target
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.49\textwidth}
+\centering
+\includegraphics[width=\linewidth]{"examples/multitrait_multimethod/target (loadings).pdf"}
+\vspace{0.2cm}
+
+(b) Estimated factor loadings
+\end{minipage}
+
 \captionsetup{width=1\textwidth}
-\includegraphics[width=\textwidth]{"examples/multitrait_multimethod/target (loadings).pdf"}
-\caption{\fontsize{12}{12}\selectfont Absolute values of factor loadings for the multitrait-multimethod analysis.}
+\caption{\fontsize{12}{12}\selectfont
+Comparison of the theoretical and estimated factor loading patterns
+for the multitrait-multimethod analysis.
+Panel (a) shows the theoretical target structure, where yellow cells
+indicate items expected to load on each factor.
+Panel (b) displays the absolute values of the estimated factor
+loadings obtained through orthoblique target rotation.}
+\label{fig:mtmm-loadings}
 \end{figure}
 
 From a statistical perspective, the relevant feature of this example is that rotation criteria and restrictions on the factor correlation matrix are handled separately. Target rotation determines an interpretable orientation and permits empirically relevant cross-loadings, whereas the orthoblique manifold guarantees the exact block-orthogonality structure that disentangles the variance explained by traits and methods. A conventional orthogonal rotation would have forced the correlations within the trait and method blocks to zero, while a conventional oblique rotation would have estimated the six trait-method correlations that must be excluded by the MTMM design. In both cases, the results would have been inconsistent with the theoretical model. Thus, the orthoblique manifold combined with target rotation made possible to test with EFA the adequacy of this MTMM analysis, revealing a possible modeling misspecification in @watts_2022.
@@ -1552,7 +1574,7 @@ The results of all the analyses converged overall though the four solutions reco
 
 The general-factor loading patterns also broadly reflected the HEXACO domains across the four analyses. The item sets for Emotionality, Extraversion, Conscientiousness, Openness, and Agreeableness were recognizable in each solution, whereas Honesty--Humility was less consistently separated, especially in the target-based specifications. Some Honesty--Humility items showed salient cross-loadings on the Conscientiousness general factor, and additional general-factor cross-loadings remained. Thus, agreement across rotations was substantial but did not imply equally clear recovery of every domain. Because none of the four specifications targeted the general-factor loadings, this broad correspondence was not imposed directly by the target, although targeting the specific factors could still alter the partitioning of common variance.
 
-Figures~\ref{fig:hexaco-loadings-comparison} and~\ref{fig:hexaco-correlations-comparison} compare all four solutions in matching panels: (a) geomin + target, (b) oblimin + target, (c) geomin + geomin, and (d) oblimin + oblimin. The first row shows the two target-based rotations, whereas the second shows the corresponding nontarget rotations. The left and right columns compare the geomin and oblimin criteria, respectively. The heatmaps display absolute values; the signs of the estimated loadings and factor correlations are therefore not shown.
+Figures \ref{fig:hexaco-loadings-comparison} and \ref{fig:hexaco-correlations-comparison} compare all four solutions in matching panels: (a) geomin + target, (b) oblimin + target, (c) geomin + geomin, and (d) oblimin + oblimin. The first row shows the two target-based rotations, whereas the second shows the corresponding nontarget rotations. The left and right columns compare the geomin and oblimin criteria, respectively. The heatmaps display absolute values; the signs of the estimated loadings and factor correlations are therefore not shown.
 
 Here, oblimin was applied to the six general factors, leaving their loading pattern exploratory, whereas target rotation was applied to the 24 specific factors. Because the items are ordinal, the model was estimated with diagonally weighted least squares using polychoric correlations. To illustrate how the model was fitted with the \texttt{latent} package, the oblimin + target specification was fitted as follows:
 
@@ -1573,11 +1595,11 @@ The oblimin + target solution yielded absolute correlations among the six genera
 
 The six general factors remained substantially exploratory in this analysis. The median absolute loading on the theoretically-expected general factor was .384; 85 of the 96 designated general-factor loadings exceeded .20 in absolute value, and 430 of the 480 general-factor cross-loadings (89.6\%) were below .20. For the 24 specific factors, the median absolute theoretically expected loading was .431, and 91 of these 96 loadings exceeded .20. In contrast, 2,205 of the 2,208 specific-factor cross-loadings (99.86\%) were below .20, and no cross-loading exceeded .30.
 
-With geomin + target (Figures~\ref{fig:hexaco-loadings-comparison}a and~\ref{fig:hexaco-correlations-comparison}a), the expected specific-factor loadings had a median absolute value of .427, with 91 of 96 exceeding .20; 2,204 of the 2,208 cross-loadings on other specific factors were below .20. Thus, geomin and oblimin produced comparably sparse specific-factor patterns when paired with target rotation. For the general factors, the median absolute designated loading was .414, 82 of the 96 designated loadings exceeded .20, and 426 of the 480 general-factor cross-loadings were below .20. The absolute general-factor correlations ranged from .007 to .214 (median .116). Compared with oblimin + target, the differences were modest, especially for the specific-factor block.
+With geomin + target (Figures \ref{fig:hexaco-loadings-comparison}a and~\ref{fig:hexaco-correlations-comparison}a), the expected specific-factor loadings had a median absolute value of .427, with 91 of 96 exceeding .20; 2,204 of the 2,208 cross-loadings on other specific factors were below .20. Thus, geomin and oblimin produced comparably sparse specific-factor patterns when paired with target rotation. For the general factors, the median absolute designated loading was .414, 82 of the 96 designated loadings exceeded .20, and 426 of the 480 general-factor cross-loadings were below .20. The absolute general-factor correlations ranged from .007 to .214 (median .116). Compared with oblimin + target, the differences were modest, especially for the specific-factor block.
 
-Without a target, geomin + geomin (Figures~\ref{fig:hexaco-loadings-comparison}c and~\ref{fig:hexaco-correlations-comparison}c) recovered the expected specific factor as the strongest specific factor for 77 items. The expected specific-factor loadings had a median absolute value of .399, and 80 of 96 exceeded .20; 2,168 of the 2,208 other specific-factor loadings were below .20, but nine exceeded .30. On the general factors, the median absolute designated loading was .428, 87 of 96 expected loadings exceeded .20, and 452 of the 480 general-factor cross-loadings were below .20. Notably, the saved factor-correlation matrix for this solution has zero off-diagonal correlations even among the six general factors. These correlations were allowed by the orthoblique specification rather than constrained to zero, so this numerical result should not be interpreted as a defining property of the geomin criterion.
+Without a target, geomin + geomin (Figures \ref{fig:hexaco-loadings-comparison}c and~\ref{fig:hexaco-correlations-comparison}c) recovered the expected specific factor as the strongest specific factor for 77 items. The expected specific-factor loadings had a median absolute value of .399, and 80 of 96 exceeded .20; 2,168 of the 2,208 other specific-factor loadings were below .20, but nine exceeded .30. On the general factors, the median absolute designated loading was .428, 87 of 96 expected loadings exceeded .20, and 452 of the 480 general-factor cross-loadings were below .20. Notably, the saved factor-correlation matrix for this solution has zero off-diagonal correlations even among the six general factors. These correlations were allowed by the orthoblique specification rather than constrained to zero, so this numerical result should not be interpreted as a defining property of the geomin criterion.
 
-The oblimin + oblimin solution (Figures~\ref{fig:hexaco-loadings-comparison}d and~\ref{fig:hexaco-correlations-comparison}d) recovered the expected specific factor for 73 items. Its median absolute expected specific-factor loading was .337, with 71 of 96 exceeding .20; 2,189 of the 2,208 specific-factor cross-loadings were below .20, and seven exceeded .30. In contrast, its general-factor block showed the clearest simple structure among the four solutions: the median absolute expected general-factor loading was .474, 95 of 96 exceeded .20, and 469 of the 480 general-factor cross-loadings were below .20. The absolute correlations among the general factors ranged from .018 to .279 (median .132), larger at the upper end than under the two target-based solutions. This configuration therefore favored a clearer general-factor structure at the expense of less distinct specific factors.
+The oblimin + oblimin solution (Figures \ref{fig:hexaco-loadings-comparison}d and \ref{fig:hexaco-correlations-comparison}d) recovered the expected specific factor for 73 items. Its median absolute expected specific-factor loading was .337, with 71 of 96 exceeding .20; 2,189 of the 2,208 specific-factor cross-loadings were below .20, and seven exceeded .30. In contrast, its general-factor block showed the clearest simple structure among the four solutions: the median absolute expected general-factor loading was .474, 95 of 96 exceeded .20, and 469 of the 480 general-factor cross-loadings were below .20. The absolute correlations among the general factors ranged from .018 to .279 (median .132), larger at the upper end than under the two target-based solutions. This configuration therefore favored a clearer general-factor structure at the expense of less distinct specific factors.
 
 \begin{figure}[!htbp]
 \centering
@@ -1585,25 +1607,25 @@ The oblimin + oblimin solution (Figures~\ref{fig:hexaco-loadings-comparison}d an
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/geomin + target (loadings).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(a) Geomin + target}}
+  {\small(a) Geomin + target}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/oblimin + target (loadings).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(b) Oblimin + target}}
+  {\small(b) Oblimin + target}
 \end{minipage}
 \par\vspace{0.8em}
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/geomin + geomin (loadings).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(c) Geomin + geomin}}
+  {\small(c) Geomin + geomin}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/oblimin + oblimin (loadings).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(d) Oblimin + oblimin}}
+  {\small(d) Oblimin + oblimin}
 \end{minipage}
-\caption{\fontsize{12}{12}\selectfont\textcolor{red}{Absolute values of factor loadings for the HEXACO oblimin + target solution.} \textcolor{green!40!black}{Absolute values of factor loadings for the four HEXACO rotations. The first row uses target rotation for the specific factors, whereas the second uses geomin or oblimin for both factor blocks. The general-factor criterion is geomin in the left column and oblimin in the right column.}}
+\caption{\fontsize{12}{12}\selectfont Absolute values of factor loadings for the four HEXACO rotations. The first row uses target rotation for the specific factors, whereas the second uses geomin or oblimin for both factor blocks. The general-factor criterion is geomin in the left column and oblimin in the right column.}
 \label{fig:hexaco-loadings-comparison}
 \end{figure}
 
@@ -1613,25 +1635,25 @@ The oblimin + oblimin solution (Figures~\ref{fig:hexaco-loadings-comparison}d an
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/geomin + target (correlations).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(a) Geomin + target}}
+  {\small(a) Geomin + target}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/oblimin + target (correlations).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(b) Oblimin + target}}
+  {\small(b) Oblimin + target}
 \end{minipage}
 \par\vspace{0.8em}
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/geomin + geomin (correlations).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(c) Geomin + geomin}}
+  {\small(c) Geomin + geomin}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\textwidth}
   \centering
   \includegraphics[width=\linewidth]{"examples/correlated_general_factors/oblimin + oblimin (correlations).pdf"}\\[1pt]
-  {\small\textcolor{green!40!black}{(d) Oblimin + oblimin}}
+  {\small(d) Oblimin + oblimin}
 \end{minipage}
-\caption{\fontsize{12}{12}\selectfont\textcolor{red}{Absolute values of factor correlations for the HEXACO oblimin + target solution.} \textcolor{green!40!black}{Absolute values of factor correlations for the four HEXACO rotations, in the same panel order as Figure~\ref{fig:hexaco-loadings-comparison}. The off-diagonal entries involving specific factors are zero by construction; correlations within the six-factor general block are allowed but depend on the recovered solution.}}
+\caption{\fontsize{12}{12}\selectfont Absolute values of factor correlations for the four HEXACO rotations, in the same panel order as Figure~\ref{fig:hexaco-loadings-comparison}. The off-diagonal entries involving specific factors are zero by construction; correlations within the six-factor general block are allowed but depend on the recovered solution.}
 \label{fig:hexaco-correlations-comparison}
 \end{figure}
 

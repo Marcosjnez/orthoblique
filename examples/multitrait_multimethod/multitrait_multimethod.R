@@ -46,18 +46,39 @@ Target[Internalizing, 2] <- 1
 Target[Children, 3] <- 1
 Target[Parents, 4] <- 1
 Target[Teachers, 5] <- 1
+
+rownames(Target) <- NULL
+colnames(Target) <- c("Externalizing", "Internalizing",
+                      "Children", "Parents", "Teachers")
+
 PsiTarget <- diag(5); PsiTarget[1:2, 1:2] <- 1; PsiTarget[3:5, 3:5] <- 1
 diag(PsiTarget) <- 0
 
 file_dir0 <- paste("examples/multitrait_multimethod/target.pdf", sep = "")
-pdf(file_dir0, width = 8, height = 6)
-par(mar = c(5.1, 4.1, 4.1, 4.1))
+pdf(file_dir0, width = 9, height = 6)
+par(mar = c(5.1, 9.2, 4.1, 0))
+
 plot(Target, breaks = c(0, 0.5, 1),
-     main = "Target on factor loadings",
-     col = c("black", "yellow"))
+     main = "", xlab = "", ylab = "",
+     col = c("black", "yellow"),
+     xlim = c(0.5, ncol(Target) + 2),
+     key = NULL)
+# Center main title
+mtext("Targets on factor loadings",
+      side = 3, line = 1.5,
+      at = (ncol(Target) + 1) / 2,
+      adj = 0.5, font = 2, cex = 1.2)
+# Center x-axis title
+mtext("Factors", side = 1, line = 3,
+      at = (ncol(Target) + 1) / 2)
+# Center y-axis title
+mtext("Items", side = 2, line = 3,
+      at = (nrow(Target) + 1) / 2)
+
 dev.off()
+
 plot(PsiTarget, breaks = c(0, 0.5, 1),
-     main = "Target on factor correlations",
+     main = "Targets on factor correlations",
      col = c("black", "yellow"))
 
 #### MTMM analysis POB (Target; 2 Traits + 3 Methods) ####
