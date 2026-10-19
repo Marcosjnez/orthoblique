@@ -1,0 +1,221 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[landscape,margin=1.15cm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage[table]{xcolor}
+\usepackage{ragged2e}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.22}
+\definecolor{head}{RGB}{31,78,121}
+\definecolor{subhead}{RGB}{221,235,247}
+\newcommand{\sym}{\operatorname{sym}}
+\newcommand{\diagop}{\operatorname{diag}}
+\newcommand{\ddiag}{\operatorname{ddiag}}
+\newcommand{\grad}{\operatorname{grad}}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+\begin{document}
+
+{\LARGE\bfseries GPA: Orthogonal, Oblique, and Orthoblique Rotation}\par
+\vspace{2mm}
+{\large A didactic comparison of the common algorithm and the geometry that changes}\par
+\vspace{4mm}
+
+\colorbox{subhead}{\parbox{0.985\textwidth}{
+\textbf{Common GPA logic.} At the current transformation $X$, compute the Euclidean gradient $G=\grad\tilde f(X)$, remove its normal component to obtain the admissible (Riemannian) gradient $G_T$, take a linear step $Z=X-tG_T$, and retract $Z$ back to the corresponding manifold. The tangent-space parameterization through $\Omega$ and the Frobenius inner product are primarily tools used to \emph{derive} the projection $G\mapsto G_T$; they are not additional update steps once the projected-gradient formula is available.
+}}
+
+\vspace{5mm}
+
+\begin{longtable}{L{3.9cm} L{7.45cm} L{7.45cm} L{7.45cm}}
+\rowcolor{head}
+\color{white}\textbf{Element} & \color{white}\textbf{Orthogonal rotation} & \color{white}\textbf{Oblique rotation} & \color{white}\textbf{Orthoblique rotation}\\
+\endfirsthead
+\rowcolor{head}
+\color{white}\textbf{Element} & \color{white}\textbf{Orthogonal rotation} & \color{white}\textbf{Oblique rotation} & \color{white}\textbf{Orthoblique rotation}\\
+\endhead
+\midrule
+\endfoot
+
+\rowcolor{subhead}
+\textbf{What is allowed} &
+All factors remain mutually orthogonal. Factor correlations are fixed at zero. &
+Every factor has unit length, but any pair of factors may correlate. &
+Factors may correlate within prespecified oblique blocks, whereas specified pairs of blocks remain exactly orthogonal. A fully orthogonal block may also be included. \\
+
+\textbf{Constraint on $X$} &
+$X^\top X=I$. &
+$\diagop(X^\top X)=\mathbf 1$. &
+$X^\top X$ is block structured, e.g.
+\[
+X^\top X=\begin{bmatrix}Y_1&0&0\\0&Y_2&0\\0&0&I\end{bmatrix},\qquad \diagop(Y_i)=\mathbf 1.
+\]
+Thus, correlations are allowed within $Y_i$ but constrained to zero between specified blocks. \\
+
+\rowcolor{subhead}
+\textbf{Meaning of a tangent direction $V$} &
+A small change of $X$ that preserves unit lengths and mutual orthogonality to first order. &
+A small change of $X$ that preserves the unit length of every column to first order; pairwise factor correlations may change. &
+A small blockwise change of $X$ that preserves unit lengths and all imposed between-block orthogonality relations to first order. \\
+
+\textbf{Tangent-space condition} &
+\[
+X^\top V+V^\top X=0.
+\]
+&
+\[
+\ddiag(X^\top V)=0.
+\]
+&
+Blockwise conditions. For example, if blocks $i$ and $j$ must remain orthogonal,
+\[
+X_i^\top V_j+V_i^\top X_j=0.
+\]
+Within an oblique block, only the column-norm constraints are imposed; within a fully orthogonal block, the usual orthogonal condition applies. \\
+
+\rowcolor{subhead}
+\textbf{Why introduce $\Omega$?} &
+To describe all tangent directions in a simple form:
+\[
+V=X\Omega,\qquad \Omega^\top=-\Omega.
+\]
+&
+To describe all tangent directions in a simple form:
+\[
+V=X^{-\top}\Omega,\qquad \diagop(\Omega)=0.
+\]
+&
+At nonsingular $X$,
+\[
+V=X^{-\top}\Omega,
+\]
+with a block structure in $\Omega$ that directly mirrors the orthoblique constraints. \\
+
+\textbf{Structure / interpretation of $\Omega$} &
+$\Omega$ is skew-symmetric. With two factors,
+\[
+\Omega=\begin{bmatrix}0&a\\-a&0\end{bmatrix}.
+\]
+There is one rotational degree of freedom: the two axes move coordinately. &
+$\Omega$ has zero diagonal. With two factors,
+\[
+\Omega=\begin{bmatrix}0&a\\b&0\end{bmatrix}.
+\]
+The two off-diagonal movements are free, reflecting the greater flexibility of oblique rotation. &
+For two oblique blocks and one orthogonal block,
+\[
+\Omega=\begin{bmatrix}
+\Omega_{11}&\Omega_{12}&\Omega_{13}\\
+-\Omega_{12}^\top&\Omega_{22}&\Omega_{23}\\
+-\Omega_{13}^\top&-\Omega_{23}^\top&\Omega_{33}
+\end{bmatrix},
+\]
+where $\diagop(\Omega_{11})=\diagop(\Omega_{22})=0$ and $\Omega_{33}$ is skew-symmetric. The off-diagonal blocks encode coordinated movements needed to preserve between-block orthogonality. \\
+
+\rowcolor{subhead}
+\textbf{Role of the Frobenius inner product} &
+\multicolumn{3}{L{22.75cm}}{The same in all three cases. It defines orthogonality between matrix-valued directions:
+\[
+\langle U,V\rangle_F=\operatorname{tr}(U^\top V).
+\]
+This allows the ambient Euclidean gradient to be decomposed into tangent and normal components. Once the projection formula has been derived, the Frobenius product need not be explicitly computed at every GPA iteration.} \\
+
+\textbf{Normal-space parameterization} &
+\[
+N=XA,\qquad A=A^\top.
+\]
+$A$ is symmetric because the normal component may violate either column lengths or mutual orthogonality. &
+\[
+N=XA,\qquad A\ \text{diagonal}.
+\]
+The normal component corresponds to changing column lengths. &
+\[
+N=XA,
+\]
+with
+\[
+A=\begin{bmatrix}
+D_1&B_{12}&B_{13}\\
+B_{12}^\top&D_2&B_{23}\\
+B_{13}^\top&B_{23}^\top&S
+\end{bmatrix},
+\]
+where $D_1,D_2$ are diagonal, $S$ is symmetric, and the $B_{ij}$ blocks handle the imposed between-block orthogonalities. \\
+
+\rowcolor{subhead}
+\textbf{What does $A$ do?} &
+It contains the coefficients needed to reconstruct the part of $G$ that points outside the orthogonal manifold. &
+It contains the coefficients needed to reconstruct the part of $G$ that would change the column norms. &
+It collects, block by block, the coefficients needed to reconstruct every component of $G$ that would violate the orthoblique restrictions. \\
+
+\textbf{Projected / Riemannian gradient} &
+\[
+G_T=G-XA,
+\qquad
+A=\sym(X^\top G).
+\]
+&
+\[
+G_T=G-XA,
+\qquad
+A=\ddiag(X^\top G).
+\]
+&
+Again,
+\[
+G_T=G-XA,
+\]
+but the blocks of $A$ are solved separately. The oblique--orthogonal blocks have closed-form solutions, whereas the oblique--oblique block is obtained from a Sylvester equation such as
+\[
+Y_1B_{12}+B_{12}Y_2=Q.
+\]
+ \\
+
+\rowcolor{subhead}
+\textbf{What is actually used to move $X$?} &
+\multicolumn{3}{L{22.75cm}}{The projected gradient $G_T=\grad f(X)$. The algorithm takes a step in the negative projected-gradient direction. $\Omega$ is mainly a tangent-space parameterization used in the derivation; it is not an additional movement variable once $G_T$ is available.} \\
+
+\textbf{Provisional update} &
+\multicolumn{3}{L{22.75cm}}{
+\[
+Z=X-tG_T.
+\]
+Even though $G_T$ is tangent, the straight-line point $Z$ generally lies slightly outside the curved manifold because tangency preserves the constraints only to first order.} \\
+
+\rowcolor{subhead}
+\textbf{Retraction} &
+Re-orthonormalize the columns (e.g., QR or polar/SVD-based retraction) so that $X_{\text{new}}^\top X_{\text{new}}=I$. &
+Renormalize each column so that every column again has unit length. &
+Use a sequential blockwise retraction: normalize the first oblique block; remove from the next block the components lying in the space of previous blocks and renormalize it; then project the fully orthogonal block onto the complement of all oblique blocks and orthonormalize it. \\
+
+\textbf{What may change during rotation?} &
+Loadings change, but factor correlations remain exactly zero. &
+Loadings and all factor correlations may change. &
+Loadings change, and only correlations permitted within the oblique blocks may change. Correlations constrained between blocks remain exactly zero. \\
+
+\rowcolor{subhead}
+\textbf{Bottom line} &
+The geometry allows only coordinated movements that keep all factor axes perpendicular. &
+The geometry allows each factor axis to move more freely, subject only to unit length. &
+The geometry combines both ideas: freedom within oblique blocks and exact orthogonality between selected blocks. \\
+
+\end{longtable}
+
+\vspace{2mm}
+\colorbox{subhead}{\parbox{0.985\textwidth}{
+\textbf{One-line summary of the algorithm:}
+\[
+X_k\;\xrightarrow{\text{Euclidean gradient}}\;G_k
+\;\xrightarrow{\text{remove normal component}}\;G_{T,k}
+\;\xrightarrow{\text{step}}\;Z_k=X_k-t_kG_{T,k}
+\;\xrightarrow{\text{retraction}}\;X_{k+1}\in M.
+\]
+What changes across orthogonal, oblique, and orthoblique rotation is the geometry of $M$: this determines the tangent directions, the normal component $XA$, and the retraction. The GPA architecture itself is unchanged.
+}}
+
+\end{document}

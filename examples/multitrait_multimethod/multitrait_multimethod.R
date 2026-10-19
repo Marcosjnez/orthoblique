@@ -93,8 +93,10 @@ efa <- lefa(sample.cov = R, sample.nobs = 2119,
 #### Plots ####
 
 # Align the results to the theoretical Target:
-lambda <- efa@transformed_pars$lambda_rotated
-psi <- efa@transformed_pars$psi_rotated; diag(psi) <- 1
+pars <- latInspect(efa, what = "est", sort = TRUE)
+lambda <- pars$lambda_rotated
+psi <- pars$psi_rotated
+diag(psi) <- 1
 x <- fungible::faAlign(F1 = Target, F2 = abs(lambda), Phi2 = abs(psi))
 lambda <- lambda[, c(x$FactorMap[2, ])]
 psi <- psi[c(x$FactorMap[2, ]), c(x$FactorMap[2, ])]

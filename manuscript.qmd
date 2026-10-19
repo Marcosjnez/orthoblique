@@ -93,7 +93,7 @@ affiliations:
 
 abstract-title: "Abstract"
 abstract: |
-  For the last two decades, the gradient projection algorithm (GPA) has been the most used tool to rotate factor solutions. However, GPA is currently limited to performing either full orthogonal or oblique rotations. Keeping structural zeros in selected positions of the factor correlation matrix after rotation is currently unavailable in Exploratory Factor Analysis. This is a shortcoming because in some cases it is known in advance that some factor correlations must be zero by theory or design. Thereby, we developed a new kind of rotation, the orthoblique rotation, in which both oblique and orthogonal relations between factors coexists. Building on the orthogonal and oblique algorithms of Jennrich, we provide a deeper account of how GPA works and use this account to generalize factor rotation to the orthoblique case. We then demonstrate that this rotation helps to estimate exploratory bi-factor models with multiple general factors in which the general factors may be correlated but must remain orthogonal to the group factors, which can be considered a generalization of the biquartimin and bigeomin criteria of Jennrich and Bentler (2011; 2012). We also illustrate its application to exploratory multitrait-multimethod models, where trait and method factors may correlate within their respective sets but trait–method correlations are constrained to zero by design. Finally, we made available the new orthoblique rotation in the R package \texttt{latent}, whose \texttt{lrotate()} function serves the same purpose as the \texttt{GPArotation} package of Bernaards and Jennrich (2005). Taken together, this work contributes to filling the gap between the confirmatory--exploratory continuum and can be seen as a continuation of the efforts of Jennrich to broaden the flexibility and reach of Exploratory Factor Analysis.
+  For the last two decades, the gradient projection algorithm (GPA) has been the most used tool to rotate factor solutions. However, GPA is currently limited to performing either fully orthogonal or fully oblique rotations. Keeping structural zeros in selected positions of the factor correlation matrix after rotation is currently unavailable in Exploratory Factor Analysis. This is a shortcoming because in some cases it is known in advance that some factor correlations must be zero by theory or design. Thereby, we developed a new kind of rotation, the orthoblique rotation, in which both oblique and orthogonal relations between factors coexist. Building on the orthogonal and oblique algorithms of Jennrich, we provide a deeper account of how GPA works and use this account to generalize factor rotation to the orthoblique case. We then demonstrate that this rotation helps to estimate exploratory bi-factor models with multiple general factors in which the general factors may be correlated but must remain orthogonal to the group factors, which can be considered a generalization of the biquartimin and bigeomin criteria of Jennrich and Bentler (2011; 2012). We also illustrate its application to exploratory multitrait-multimethod models, where trait and method factors may correlate within their respective sets but trait–method correlations are constrained to zero by design. Finally, we made available the new orthoblique rotation in the R package \texttt{latent}, whose \texttt{lrotate()} function serves the same purpose as the \texttt{GPArotation} package of Bernaards and Jennrich (2005). Taken together, this work contributes to filling the gap between the confirmatory--exploratory continuum and can be seen as a continuation of the efforts of Jennrich to broaden the flexibility and reach of Exploratory Factor Analysis.
 ---
 
 \doublespacing
@@ -109,7 +109,7 @@ However, the flexibility of EFA comes at the expense of specifying a suitable si
 
 The generality of GPA for factor rotation was the main contribution of @jennrich_2001 and @jennrich_2002. Rather than developing a different algorithm for every simplicity criterion, they showed that a common computational procedure could optimize many criteria under the same rotation constraints. Bernaards and Jennrich (2005) developed this idea into general-purpose software and separated the evaluation of the criterion and the gradient of the parameters from the operations that enforce the rotation constraints. They also provided derivations, proofs, and software implementation details. Thus, their work provided both the motivation and the computational starting point for the present generalization to a new rotation method. Our purpose is to give a deeper and more explicit geometric account of all the mathematical objects involving factor rotation and the connections between them. Explaining why they are needed, how they are derived from the constraints of the rotation matrix, and how they work together provides a constructive route from the orthogonal and oblique cases to other rotation geometries.
 
-This generalization is very important because in EFA, the applications of GPA are currently limited to either orthogonal and oblique rotation. In other words, all the factors in EFA are currently either constrained to be orthogonal or allowed to correlate. This circumstance is problematic in cases where the researchers know in advance that two sets of factors may be correlated within each set but orthogonal between sets. For example, consider multitrait-multimethod models, in which trait and method factors may correlate within their respective sets but trait–method correlations must be constrained to zero by design. In this scenario, there should be structural zeros in the factor correlation matrix to effectively separate the variance explained by traits and methods. In other cases, it may be desirable to constrain one factor, or a group of factors, to be orthogonal to the remaining factors in order to obtain a more parsimonious pattern structure. For this, consider applications of exploratory bifactor modeling with one or multiple general factors in which all the general factors must be orthogonal to the group factors, but may be correlated among themselves [@jennrich_2012; @jimenez_2023a]. If the general factors were allowed to correlate with the group factors in an oblique rotation analysis, then the variance explained by each kind of factor could not be correctly disentangled, with the consequence that cross-loadings across the general factors would be biased.
+This generalization is very important because in EFA, the applications of GPA are currently limited to either orthogonal and oblique rotation. In other words, all the factors in EFA are currently either constrained to be orthogonal or allowed to correlate. This circumstance is problematic in cases where the researchers know in advance that two sets of factors may be correlated within each set but orthogonal between sets. For example, consider multitrait-multimethod models, in which trait and method factors may correlate within their respective sets but trait–method correlations must be constrained to zero by design. In this scenario, there should be structural zeros in the factor correlation matrix to effectively separate the variance explained by traits and methods. In other cases, it may be desirable to constrain one factor, or a group of factors, to be orthogonal to the remaining factors in order to obtain a more parsimonious pattern structure. For this, consider applications of exploratory bifactor modeling with one or multiple general factors in which all the general factors must be orthogonal to the group factors, but may be correlated among themselves [@jennrich_2012; @jimenez_2023a]. If the general factors were allowed to correlate with the group factors in an oblique rotation analysis, then the variance explained by each kind of factor could not be correctly disentangled and could complicate the interpretation of the general-factor loadings.
 
 Thereby, a generalization of the oblique and orthogonal rotations that allows for a mix of oblique and orthogonal factors could aid the correct estimation of such factor structures. An illustrative example of this generalization is presented in Figure \ref{fig:rotations} along with the standard orthogonal and oblique cases.
 
@@ -121,13 +121,13 @@ Thereby, a generalization of the oblique and orthogonal rotations that allows fo
 \label{fig:rotations}
 \end{figure}
 
-In this particular orthoblique example, factors are organized into two oblique blocks of two factors each, with the remaining two factors being completely orthogonal. However, others possible patterns of correlations are possible by modifying the size of the oblique and orthogonal blocks of factors. As such, the differential feature of the orthoblique rotation is that some blocks of factors may be allowed to correlated within but not between. 
+In this particular orthoblique example, factors are organized into two oblique blocks of two factors each, with the remaining two factors being completely orthogonal. However, other correlation patterns are possible by modifying the size of the oblique and orthogonal blocks of factors. As such, the differential feature of the orthoblique rotation is that some blocks of factors may be allowed to correlate within but not between. 
 
-The objectives of this work are fourfold. First, we give a coherent and self-contained explanation of EFA and GPA for orthogonal and oblique rotation, connecting the matrix formulas of @jennrich_2001 and @jennrich_2002 with their underlying geometry. Second, using these explanations, we derive the orthoblique rotation, a generalization in which both oblique and orthogonal relations between factors coexists, and show how the conventional rotations are obtained as special cases. Standard errors for the new rotated parameters and correlation-preserving factor scores are also provided. Third, we make this new rotation available in the \texttt{latent} R package and explain how the function \texttt{lrotate()} extends the rotation framework used in \texttt{GPArotation}. Lastly, we illustrate the usefulness of this generalization in two empirical examples concerning exploratory multitrait-multimethod and bifactor models with multiple general factors. In the end, we discuss the benefits of the orthoblique rotation for preserving the flexibility of EFA to uncover cross-loadings and wrong theoretical expectations while retaining specific factor-correlation restrictions.
+The objectives of this work are fourfold. First, we give a coherent and self-contained explanation of EFA and GPA for orthogonal and oblique rotation, connecting the matrix formulas of @jennrich_2001 and @jennrich_2002 with their underlying geometry. Second, using these explanations, we derive the orthoblique rotation, a generalization in which both oblique and orthogonal relations between factors coexist, and show how the conventional rotations are obtained as special cases. Standard errors for the new rotated parameters and correlation-preserving factor scores are also provided. Third, we make this new rotation available in the \texttt{latent} R package and explain how the function \texttt{lrotate()} extends the rotation framework used in \texttt{GPArotation}. Lastly, we illustrate the usefulness of this generalization in two empirical examples concerning exploratory multitrait-multimethod and bifactor models with multiple general factors. In the end, we discuss the benefits of the orthoblique rotation for preserving the flexibility of EFA to uncover cross-loadings and wrong theoretical expectations while retaining specific factor-correlation restrictions.
 
 # Factor rotation
 
-Because rotation is applied only to measurement parameters, without loss of generality we will consider the simplest case of EFA: Exploratory Factor Analysis (EFA). EFA is usually performed in two steps. First, an identified model $\hat{\mathbf{\Sigma}} = \mathbf{\Lambda}_0\mathbf{\Lambda}_0^\top + \mathbf{\Theta}$ is estimated by maximum likelihood or least squares by constraining $\mathbf{\Lambda}_0$ to have either orthogonal columns or a lower-triangular structure. Second, $\mathbf{\Lambda}_0$ is rotated to find an equally fitting model $\hat{\mathbf{\Sigma}} = \mathbf{\Lambda}\mathbf{\Psi}\mathbf{\Lambda}^\top + \mathbf{\Theta}$, where $\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}$ and $\mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}$ is the latent factor correlation matrix. This last step involves finding the optimal rotation matrix $\mathbf{X}$ that minimizes a complexity criterion seeking to obtain a sparse and interpretable $\mathbf{\Lambda}$. However, $\mathbf{X}$ must be subject to certain constraints that distinguish orthogonal from oblique rotations. In orthogonal rotation, the constraint is $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$, whereas in oblique rotation it is $\mathrm{diag}(\mathbf{X}^\top\mathbf{X}) = \mathbf{1}$. Therefore, both orthogonal and oblique rotation matrices belong to smooth nonlinear sets of $\mathbb{R}^{n\times n}$ matrices characterized by these specific constraints. Informally, these specific sets are termed manifolds and denoted by $\mathcal{M}$.
+EFA is usually performed in two steps. First, an identified model $\hat{\mathbf{\Sigma}} = \mathbf{\Lambda}_0\mathbf{\Lambda}_0^\top + \mathbf{\Theta}$ is estimated by maximum likelihood or least squares by constraining $\mathbf{\Lambda}_0$ to have either orthogonal columns or a lower-triangular structure. Second, $\mathbf{\Lambda}_0$ is rotated to find an equally fitting model $\hat{\mathbf{\Sigma}} = \mathbf{\Lambda}\mathbf{\Psi}\mathbf{\Lambda}^\top + \mathbf{\Theta}$, where $\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}$ and $\mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}$ is the latent factor correlation matrix. This last step involves finding the optimal rotation matrix $\mathbf{X}$ that minimizes a complexity criterion seeking to obtain a sparse and interpretable $\mathbf{\Lambda}$. However, $\mathbf{X}$ must be subject to certain constraints that distinguish orthogonal from oblique rotations. In orthogonal rotation, the constraint is $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$, whereas in oblique rotation it is $\mathrm{diag}(\mathbf{X}^\top\mathbf{X}) = \mathbf{1}$. Therefore, both orthogonal and oblique rotation matrices belong to smooth nonlinear sets of $\mathbb{R}^{n\times n}$ matrices characterized by these specific constraints. Informally, these specific sets are termed manifolds and denoted by $\mathcal{M}$.
 
 The problem of factor rotation is that the optimal orthogonal or oblique rotation matrix $\mathbf{X}$ cannot generally be found by using ordinary optimization algorithms that do not enforce these constraints. For this purpose, the Gradient Projection Algorithm (GPA) has proved to be an elegant and robust solution. GPA builds on differential geometry to perform optimization on nonlinear manifolds. Let $\tilde{f}$ be a complexity function with domain in $\mathbb{R}^{n\times n}$ that we aim to minimize with respect to a rotation matrix $\mathbf{X}$. This function can be any complexity criterion, such as varimax, oblimin, or geomin. Suppose that we want to constrain the solution to lie on a nonlinear manifold $\mathcal{M}$ characterized by a defining smooth function $h:\mathbb{R}^{n\times n}\rightarrow\mathbb{R}^{d}$ that satisfies
 
@@ -146,7 +146,7 @@ $$
 
 <!-- Because these constraints are smooth and their differentials have full rank at every point of the manifolds, the regular level-set theorem guarantees that these sets are smooth embedded manifolds.^[That is, $\mathrm{rank}(\mathrm{D}h(\mathbf{X}))=d$ for all $\mathbf{X}\in\mathcal{M}$ [@boumal_2023, Sections 3.2 and 7.7].] -->
 
-To better understand these manifold definitions, an illustration of the orthogonal and oblique manifolds for $n=3$ is presented in Figure 1. In both manifolds, each column $\mathbf{x}_j$ of the rotation matrix is a unit vector and can therefore be represented on the unit sphere. The oblique manifold is the product of $n$ unit spheres, whereas the orthogonal manifold is the subset of this product in which the vectors are also constrained to point in mutually perpendicular directions.
+To better understand these manifold definitions, an illustration of the orthogonal and oblique manifolds for $n=3$ is presented in Figure \ref{fig:orthogonal-oblique-manifolds}. In both manifolds, each column $\mathbf{x}_j$ of the rotation matrix is a unit vector and can therefore be represented on the unit sphere. The oblique manifold is the product of $n$ unit spheres, whereas the orthogonal manifold is the subset of this product in which the vectors are also constrained to point in mutually perpendicular directions.
 
 \begin{figure}[!ht]
 \centering
@@ -301,7 +301,7 @@ $$
 \mathbf{0}
 \right\}.
 $$
-Indeed, $\mathbf{\Omega}$ is an arbitrary off-diagonal matrix with $n(n-1)$ free elements and thus it is a valid full-rank basis of the tangent space of the oblique manifold.
+Indeed, $\mathbf{\Omega}$ is an arbitrary off-diagonal matrix with $n(n-1)$ free elements and thus it is a valid full-rank parameterization of the tangent space of the oblique manifold.
 
 Now, notice that any member of $\mathbb{R}^{n \times n}$ can be decomposed in orthogonal complements. At any point $\mathbf{X}\in\mathcal{M}$, the Euclidean space can be decomposed into the orthogonal direct sum of the tangent and normal spaces,
 $$
@@ -318,7 +318,7 @@ $$
 \text{grad}\tilde{f}(\mathbf{X}) = \text{grad}\tilde{f}(\mathbf{X})_\parallel + \text{grad}\tilde{f}(\mathbf{X})_\perp,
 $$ {#eq-orth_compl_grad}
 
-where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\mathbf{X})_\perp$ are the projections of $\text{grad}\tilde{f}(\mathbf{X})$ onto the tangent and normal spaces of the manifold $\mathcal{M}$, respectively [@absil_2009, p. 47]. Figure 2 depicts the relationship between these quantities. 
+where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\mathbf{X})_\perp$ are the projections of $\text{grad}\tilde{f}(\mathbf{X})$ onto the tangent and normal spaces of the manifold $\mathcal{M}$, respectively [@absil_2009, p. 47]. Figure \ref{fig:tangent-gradient} depicts the relationship between these quantities. 
 
 \begin{figure}[!ht]
 \centering
@@ -342,7 +342,7 @@ where $\text{grad}\tilde{f}(\mathbf{X})_\parallel$ and $\text{grad}\tilde{f}(\ma
 \label{fig:tangent-gradient}
 \end{figure}
 
-As it can be seen in Figure 2, a tangent space is indeed a linearization of the manifold at a given $\mathbf{X}$ and for any vector in the tangent space there would be another vector from the normal space that is orthogonal to it and satisfies @eq-orth_compl. However, to make sense of this notion of orthogonality at any $\mathbf{V} \in \mathcal{T}_{\mathbf{X}}\mathcal{M}$, we must endow the tangent space with a metric like the Frobenius inner product (i.e., $\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})$), so that $\mathcal{M}$ acquires a Riemannian structure, turning it into a Riemannian manifold. In other words, the collection of inner products on the tangent spaces defines a Riemannian metric on $\mathcal{M}$, turning it into a Riemannian manifold. And this definition of inner product over the tangent space of $\mathcal{M}$ allows us to develop a definition of orthogonal complements.
+As it can be seen in Figure \ref{fig:tangent-gradient}, a tangent space is indeed a linearization of the manifold at a given $\mathbf{X}$ and for any vector in the tangent space there would be another vector from the normal space that is orthogonal to it and satisfies @eq-orth_compl. However, to make sense of this notion of orthogonality at any $\mathbf{V} \in \mathcal{T}_{\mathbf{X}}\mathcal{M}$, we must endow the tangent space with a metric like the Frobenius inner product (i.e., $\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})$), so that $\mathcal{M}$ acquires a Riemannian structure, turning it into a Riemannian manifold. In other words, the collection of inner products on the tangent spaces defines a Riemannian metric on $\mathcal{M}$, turning it into a Riemannian manifold. And this definition of inner product over the tangent space of $\mathcal{M}$ allows us to develop a definition of orthogonal complements.
 
 Recall that $f=\tilde{f}|_{\mathcal{M}}$ is the restriction of the complexity criterion to the manifold. Using @eq-orth_compl_grad and the Frobenius inner product as Riemannian metric, we arrive at the following identities for any $\mathbf{V} \in \mathcal{T}_\mathbf{X}\mathcal{M}$: 
 $$
@@ -574,7 +574,7 @@ $$
 \right].
 $$
 
-These are indeed the same projected gradients formulas denoted by \texttt{Gp} in the orthogonal and oblique implementations of Bernaards and Jennrich (pp. 692--695; 2005) and in the \texttt{GPArotation} package.
+These are indeed the same projected-gradient formulas denoted by \texttt{Gp} in the orthogonal and oblique implementations of Bernaards and Jennrich (pp. 692--695; 2005) and in the \texttt{GPArotation} package.
 
 # Solution to problem 2: the Retraction
 
@@ -919,7 +919,7 @@ $$
 \mathbf{\Omega}_{33}
 \end{bmatrix}.
 $$
-$\mathbf{\Omega}_{11}$ and $\mathbf{\Omega}_{22}$ can be arbitrary zero-diagonal matrices and $\mathbf{\Omega}_{33}$ must be skew-symmetric. The block matrices in the upper diagonal can be totally arbitrary, but the must be skew-symmetric with respect to the lower diagonal blocks. We can see that $\text{dim}(\mathbf{\Omega}) = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2$. Indeed, this is the same than $n^2-d$ and hence $\mathbf{X}^{-\top}\mathbf{\Omega}$ is a valid full-rank basis of the tangent space.
+$\mathbf{\Omega}_{11}$ and $\mathbf{\Omega}_{22}$ can be arbitrary zero-diagonal matrices and $\mathbf{\Omega}_{33}$ must be skew-symmetric. The block matrices in the upper diagonal can be totally arbitrary, but they must be skew-symmetric with respect to the lower diagonal blocks. We can see that $\text{dim}(\mathbf{\Omega}) = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2$. Indeed, this is the same as $n^2-d$ and hence $\mathbf{X}^{-\top}\mathbf{\Omega}$ is a valid full-rank parameterization of the tangent space.
 
 ## Normal space
 
@@ -1122,7 +1122,7 @@ $$ {#eq-orth_compl_proj}
 
 At $t=0$, $\mathbf{R}_i$ reduces to $\mathbf{X}_i$ and $\mathbf{Z}_j$ reduces to $\mathbf{X}_j$. Since $\mathbf{X}_i^\top \mathbf{X}_j = \mathbf{0}$, the second term of this expression vanishes and we are left with $\left. P_{\mathbf{X}_j}(t\mathbf{V}_j) \right |_{t=0} = \mathbf{X}_j$. Therefore, $R_{\mathbf{X}}^{\mathcal{POB}}(\mathbf{0}) = \mathbf{X}$, satisfying the first retraction condition.
 
-To proof the second retraction condition we first differentiate @eq-orth_compl_proj using the product rule,
+To prove the second retraction condition we first differentiate @eq-orth_compl_proj using the product rule,
 $$
 \begin{aligned}
 DP_{\mathbf{X}_j}(t\mathbf{V}_j)
@@ -1157,9 +1157,9 @@ $$
 \right).
 $$
 
-But the tangent-space equations (\ref{eq-pob_tangent_space}) states that $\mathbf{V}_i^\top\mathbf{X}_j+\mathbf{X}_i^\top\mathbf{V}_j=\mathbf{0}$. Hence, $\left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0} = \mathbf{V}_j$.
+But the tangent-space equations (\ref{eq-pob_tangent_space}) state that $\mathbf{V}_i^\top\mathbf{X}_j+\mathbf{X}_i^\top\mathbf{V}_j=\mathbf{0}$. Hence, $\left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0} = \mathbf{V}_j$.
 
-Finally, because we already showed that doing normalization or orthogonalization preserve first-order directions, it follows that applying these operations afterwards still preserve this direction and hence $\left. DR_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) \right|_{t=0} = \mathbf{V}$. 
+Finally, because we already showed that doing normalization or orthogonalization preserve first-order directions, it follows that applying these operations afterwards still preserves this direction and hence $\left. DR_{\mathbf{X}}^{\mathcal{POB}}(t\mathbf{V}) \right|_{t=0} = \mathbf{V}$. 
 
 Notice that any block order also satisfies these retraction conditions, provided each block is projected onto the orthogonal complement of all previously processed blocks and then normalized if they are oblique or orthonormalized if it is orthogonal. Different orders may produce different finite updates but they always preserve the same first-order direction.
 
@@ -1181,24 +1181,22 @@ In this setup, the tangent space, normal space, and retraction would involve add
 
 Furthermore, this generalization shows that orthogonal and oblique rotations are special cases of the orthoblique manifold. If there are no oblique blocks and $r=n$, then $\mathcal{POB}(\varnothing,n)=\mathcal{O}(n)$. And if there is one oblique block with $p_1=n$ and $r=0$, then $\mathcal{POB}(\{n\},0)=\mathcal{OB}(n)$.
 
-Table \ref{tab:gpa-comparison} brings together the common GPA steps and the geometric differences between orthogonal, oblique, and orthoblique rotation. It also distinguishes the quantities used to derive the projected gradient from the operations used to update $\mathbf{X}$.
-
 # Rotation constraints and standard errors
 
 We already know how to impose constraints on $\mathbf{X}$ in orthogonal, oblique, and orthoblique rotation scenarios. A remaining matter is how these constraints are translated to the rotated loadings $\mathbf{\Lambda}$ and factor correlation matrix $\mathbf{\Psi}$ as this information is required for computing valid standard errors of rotated parameters.
 
-Let $\theta$ be a vector collecting the $k$ factor model parameters after factor rotation and $\mathbf{H}_{\theta}$ be the corresponding Hessian matrix of the log-likelihood. Define $\mathbf{C}_{\theta}$ as the $k\times c$ matrix whose columns contain the derivatives of the $c$ constraints with respect to these parameters that must be satisfied at the stationary point. Then,
+Let $\theta$ be a vector collecting the $k$ factor model parameters after factor rotation and $\mathbf{I}_{\theta}$ be the corresponding observed information matrix (the negative Hessian of the log-likelihood). Define $\mathbf{C}_{\theta}$ as the $k\times c$ matrix whose columns contain the derivatives of the $c$ constraints with respect to these parameters that must be satisfied at the stationary point. Then,
 
 $$
 \begin{pmatrix}
-\mathbf{H}_{\theta} & \mathbf{C}_{\theta} \\
+\mathbf{I}_{\theta} & \mathbf{C}_{\theta} \\
 \mathbf{C}_{\theta}^\top & \mathbf{0}
 \end{pmatrix}
-$$ {#eq-augmented-hessian}
+$$ {#eq-augmented-information}
 
-is an augmented hessian matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood estimation [Equation 17; @jennrich_1974]. Alternatively, this augmented Hessian may be used in a sandwich estimator for non-maximum likelihood methods [@zhang_2014].
+is an augmented Information matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood estimation [Equation 17; @jennrich_1974]. For non-maximum-likelihood estimators, an alternative augmented Hessian matrix can be incorporated into the sandwich covariance estimator described by @zhang_2014. Replacing $\mathbf{I}_\theta$ by the Hessian matrix of the loss function in @eq-augmented-information would suffice.
 
-For orthogonal and oblique rotation, the derivatives of the constraints can be found elsewhere [@archer_1973; @jennrich_1973]. $\mathbf{C}_{\theta}$. For orthoblique rotation, we first derive the constraints and then compute their corresponding derivatives. 
+For orthogonal and oblique rotation, the derivatives of the constraints can be found elsewhere [@archer_1973; @jennrich_1973]. For orthoblique rotation, we first derive the constraints and then compute their corresponding derivatives with respect to the model parameters after rotation. 
 
 First, let $\zeta$ be the function that transforms the rotation matrix into the rotated parameters. In orthoblique rotation, $\zeta(\mathbf{X}) = \{\mathbf{\Lambda} = \mathbf{\Lambda}_0\mathbf{X}^{-\top}, \mathbf{\Psi} = \mathbf{X}^\top\mathbf{X}\}$. By the definition of gradient, at any tangent direction $\mathbf{V}$ we should have
 $$
@@ -1209,7 +1207,7 @@ $$
 $$ {#eq-differential_rotated}
 where $\Delta f_\mathbf{\Lambda\Psi}$ is the gradient of the complexity function with respect to the rotated parameters. The second equality follows because at a given solution the complexity criterion must be stationary.
 
-As showed before, the tangent space of the orthoblique manifold has the form $\mathbf{V} = \mathbf{X}^{-\top}\mathbf{\Omega}$, where the blocks of oblique factors in $\mathbf{\Omega}$ are arbitrary off-diagonal matrices, the block of orthogonal factors is skew-symmetric, and the intersections in $\mathbf{\Omega}$ between different blocks of factors $i$ and $j$ satisfy $\mathbf{\Omega}_{ij}=-\mathbf{\Omega}_{ji}^\top$. 
+As shown before, the tangent space of the orthoblique manifold has the form $\mathbf{V} = \mathbf{X}^{-\top}\mathbf{\Omega}$, where the blocks of oblique factors in $\mathbf{\Omega}$ are arbitrary off-diagonal matrices, the block of orthogonal factors is skew-symmetric, and the intersections in $\mathbf{\Omega}$ between different blocks of factors $i$ and $j$ satisfy $\mathbf{\Omega}_{ij}=-\mathbf{\Omega}_{ji}^\top$. 
 
 Substituting this tangent parameterization into the differential of $\zeta$ gives
 
@@ -1243,7 +1241,7 @@ $$
 c = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2.
 $$ 
 
-The first two terms count the off-diagonal entries of each oblique block. The next three terms count the number of symmetric entries different blocks, and the final term counts symmetric entries within the orthogonal block. These are $c$ independent equations that become zero at convergence and whose derivatives with respect to the rotated parameters are collected in the $\mathbf{C}_\theta$ term of the augmented Hessian representation (@eq-augmented-hessian).
+The first two terms count the off-diagonal entries of each oblique block. The next three terms count the symmetry equations between different blocks, and the final term counts the symmetry equations within the orthogonal block. These are $c$ stationarity equations that become zero at convergence and whose derivatives with respect to the rotated parameters are collected in the $\mathbf{C}_\theta$ term of the augmented Information representation (@eq-augmented-information).
 
 Differentiating @eq-orthblq_constraints yields
 $$
@@ -1254,52 +1252,13 @@ $$
   \Delta f_{\mathbf{\Lambda}}^\top\mathbf{\Lambda}\\
 &-\mathbf{\Psi}^{-1}
   \left[
-    \big\{\mathrm{d}(\Delta f_{\mathbf{\Lambda}})\big\}^\top\mathbf{\Lambda}
+    \mathrm{d}(\Delta f_{\mathbf{\Lambda}})^\top\mathbf{\Lambda}
     +\Delta f_{\mathbf{\Lambda}}^\top\mathrm{d}\mathbf{\Lambda}
   \right].
 \end{aligned}
 $$ {#eq-rotation_constraint_differential}
 
-Here, $\mathrm{d}(\Delta f_{\mathbf{\Lambda}})$ and $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ are the total differentials of the criterion gradients.
-
-For the symmetry equations, we simply subtract the transpose of @eq-rotation_constraint_differential. To keep the expression short, write
-$$
-\mathbf{B}=\Delta f_{\mathbf{\Lambda}}^\top\mathbf{\Lambda},
-\qquad
-\mathrm{d}\mathbf{B}
-=\big\{\mathrm{d}(\Delta f_{\mathbf{\Lambda}})\big\}^\top\mathbf{\Lambda}
- +\Delta f_{\mathbf{\Lambda}}^\top\mathrm{d}\mathbf{\Lambda}.
-$$
-Then
-$$
-\begin{aligned}
-\mathrm{d}(\mathbf{K}-\mathbf{K}^\top)
-={}&\mathbf{\Psi}^{-1}(\mathrm{d}\mathbf{\Psi})\mathbf{\Psi}^{-1}\mathbf{B}
--\mathbf{B}^\top\mathbf{\Psi}^{-1}(\mathrm{d}\mathbf{\Psi})\mathbf{\Psi}^{-1}\\
-&-\mathbf{\Psi}^{-1}\mathrm{d}\mathbf{B}
- +(\mathrm{d}\mathbf{B})^\top\mathbf{\Psi}^{-1}.
-\end{aligned}
-$$ {#eq-rotation_symmetry_differential}
-The $\mathrm{d}(\Delta f_{\mathbf{\Psi}})$ terms cancel because this gradient and its differential are symmetric.
-
-To obtain the constraint derivative matrix $\mathbf{C}_\theta$ in @eq-augmented-hessian, let $\boldsymbol{\theta}=(\theta_1,\ldots,\theta_k)^\top$ collect the $k$ independently estimated parameters of the rotated model. Define $\mathbf{h}(\boldsymbol{\theta})\in\mathbb{R}^c$ as the vector of the $c$ independent stationarity equations obtained from $\mathbf{K}$: the off-diagonal entries within the oblique blocks and the symmetry equations for all remaining pairs of factors.
-
-The derivatives of these constraints can be calculated by evaluating $\mathrm{d}\mathbf{K}$ along successive coordinate directions. Specifically, let $\mathbf{e}_i\in\mathbb{R}^k$ denote the $i$th standard basis vector, whose $i$th element is one and whose remaining elements are zero. For each $i=1,\ldots,k$, we set $\mathrm{d}\boldsymbol{\theta}=\mathbf{e}_i$ and evaluate @eq-rotation_constraint_differential, extracting the corresponding $c$ stationarity equations. Denoting this extraction by $\mathcal{S}$, the constraint derivative matrix is
-
-$$
-\mathbf{C}_\theta =
-\begin{bmatrix}
-\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_1]\big)^\top\\
-\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_2]\big)^\top\\
-\vdots\\
-\mathcal{S}\big(\mathrm{d}\mathbf{K}[\mathbf{e}_k]\big)^\top
-\end{bmatrix}
-=
-\left(\frac{\partial\mathbf{h}}{\partial\boldsymbol{\theta}}\right)^\top
-\in\mathbb{R}^{k\times c}.
-$$
-
-Here, $\mathcal{S}$ selects the off-diagonal entries of $\mathrm{d}\mathbf{K}$ within the oblique blocks and one independent entry of $\mathrm{d}(\mathbf{K}-\mathbf{K}^\top)$ for each remaining pair of factors. Thus, each row of $\mathbf{C}_\theta$ contains the derivatives of all $c$ rotation constraints with respect to one parameter $\theta_i$.
+To obtain the appropriate $k \times c$ derivatives in $\mathbf{C}_\theta$ from this differential, let $\mathbf{e}_i\in\mathbb{R}^k$ denote the $i$th standard basis vector, whose $i$th element is one and whose remaining elements are zero. For each model parameter $i=1,\ldots,k$ in $\theta$, we set $\mathrm{d}\theta=\mathbf{e}_i$ in turn and evaluate @eq-rotation_constraint_differential along $\mathrm{d}\theta$ to find the first $p(p-1) + q(q-1)$ constraint derivatives corresponding to the off-diagonal entries of the oblique blocks. To find the remaining $pq + pr + qr + r(r-1)/2$ constraint derivatives of the symmetric entries corresponding to the intersections between blocks and the entries in the orthogonal block, simply evaluate $\mathrm{d}\mathbf{K}-\mathrm{d}\mathbf{K}^\top$ in the same iterative fashion.
 
 # Software: orthoblique rotation with the latent package
 
@@ -1397,24 +1356,13 @@ The single value \texttt{oblique = 3} both selects the orthoblique manifold and 
 
 By default, \texttt{lrotate()} and \texttt{lefa()} computes the variance-covariance matrix and standard errors of the rotated parameters and uniquenesses using the corresponding rotation constraints derivatives.
 
-<!-- To extract only the matrix of rotation constraint derivatives $\mathbf{C}_\theta$ in the augmented Hessian representation (@eq-augmented-hessian), the user can employ the \texttt{constraints\_derivs} function: -->
-<!-- ```{r} -->
-<!-- #| label: software-constraints_derivs -->
-<!-- #| eval: false -->
-<!-- #| echo: true -->
-<!-- # Compute the matrix of rotation constraint derivatives: -->
-<!-- C_theta <- constraints_derivs(fit_efa) -->
-<!-- ``` -->
-
-<!-- The \texttt{constraints\_derivs} function computes the appropriate derivatives for all currenlty available rotation criteria and it also supports orthogonal and oblique rotation models. -->
-
 Finally, \texttt{latent} can also estimate factor scores that preserve the orthoblique factor correlations. Currently, two existing methods implemented in the function \texttt{latscores} allow this: the constrained regression method of @green_1969 that finds the best correlation-preserving scores in the least-squares sense, and the method of @tenberge_1999 that minimizes the determinant of the residual covariance matrix:
 
 ```{r}
 #| label: software-factor_scores
 #| eval: false
 #| echo: true
-# Compute the best factors scores in the least-squares sense:
+# Compute the best factor scores in the least-squares sense:
 Green_scores <- latscores(fit, method = "Green")
 # Compute the factor scores that minimize the determinant of the residual
 # covariance matrix:
@@ -1514,9 +1462,6 @@ The model was fitted using unweighted least squares and target rotation as follo
 #| include: true
 set.seed(2026)
 R <- mtmm$ABCD$R # Extract the correlation matrix
-keep <- !rownames(R) %in% c("ARGUc", "ARGUp")
-R <- R[keep, keep] # Remove the two duplicated indicators
-# target must use these same 54 rows in the same order.
 efa <- lefa(sample.cov = R, sample.nobs = 2119,
             nfactors = 5, estimator = "uls",
             oblique = c(2, 3),
@@ -1589,7 +1534,7 @@ $$
 \mathbf{0} & \mathbf{I}_{24}
 \end{pmatrix},
 $$
-where $\boldsymbol{\Psi}_{G}$ contains the correlations among the six domain-general factors. Therefore, the general factors can correlate, whereas every specific factor is orthogonal to the general factors and to all other specific factors. This manner, common variance would be partitioned between specific factors, representing narrow facet-level variance, and general factors, representing broader variance shared across facets.
+where $\boldsymbol{\Psi}_{G}$ contains the correlations among the six domain-general factors. Therefore, the general factors can correlate, whereas every specific factor is orthogonal to the general factors and to all other specific factors. In this way, common variance would be partitioned between specific factors, representing narrow facet-level variance, and general factors, representing broader variance shared across facets.
 
 This formulation extends the exploratory bifactor approach of Jennrich and Bentler (2011; 2012) to the case of multiple correlated general factors. In their biquartimin and bigeomin criteria, a single general-factor column is excluded from the simplicity rotation criterion, which is applied to the group-factor columns only. Here, there are six general-factor columns, and their orientation also has to be determined. We therefore applied a criterion to the general factor columns and another to the specific factor columns. Thus this example also illustrates the possibility of combining different rotation criteria within the same analysis. 
 
@@ -1599,7 +1544,7 @@ The three solutions recovered different aspects of the theoretical HEXACO hierar
 
 In all three solutions, the general-factor loading patterns broadly reflected the HEXACO domains. Emotionality, Extraversion, Conscientiousness, Openness, and Agreeableness were recognizable, whereas Honesty--Humility was less consistently separated in the target-based specifications. Some Honesty--Humility items showed salient cross-loadings on the Conscientiousness general factor, and additional general-factor cross-loadings remained. Because none of these specifications targeted the general-factor loadings, this correspondence was not imposed directly by the target, although targeting the specific factors could still alter the partitioning of common variance.
 
-Figure \ref{fig:hexaco-loadings-comparison} compares the theoretical loading structure (a) with the three rotated loading solutions: (b) geomin + target, (c) oblimin + target, and (d) oblimin + oblimin. The loading heatmaps display absolute values. Figure \ref{fig:hexaco-correlations-comparison} presents the corresponding signed $6\times6$ general-factor correlation matrices, in panels (a), (b), and (c), respectively.
+Figure \ref{fig:hexaco-loadings-comparison} compares the theoretical loading structure (a) with the three rotated loading solutions: (b) geomin + target, (c) oblimin + target, and (d) oblimin + oblimin. The loading heatmaps display absolute values. Figure \ref{fig:hexaco-correlations-comparison} presents the corresponding $6\times6$ general-factor correlation matrices, in panels (a), (b), and (c), respectively.
 
 
 The following code illustrates the oblimin + target specification. Oblimin is applied to the six general factors and target rotation to the 24 specific factors. The argument \texttt{oblique = 6} automatically selects the orthoblique manifold and places the first six factors in one oblique block; all remaining factors are mutually orthogonal and orthogonal to the general factors. The same \texttt{oblique} specification is used in all three analyses, independently of their rotation criteria. Because the items are ordinal, the model is estimated with diagonally weighted least squares using polychoric correlations.
@@ -1611,8 +1556,7 @@ The following code illustrates the oblimin + target specification. Oblimin is ap
 #| include: true
 rotation_model <- list(
   oblimin = list(gamma = 0, factors = 1:6),
-  target = list(target = target[, 7:30], factors = 7:30)
-)
+  target  = list(target = target[, 7:30], factors = 7:30))
 efa <- lefa(data = mooc, nfactors = 30,
             ordered = TRUE, estimator = "dwls",
             oblique = 6,
@@ -1679,9 +1623,9 @@ general and specific factors.
     $\begin{array}{c|rrrrrr}
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
       G_1 & 1.00 & -0.15 & 0.06 & -0.09 & 0.13 & 0.21\\
-      G_2 & -0.15 & 1.00 & -0.04 & 0.13 & -0.13 & -0.01\\
-      G_3 & 0.06 & -0.04 & 1.00 & -0.19 & 0.07 & 0.14\\
-      G_4 & -0.09 & 0.13 & -0.19 & 1.00 & -0.12 & -0.01\\
+      G_2 & -0.15 & 1.00 & -0.03 & 0.12 & -0.13 & -0.01\\
+      G_3 & 0.06 & -0.03 & 1.00 & -0.19 & 0.07 & 0.14\\
+      G_4 & -0.09 & 0.12 & -0.19 & 1.00 & -0.12 & -0.01\\
       G_5 & 0.13 & -0.13 & 0.07 & -0.12 & 1.00 & 0.02\\
       G_6 & 0.21 & -0.01 & 0.14 & -0.01 & 0.02 & 1.00
     \end{array}$%
@@ -1696,12 +1640,12 @@ general and specific factors.
   \resizebox{\linewidth}{!}{%
     $\begin{array}{c|rrrrrr}
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
-      G_1 & 1.00 & -0.11 & 0.13 & 0.08 & -0.22 & 0.06\\
+      G_1 & 1.00 & -0.11 & 0.12 & 0.08 & -0.22 & 0.05\\
       G_2 & -0.11 & 1.00 & -0.08 & -0.12 & 0.11 & -0.01\\
-      G_3 & 0.13 & -0.08 & 1.00 & 0.20 & -0.10 & 0.11\\
-      G_4 & 0.08 & -0.12 & 0.20 & 1.00 & -0.14 & 0.04\\
-      G_5 & -0.22 & 0.11 & -0.10 & -0.14 & 1.00 & -0.11\\
-      G_6 & 0.06 & -0.01 & 0.11 & 0.04 & -0.11 & 1.00
+      G_3 & 0.12 & -0.08 & 1.00 & 0.20 & -0.10 & 0.11\\
+      G_4 & 0.08 & -0.12 & 0.20 & 1.00 & -0.13 & 0.04\\
+      G_5 & -0.22 & 0.11 & -0.10 & -0.13 & 1.00 & -0.11\\
+      G_6 & 0.05 & -0.01 & 0.11 & 0.04 & -0.11 & 1.00
     \end{array}$%
   }
   \par\vspace{3pt}
@@ -1719,10 +1663,10 @@ general and specific factors.
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
       G_1 & 1.00 & 0.02 & -0.10 & -0.06 & 0.25 & -0.06\\
       G_2 & 0.02 & 1.00 & -0.19 & -0.18 & 0.28 & -0.03\\
-      G_3 & -0.10 & -0.19 & 1.00 & 0.13 & -0.07 & 0.21\\
+      G_3 & -0.10 & -0.19 & 1.00 & 0.13 & -0.07 & 0.20\\
       G_4 & -0.06 & -0.18 & 0.13 & 1.00 & -0.08 & 0.16\\
       G_5 & 0.25 & 0.28 & -0.07 & -0.08 & 1.00 & -0.23\\
-      G_6 & -0.06 & -0.03 & 0.21 & 0.16 & -0.23 & 1.00
+      G_6 & -0.06 & -0.03 & 0.20 & 0.16 & -0.23 & 1.00
     \end{array}$%
   }
   \par\vspace{3pt}
@@ -1730,11 +1674,11 @@ general and specific factors.
 \end{minipage}
 
 \caption{\fontsize{12}{12}\selectfont
-Signed correlation matrices among the six general HEXACO factors for
+Factor correlation matrices among the six general HEXACO factors for
 (a) geomin + target, (b) oblimin + target, and (c) oblimin + oblimin.
 All entries are rounded to two decimal places.
-Correlations between general and specific factors and between distinct
-specific factors are constrained to zero and are not displayed.}
+Correlations between general and group factors and between distinct
+group factors are constrained to zero and thus are not displayed.}
 \label{fig:hexaco-correlations-comparison}
 \end{figure}
 
