@@ -58,9 +58,17 @@ Target_s <- diag(24) %x% rep(1, 4)
 Target <- cbind(Target_g, Target_s)
 PsiTarget <- diag(30); PsiTarget[1:6, 1:6] <- 1; diag(PsiTarget) <- 0
 
+# Plot target matrix:
+file_dir0 <- paste("examples/correlated_general_factors/target.pdf", sep = "")
+pdf(file_dir0, width = 8, height = 6)
+par(mar = c(5.1, 4.1, 4.1, 4.1))
 plot(Target, breaks = c(0, 0.5, Inf),
-     main = "Target on factor loadings",
+     main = "Theoretical structure",
+     xlab = "Factors", ylab = "Items",
+     key = NULL,
      col = c("black", "yellow"))
+dev.off()
+
 plot(PsiTarget, breaks = c(0, 0.5, Inf),
      main = "Target on factor correlations",
      col = c("black", "yellow"))
@@ -72,14 +80,13 @@ rotation_model <- list(
        target = list(target = Target[, 7:30], factors = 7:30)),
   list(oblimin = list(gamma = 0, factors = 1:6),
        target = list(target = Target[, 7:30], factors = 7:30)),
-  list(geomin = list(epsilon = 0.01, factors = 1:6),
-       geomin = list(epsilon = 0.01, factors = 7:30)),
   list(oblimin = list(gamma = 0, factors = 1:6),
        oblimin = list(gamma = 0, factors = 7:30))
 )
 
-names(rotation_model) <- c("geomin + target", "oblimin + target",
-                           "geomin + geomin", "oblimin + oblimin")
+names(rotation_model) <- c("geomin + target", 
+                           "oblimin + target",
+                           "oblimin + oblimin")
 nmodels <- length(rotation_model)
 
 set.seed(2026)
