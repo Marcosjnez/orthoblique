@@ -1468,15 +1468,15 @@ efa <- lefa(sample.cov = R, sample.nobs = 2119,
             rotation = "target", target = target)
 ```
 
-The results showed that the estimated correlation between Externalizing and Internalizing was -.251. The correlations were .298 between Children and Parents, .240 between Children and Teachers, and .302 between Parents and Teachers. In contrast, all six correlations between trait and method factors were zero to numerical precision as expected by the orthoblique constraints.
+The results showed that the estimated correlation between Externalizing and Internalizing was .251. The correlations were .298 between Children and Parents, .240 between Children and Teachers, and .302 between Parents and Teachers. In contrast, all six correlations between trait and method factors were zero to numerical precision as expected by the orthoblique constraints.
 
 In the same factor order, these reported estimates give
 $$
 \widehat{\mathbf{\Psi}}
 =\left[
 \begin{array}{cc|ccc}
-1     & -.251 &    0 &    0 &    0 \\
--.251 &     1 &    0 &    0 &    0 \\\hline
+1     & .251 &    0 &    0 &    0 \\
+.251 &     1 &    0 &    0 &    0 \\\hline
     0 &     0 &    1 & .298 & .240 \\
     0 &     0 & .298 &    1 & .302 \\
     0 &     0 & .240 & .302 &    1
@@ -1540,7 +1540,7 @@ This formulation extends the exploratory bifactor approach of Jennrich and Bentl
 
 To examine the extent to which the theoretical HEXACO structure is supported, we compared three rotation specifications. With 30 factors, a nontarget rotation has a large rotational search space and hence a greater risk of capitalizing on chance. Conversely, targeting a large number of loadings toward zero gives the theoretical structure a stronger role in determining factor orientation. We therefore applied geomin or oblimin to the six general factors combined with target rotation of the 24 specific factors, and compared these two solutions with oblimin applied to both blocks without a target. In the two target-based solutions, only the specific factors were targeted, providing theoretical anchoring where rotational complexity was greatest while leaving the general factors exploratory. The nontarget oblimin specification allows both levels to be oriented by the complexity criterion and can be viewed as an extension of biquartimin rotation to multiple general factors.^[In both oblimin specifications, we set $\gamma=0$ (quartimin). In the geomin + target specification, we set $\epsilon=.01$. For target rotation, the facet memberships determined the expected specific-factor loadings.]
 
-The three solutions recovered different aspects of the theoretical HEXACO hierarchy. In both target-based solutions, all 96 items had their largest absolute loading among the 24 specific factors on the expected facet. Without a target, this occurred for 73 of 96 items (76.0\%) under oblimin. Thus, target rotation provided clearer facet separation, although the nontarget oblimin solution also recovered much of the intended facet structure without prespecifying it.
+The three solutions recovered different aspects of the theoretical HEXACO hierarchy. In both target-based solutions, all 96 items had their largest absolute loading among the 24 specific factors on the expected facet. Without a target, this occurred for 75 of 96 items (78.1\%) under oblimin. Thus, target rotation provided clearer facet separation, although the nontarget oblimin solution also recovered much of the intended facet structure without prespecifying it.
 
 In all three solutions, the general-factor loading patterns broadly reflected the HEXACO domains. Emotionality, Extraversion, Conscientiousness, Openness, and Agreeableness were recognizable, whereas Honesty--Humility was less consistently separated in the target-based specifications. Some Honesty--Humility items showed salient cross-loadings on the Conscientiousness general factor, and additional general-factor cross-loadings remained. Because none of these specifications targeted the general-factor loadings, this correspondence was not imposed directly by the target, although targeting the specific factors could still alter the partitioning of common variance.
 
@@ -1569,7 +1569,7 @@ The six general factors remained substantially exploratory in this analysis. The
 
 With geomin + target (Figures \ref{fig:hexaco-loadings-comparison}b and \ref{fig:hexaco-correlations-comparison}a), the expected specific-factor loadings had a median absolute value of .427, with 91 of 96 exceeding .20; 2,204 of the 2,208 cross-loadings on other specific factors were below .20. Thus, geomin and oblimin produced comparably sparse specific-factor patterns when paired with target rotation. For the general factors, the median absolute designated loading was .414, 82 of the 96 designated loadings exceeded .20, and 426 of the 480 general-factor cross-loadings were below .20. The absolute general-factor correlations ranged from .007 to .214 (median .116). Compared with oblimin + target, the differences were modest, especially for the specific-factor block.
 
-The oblimin + oblimin solution (Figures \ref{fig:hexaco-loadings-comparison}d and \ref{fig:hexaco-correlations-comparison}c) recovered the expected specific factor for 73 items. Its median absolute expected specific-factor loading was .337, with 71 of 96 exceeding .20; 2,189 of the 2,208 specific-factor cross-loadings were below .20, and seven exceeded .30. In contrast, its general-factor block showed a clearer simple structure than in the two target-based solutions: the median absolute expected general-factor loading was .474, 95 of 96 exceeded .20, and 469 of the 480 general-factor cross-loadings were below .20. The absolute correlations among the general factors ranged from .018 to .279 (median .132), larger at the upper end than under the two target-based solutions. This configuration therefore favored a clearer general-factor structure at the expense of less distinct specific factors.
+The oblimin + oblimin solution (Figures \ref{fig:hexaco-loadings-comparison}d and \ref{fig:hexaco-correlations-comparison}c) recovered the expected specific factor for 75 items. Its median absolute expected specific-factor loading was .348, with 72 of 96 exceeding .20; 2,193 of the 2,208 specific-factor cross-loadings were below .20, and five exceeded .30. In contrast, its general-factor block showed a clearer simple structure than in the two target-based solutions: the median absolute expected general-factor loading was .459, 95 of 96 exceeded .20, and 468 of the 480 general-factor cross-loadings were below .20. The absolute correlations among the general factors ranged from .015 to .276 (median .138), larger at the upper end than under the two target-based solutions. This configuration therefore favored a clearer general-factor structure at the expense of less distinct specific factors.
 
 
 \begin{figure}[!htbp]
@@ -1622,12 +1622,12 @@ general and specific factors.
   \resizebox{\linewidth}{!}{%
     $\begin{array}{c|rrrrrr}
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
-      G_1 & 1.00 & -0.15 & 0.06 & -0.09 & 0.13 & 0.21\\
-      G_2 & -0.15 & 1.00 & -0.03 & 0.12 & -0.13 & -0.01\\
-      G_3 & 0.06 & -0.03 & 1.00 & -0.19 & 0.07 & 0.14\\
-      G_4 & -0.09 & 0.12 & -0.19 & 1.00 & -0.12 & -0.01\\
-      G_5 & 0.13 & -0.13 & 0.07 & -0.12 & 1.00 & 0.02\\
-      G_6 & 0.21 & -0.01 & 0.14 & -0.01 & 0.02 & 1.00
+      G_1 & 1.00 & 0.15 & 0.06 & -0.09 & 0.13 & -0.21\\
+      G_2 & 0.15 & 1.00 & 0.03 & -0.12 & 0.13 & -0.01\\
+      G_3 & 0.06 & 0.03 & 1.00 & -0.19 & 0.07 & -0.14\\
+      G_4 & -0.09 & -0.12 & -0.19 & 1.00 & -0.12 & 0.01\\
+      G_5 & 0.13 & 0.13 & 0.07 & -0.12 & 1.00 & -0.02\\
+      G_6 & -0.21 & -0.01 & -0.14 & 0.01 & -0.02 & 1.00
     \end{array}$%
   }
   \par\vspace{3pt}
@@ -1640,12 +1640,12 @@ general and specific factors.
   \resizebox{\linewidth}{!}{%
     $\begin{array}{c|rrrrrr}
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
-      G_1 & 1.00 & -0.11 & 0.12 & 0.08 & -0.22 & 0.05\\
-      G_2 & -0.11 & 1.00 & -0.08 & -0.12 & 0.11 & -0.01\\
-      G_3 & 0.12 & -0.08 & 1.00 & 0.20 & -0.10 & 0.11\\
-      G_4 & 0.08 & -0.12 & 0.20 & 1.00 & -0.13 & 0.04\\
-      G_5 & -0.22 & 0.11 & -0.10 & -0.13 & 1.00 & -0.11\\
-      G_6 & 0.05 & -0.01 & 0.11 & 0.04 & -0.11 & 1.00
+      G_1 & 1.00 & -0.11 & -0.12 & 0.08 & -0.22 & 0.05\\
+      G_2 & -0.11 & 1.00 & 0.08 & -0.12 & 0.11 & -0.01\\
+      G_3 & -0.12 & 0.08 & 1.00 & -0.20 & 0.10 & -0.11\\
+      G_4 & 0.08 & -0.12 & -0.20 & 1.00 & -0.13 & 0.04\\
+      G_5 & -0.22 & 0.11 & 0.10 & -0.13 & 1.00 & -0.11\\
+      G_6 & 0.05 & -0.01 & -0.11 & 0.04 & -0.11 & 1.00
     \end{array}$%
   }
   \par\vspace{3pt}
@@ -1661,12 +1661,12 @@ general and specific factors.
   \resizebox{\linewidth}{!}{%
     $\begin{array}{c|rrrrrr}
        & G_1 & G_2 & G_3 & G_4 & G_5 & G_6\\ \hline
-      G_1 & 1.00 & 0.02 & -0.10 & -0.06 & 0.25 & -0.06\\
-      G_2 & 0.02 & 1.00 & -0.19 & -0.18 & 0.28 & -0.03\\
-      G_3 & -0.10 & -0.19 & 1.00 & 0.13 & -0.07 & 0.20\\
-      G_4 & -0.06 & -0.18 & 0.13 & 1.00 & -0.08 & 0.16\\
-      G_5 & 0.25 & 0.28 & -0.07 & -0.08 & 1.00 & -0.23\\
-      G_6 & -0.06 & -0.03 & 0.20 & 0.16 & -0.23 & 1.00
+      G_1 & 1.00 & -0.02 & -0.10 & 0.06 & 0.25 & 0.04\\
+      G_2 & -0.02 & 1.00 & 0.19 & -0.18 & -0.28 & -0.01\\
+      G_3 & -0.10 & 0.19 & 1.00 & -0.14 & -0.07 & -0.18\\
+      G_4 & 0.06 & -0.18 & -0.14 & 1.00 & 0.08 & 0.15\\
+      G_5 & 0.25 & -0.28 & -0.07 & 0.08 & 1.00 & 0.24\\
+      G_6 & 0.04 & -0.01 & -0.18 & 0.15 & 0.24 & 1.00
     \end{array}$%
   }
   \par\vspace{3pt}
