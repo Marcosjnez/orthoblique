@@ -271,7 +271,7 @@ rotations. Keeping structural zeros in selected positions of the factor
 correlation matrix after rotation is currently unavailable in
 Exploratory Factor Analysis. This is a shortcoming because in some cases
 it is known in advance that some factor correlations must be zero by
-theory or design. Thereby, we developed a new kind of rotation, the
+theory or design. We therefore developed a new kind of rotation, the
 orthoblique rotation, in which both oblique and orthogonal relations
 between factors coexist. Building on the orthogonal and oblique
 algorithms of Jennrich, we provide a deeper account of how GPA works and
@@ -287,10 +287,9 @@ sets but trait--method correlations are constrained to zero by design.
 Finally, we made available the new orthoblique rotation in the R package
 \texttt{latent}, whose \texttt{lrotate()} function serves the same
 purpose as the \texttt{GPArotation} package of Bernaards and Jennrich
-(2005). Taken together, this work contributes to filling the gap between
-the confirmatory--exploratory continuum and can be seen as a
-continuation of the efforts of Jennrich to broaden the flexibility and
-reach of Exploratory Factor Analysis.
+(2005). Taken together, this work helps bridge the gap between
+exploratory and confirmatory factor analysis and continues Jennrich's
+efforts to expand the flexibility and scope of factor rotation.
 
 Keywords: orthoblique rotation, exploratory factor analysis, gradient
 projection algorithm
@@ -352,7 +351,7 @@ route from the orthogonal and oblique cases to other rotation
 geometries.
 
 This generalization is very important in EFA because the applications of
-GPA are currently limited to either orthogonal and oblique rotation. In
+GPA are currently limited to either orthogonal or oblique rotation. In
 other words, all the factors in an EFA model are currently constrained
 to be either orthogonal or allowed to correlate. This circumstance is
 problematic in cases where the researchers know in advance that two sets
@@ -368,7 +367,8 @@ in order to obtain a more parsimonious pattern structure. For this
 scenario, consider applications of exploratory bifactor modeling with
 one or multiple general factors in which all the general factors must be
 orthogonal to the group factors, but may be correlated among themselves
-{[}Jiménez et al. (2023); jimenez\_2023b{]}. If the general factors were
+(Jiménez, Abad, Garcia-Garzon, \& Garrido, 2023; Jiménez, Abad,
+Garcia-Garzon, Golino, et al., 2023). If the general factors were
 allowed to correlate with the group factors in an oblique rotation
 analysis, then the variance explained by each kind of factor could not
 be correctly disentangled and would complicate the interpretation of the
@@ -393,7 +393,7 @@ In the orthoblique example presented in the figure, factors are
 organized into two oblique blocks of two factors each, with the
 remaining two factors being completely orthogonal. However, other
 correlation patterns are possible by modifying the size of the oblique
-and orthogonal blocks of factors. As such, the differential feature of
+and orthogonal blocks of factors. As such, the distinctive feature of
 the orthoblique rotation is that some blocks of factors may be allowed
 to correlate within but not between.
 
@@ -414,7 +414,7 @@ usefulness of this generalization in two empirical examples concerning
 exploratory multitrait-multimethod and bifactor models with multiple
 general factors. In the end, we discuss the benefits of the orthoblique
 rotation for preserving the flexibility of EFA to uncover cross-loadings
-and wrong theoretical expectations while retaining a desired
+and departures from theoretical expectations while retaining a desired
 factor-correlation pattern with structural zeros.
 
 \section{Factor rotation}\label{factor-rotation}
@@ -425,13 +425,13 @@ items is modeled as a function of the factor loading matrix
 and the error covariance matrix \(\mathbf{\Theta}\). The loading matrix
 contains the relationships between the observed items and the common
 factors, the factor correlation matrix describes the associations among
-these factors, and the residual covariance matrix is assumed to be
+these factors, and the error covariance matrix is assumed to be
 diagonal, containing the error variances or uniquenesses.
 
 EFA is usually performed in two steps. First, an identified model
 \(\mathbf{\Sigma} = \mathbf{\Lambda}_0\mathbf{\Lambda}_0^\top + \mathbf{\Theta}\)
 is estimated by maximum likelihood or least squares, where
-\(\mathbf{\Lambda}_0\) is loading matrix constrained to have either
+\(\mathbf{\Lambda}_0\) is a loading matrix constrained to have either
 orthogonal columns or a lower-triangular structure. Second,
 \(\mathbf{\Lambda}_0\) is rotated to find an alternative but equally
 fitting model
@@ -600,11 +600,11 @@ after moving along this direction, the new candidate
 gradient}\label{solution-to-problem-1-the-riemannian-gradient}
 
 The Riemannian gradient is a generalization of the Euclidean gradient
-that represents first-order directions on a manifold. As such, it
-provides the direction towards the complexity criterion decreases when
-moving over nonlinear manifolds like the spheres depicted in Figure
-\ref{fig:orthogonal-oblique-manifolds}. More precisely, the Riemannian
-gradient is characterized as follows (Boumal, 2023, Definition 3.58):
+that represents first-order directions on a manifold. As such, its
+negative provides valid descent direction along manifolds like the
+spheres depicted in Figure \ref{fig:orthogonal-oblique-manifolds}. More
+precisely, the Riemannian gradient is characterized as follows (Boumal,
+2023, Definition 3.58):
 
 \begin{definition}
 The Riemannian gradient of $f$ at $\mathbf{X}\in\mathcal{M}$, denoted by $\text{grad}f(\mathbf{X})$, is the unique element of $\mathcal{T}_{\mathbf{X}}\mathcal{M}$ that satisfies $\mathrm{D}f(\mathbf{X})[\mathbf{V}] = \left\langle \mathbf{V}, \text{grad}f(\mathbf{X}) \right\rangle_{\mathbf{X}}$ for every $\mathbf{V}\in\mathcal{T}_{\mathbf{X}}\mathcal{M}$.
@@ -740,20 +740,21 @@ these quantities.
 \label{fig:tangent-gradient}
 \end{figure}
 
-As it can be seen in Figure \ref{fig:tangent-gradient}, a tangent space
-is indeed a linearization of the manifold at a given \(\mathbf{X}\) and
-for any vector in the tangent space there would be another vector from
-the normal space that is orthogonal to it and satisfies
-Equation~\ref{eq-orth_compl_grad}. However, to make sense of this notion
-of orthogonality at any
+As shown in Figure \ref{fig:tangent-gradient}, a tangent space is indeed
+a linearization of the manifold at a given \(\mathbf{X}\). At this
+point, the Euclidean gradient can be decomposed into orthogonal
+components as expressed in Equation~\ref{eq-orth_compl_grad}: one
+belonging to the tangent space and another belonging to the normal
+space. However, to make sense of this notion of orthogonality at any
 \(\mathbf{V} \in \mathcal{T}_{\mathbf{X}}\mathcal{M}\), we must endow
-the tangent space with a metric like the Frobenius inner product (i.e.,
-\(\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \text{trace}(\mathbf{U}^\top\mathbf{V})\)),
-so that \(\mathcal{M}\) acquires a Riemannian structure, turning it into
-a Riemannian manifold. In other words, the collection of inner products
-on the tangent spaces defines a Riemannian metric on \(\mathcal{M}\),
-turning it into a Riemannian manifold, which allows us to develop a
-notion of orthogonal complements at each tangent space.
+the tangent space with a metric, like the Frobenius inner product (i.e.,
+\(\langle \mathbf{U},\mathbf{V}\rangle_{\mathbf{X}} = \mathrm{trace}(\mathbf{U}^\top\mathbf{V})\)).
+Under this metric, we can formalize the orthogonality of every vector in
+the tangent space with a vector in the normal space, so the collection
+of these inner products over all tangent spaces defines a Riemannian
+metric on \(\mathcal{M}\), turning it into a Riemannian manifold. This
+structure provides the geometric foundation for defining the Riemannian
+gradient.
 
 Let \(f=\tilde{f}|_{\mathcal{M}}\) be the restriction of the complexity
 criterion \(\tilde{f}\) to a manifold. Using
@@ -1014,7 +1015,7 @@ and Jennrich (pp.~692--695; 2005) and in the \texttt{GPArotation}
 package.
 
 \section{Solution to problem 2: the
-Retraction}\label{solution-to-problem-2-the-retraction}
+retraction}\label{solution-to-problem-2-the-retraction}
 
 With this generalization of gradients to nonlinear manifolds, we are
 prepared to compute valid descent directions along the tangent space
@@ -1066,10 +1067,10 @@ purpose, suppose that we apply some projection
 that restores the constraints exactly while preserving this direction.
 Because the tangent step is already correct to first order,
 \(R_\mathbf{X}\) only needs to act on the higher-order residuals of
-eq-cross\_step\_orth and Equation~\ref{eq-cross_step_oblq}. This is
-exactly what a retraction does: it fixes the constraints of the tangent
-step \(\mathbf{Z}\) without modifying the descent direction (i.e., the
-negative of the Riemannian gradient).
+Equation~\ref{eq-cross_step_orth} and Equation~\ref{eq-cross_step_oblq}.
+This is exactly what a retraction does: it fixes the constraints of the
+tangent step \(\mathbf{Z}\) without modifying the descent direction
+(i.e., the negative of the Riemannian gradient).
 
 A retraction only needs to satisfy two conditions. The first condition
 ensures that taking a zero step leaves the current point unchanged. In
@@ -1190,8 +1191,8 @@ R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V}) = (\mathbf{X}+t\mathbf{V})\left(\mat
 \(\left.\frac{d}{dt}R_{\mathbf{X}}^{\mathrm{orth}}(t\mathbf{V})\right|_{t=0} = \mathbf{V}\)
 so that the descent direction along the tangent space is preserved.
 
-In case of oblique rotation, a suitable retraction involves normalizing
-the columns of \(\mathbf{Z}\):
+For oblique rotation, a suitable retraction involves normalizing the
+columns of \(\mathbf{Z}\):
 \begin{equation}\protect\phantomsection\label{eq-oblq_retraction}{
 R_{\mathbf{X}}^{\mathrm{oblq}}(t\mathbf{V}) = \mathbf{Z} \left[\mathrm{ddiag}\!\left(\mathbf{Z}^\top \mathbf{Z}\right)\right]^{-1/2},
 }\end{equation} which is the projection used by Jennrich (2002, Appendix
@@ -1679,7 +1680,7 @@ first two oblique blocks, respectively, and those indexed by \(3\)
 correspond to the block of orthogonal factors.
 
 The retraction of the first oblique block can be simply the retraction
-of \(\mathbf{Z}_1\) onto the space set of normalized columns
+of \(\mathbf{Z}_1\) onto the set of normalized columns
 (Equation~\ref{eq-oblq_retraction}), \[
 \mathbf{R}_1 = \mathbf{Z}_1 \left[ \mathrm{ddiag} \left( \mathbf{Z}_1^\top\mathbf{Z}_1 \right) \right]^{-1/2},
 \] so that \(\text{diag}(\mathbf{R}_1^\top \mathbf{R}_1) = \mathbf{1}\).
@@ -1788,7 +1789,7 @@ But the tangent-space equations (\ref{eq-pob_tangent_space}) state that
 Hence,
 \(\left. DP_{\mathbf{X}_j}(t\mathbf{V}_j) \right|_{t=0} = \mathbf{V}_j\).
 
-Finally, because we already showed that doing normalization or
+Finally, because we already showed that doing normalization and
 orthogonalization preserve first-order directions, it follows that
 applying these operations afterwards still preserves this direction and
 hence
@@ -1861,10 +1862,10 @@ stationary point. Then,
 is an augmented Information matrix whose inverse can be used to obtain a
 variance-covariance estimate in maximum likelihood estimation
 {[}Equation 17; Jennrich (1974){]}. For non-maximum-likelihood
-estimators, an alternative augmented Hessian matrix can be incorporated
-into the sandwich covariance estimator described by Zhang (2014).
-Replacing \(\mathbf{I}_\theta\) by the Hessian matrix of the loss
-function in Equation~\ref{eq-augmented-information} would suffice.
+estimators, an alternative augmented Hessian matrix that replaces
+\(\mathbf{I}_\theta\) with the Hessian matrix of the loss function can
+be incorporated into the sandwich covariance estimator described by
+Zhang (2014).
 
 For orthogonal and oblique rotations, the derivatives of the constraints
 can be found elsewhere (Archer \& Jennrich, 1973; Jennrich, 1973). For
@@ -2022,7 +2023,7 @@ rotation:
 
 Here, \texttt{oblique = c(3, 3)} automatically selects the orthoblique
 geometry and partitions the factors into two blocks of three factors
-each. As result, clumns 1--3 form the first oblique block, and columns
+each. As a result, clumns 1--3 form the first oblique block, and columns
 4--6 form the second. Correlations are allowed within each block, while
 correlations between blocks are constrained to zero. With six factors,
 the column ordering and the correlation structure of the rotated
@@ -2052,17 +2053,17 @@ _{\text{oblique block 2}}
 The factor correlations are freely estimated within each oblique block,
 whereas correlations between blocks are constrained to zero. In this
 setup, there are many alternative choices for the \texttt{oblique}
-argument. The \texttt{oblique} argument accepts any vector of positive
-integers specifying the sizes of consecutive oblique blocks, which may
-vary in number and size as long as their total does not exceed the
-number of factors in the unrotated loading matrix. For example, with six
-factors, \texttt{oblique = c(2, 2, 2)} specifies three oblique blocks of
-two factors each, whereas \texttt{oblique = c(3, 2)} specifies two
-oblique blocks containing three and two factors, respectively. In the
-latter case, the remaining factor is assumed to be completely
-orthogonal. More generally, whenever the sum of the block sizes is
-smaller than the total number of factors, all remaining factors are
-constrained to be completely orthogonal.
+argument. This argument accepts any vector of positive integers
+specifying the sizes of consecutive oblique blocks, which may vary in
+number and size as long as their total does not exceed the number of
+factors in the unrotated loading matrix. For example, with six factors,
+\texttt{oblique = c(2, 2, 2)} specifies three oblique blocks of two
+factors each, whereas \texttt{oblique = c(3, 2)} specifies two oblique
+blocks containing three and two factors, respectively. In the latter
+case, the remaining factor is assumed to be completely orthogonal. More
+generally, whenever the sum of the block sizes is smaller than the total
+number of factors, all remaining factors are constrained to be
+completely orthogonal.
 
 As an alternative to \texttt{lrotate()}, the function \texttt{lefa()}
 for exploratory factor analysis takes the raw data or a covariance
@@ -2086,7 +2087,7 @@ with either maximum likelihood (\texttt{"ml"}), unweighted least-squares
 \end{Shaded}
 
 Because different factor blocks may contain different levels of
-complexity, both \texttt{lrotate} and \texttt{lefa()} allow the
+complexity, both \texttt{lrotate()} and \texttt{lefa()} allow the
 application of different rotation criteria to arbitrary columns of
 \(\mathbf{\Lambda}\). Suppose that we have a block of three oblique
 factors and another block of three orthogonal factors. Then, we may
@@ -2119,13 +2120,13 @@ whereas \texttt{rotation} specifies the complexity criterion applied to
 each loading block. This particular combination of oblimin for oblique
 factors and varimax for orthogonal factors is intended solely to
 illustrate the flexibility of the rotation framework in the
-\texttt{lrotate} function and is not a recommendation for use in
+\texttt{lrotate()} function and is not a recommendation for use in
 practice.
 
 Another advantage of \texttt{lefa()} is that it computes the
 variance-covariance matrix and standard errors of the rotated parameters
-and uniquenesses using the corresponding rotation constraints
-derivatives.
+and uniquenesses using the derivatives of the corresponding rotation
+constraints.
 
 Finally, \texttt{latent} can also estimate factor scores that preserve
 the orthoblique factor correlations. Currently, two existing methods
@@ -2155,9 +2156,8 @@ documentation of the functions \texttt{lrotate()}, \texttt{lefa()}, and
 \section{Alternative approaches towards an orthoblique
 structure}\label{alternative-approaches-towards-an-orthoblique-structure}
 
-In this section we briefly discuss two alternative methods to
-orthoblique rotation and explain why orthoblique rotation is more
-general and has some advantages over them.
+In this section, we compare orthoblique rotation with two alternative
+approaches and highlight their main differences.
 
 First, one may argue that achieving an orthoblique correlation pattern
 is already possible in Exploratory Structural Equation Modeling {[}ESEM;
@@ -2205,7 +2205,7 @@ restricted optimization problem with structural zeros in the
 intersections of different exploratory blocks of factors. Consequently,
 orthoblique rotation searches over a larger set of rotation matrices and
 can attain a lower value of the rotation criterion than the more
-restrictive block-diagonal approach took in ESEM. In these regards,
+restrictive block-diagonal approach used in ESEM. In this respect,
 orthoblique rotation is a more exploratory approach than ESEM.
 
 Second, we also highlight that using orthoblique rotation in tandem with
@@ -2234,8 +2234,8 @@ with the orthoblique manifold. However, in our orthoblique approach, the
 roles of the manifold and rotation criteria are separated: the target
 criterion is used only to orient the loading matrix, while the
 orthoblique manifold imposes the trait-method orthogonality exactly.
-Hence, orthoblique rotation can be used with any rotation criteria, not
-just with target criteria. Moreover, the correlations encouraged to be
+Hence, orthoblique rotation can be used with any rotation criterion, not
+only target-based criteria. Moreover, the correlations encouraged to be
 small in extended target rotation become exact structural zeros in
 orthoblique rotation. As such, a benefit of our approach is that the
 constant parameter \(w\) that weights the relative contribution of
@@ -2286,7 +2286,7 @@ unrelated factors.
 All analyses were conducted with the \texttt{latent} package and the
 \texttt{lefa()} function.
 
-\subsection{ASEBA. An exploratory Multitrait-multimethod
+\subsection{ASEBA. An exploratory multitrait-multimethod
 model}\label{aseba.-an-exploratory-multitrait-multimethod-model}
 
 The first application uses the MTMM data analyzed by Watts et al.
@@ -2409,7 +2409,7 @@ assessing Attention Problems, loaded poorly on the merged trait factor.
 Of these 18 indicators, 16 had absolute loadings below .20, with a
 median of .079 and a range from .028 to .259. In contrast, 15 of the 18
 Attention Problems indicators exceeded .20 on the same factor, with a
-median absolute loading of .433. Thereby, the original Externalizing
+median absolute loading of .433. Thus, the original Externalizing
 indicators contributed little to the merged trait factor, which was
 mainly defined by Attention Problems.
 
@@ -2422,7 +2422,7 @@ by the method factors, while the merged trait factor mainly reflected
 Attention Problems and not Externalizing.
 
 Overall, this exploratory solution revealed that conflating the
-indicators of Externalizing and Attention problems in a single factor
+indicators of Externalizing and Attention Problems in a single factor
 did not recover the intended broad representation of both sets of
 indicators. Thus, the Externalizing label overstated the breadth of this
 merged factor: 15 of the 18 Attention Problems indicators, but only two
@@ -2469,8 +2469,8 @@ within the trait and method blocks to zero, while a conventional oblique
 rotation would have estimated the six trait-method correlations that
 must be excluded by the MTMM design. In both cases, the results would
 have been inconsistent with the theoretical model. Thus, the orthoblique
-manifold combined with target rotation made possible to test with EFA
-the adequacy of this MTMM analysis, revealing a possible modeling
+manifold combined with target rotation made it possible to assess the
+adequacy of this MTMM analysis using EFA, revealing a potential model
 misspecification in Watts et al. (2022).
 
 \subsection{HEXACO. A hierarchical model with multiple oblique general
@@ -2484,8 +2484,8 @@ The original study reports that the sample included participants from
 131 countries, with 69\% being female, and had a mean age of 34.7 years.
 For the present analysis, we used 96 HEXACO items corresponding to the
 six personality domains and their 24 facets, excluding the last four
-altruism items that do not belong to the HEXACO hierarchy (i.e, they are
-not expected to be nested in a general factor).
+altruism items that do not belong to the HEXACO hierarchy (i.e., they
+are not expected to be nested in a general factor).
 
 We fitted a 30-factor EFA model with six general factors, one for each
 HEXACO domain, and 24 specific factors. The first six factors were
@@ -2595,7 +2595,7 @@ factors were estimated, while the remaining 420 were fixed to zero and
 recovered to numerical precision.
 
 The six general factors remained substantially exploratory in this
-analysis. The median absolute loading on the theoretically-expected
+analysis. The median absolute loading on the theoretically expected
 general factor was .384; 85 of the 96 designated general-factor loadings
 exceeded .20 in absolute value, and 430 of the 480 general-factor
 cross-loadings (89.6\%) were below .20. For the 24 specific factors, the
@@ -2806,13 +2806,13 @@ The empirical applications illustrated two complementary uses of this
 new orthoblique geometry: an MTMM representation in which trait and
 method factors can correlate within their respective blocks while
 remaining orthogonal between blocks, and a bifactor model in which
-several general factors may correlate among them while remaining
+several general factors may correlate with one another while remaining
 orthogonal to specific factors that are also mutually orthogonal. As
 such, the present work not only builds on the general-purpose rotation
 framework developed by Jennrich (2001), Jennrich (2002), and Bernaards
-and Jennrich (2005). It also extends the exploratory bifactor rotation
+\& Jennrich (2005), but also extends the exploratory bifactor rotation
 methods based on biquartimin and bigeomin (Jennrich \& Bentler, 2011,
-2012) to account for scenarios involving multiple general factors.
+2012) to models with multiple general factors.
 
 Additionally, we provided a new R package to exploit these new rotation
 capabilities. The function \texttt{lrotate()} implements orthogonal,
@@ -2843,10 +2843,10 @@ correspond to the substantive factors that researchers intended to allow
 to correlate. It is therefore important to inspect the rotated loading
 matrix to verify that the factors assigned to each oblique block
 correspond to the intended factor structure. Another limitation is that
-we did not assess the proclivity of orthoblique rotation to local minima
-solutions. In factor rotation, different starting values for the
-rotation matrix may lead to different stationary points, potentially
-yielding different loading and factor correlation patterns. Although the
+we did not assess the susceptibility of orthoblique rotation to local
+minima. In factor rotation, different starting values for the rotation
+matrix may lead to different stationary points, potentially yielding
+different loading and factor correlation patterns. Although the
 \texttt{latent} package supports conducting rotation from multiple
 random starting values, these do not guarantee convergence to the global
 minimum. Furthermore, the accuracy and stability of parameter recovery
@@ -2940,6 +2940,13 @@ Jiménez, M., Abad, F. J., Garcia-Garzon, E., \& Garrido, L. E. (2023).
 Exploratory bi-factor analysis with multiple general factors.
 \emph{Multivariate Behavioral Research}, \emph{58}(6), 1072--1089.
 \url{https://doi.org/10.1080/00273171.2023.2189571}
+
+\bibitem[\citeproctext]{ref-jimenez_2023b}
+Jiménez, M., Abad, F. J., Garcia-Garzon, E., Golino, H., Christensen, A.
+P., \& Garrido, L. E. (2023). Dimensionality assessment in bifactor
+structures with multiple general factors: {A} network psychometrics
+approach. \emph{Psychological Methods}, \emph{30}(4), 770--792.
+\url{https://doi.org/10.1037/met0000590}
 
 \bibitem[\citeproctext]{ref-latent}
 Jiménez, M., Garnier-Villarreal, M., \& Franco, V. R. (2026).
