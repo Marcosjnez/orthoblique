@@ -264,35 +264,30 @@ Franco \and Luis E. Garrido \and Francisco J. Abad}
 \begin{document}
 \maketitle
 \begin{abstract}
-For the last two decades, the gradient projection algorithm (GPA) has
-been the most used tool to rotate factor solutions. However, GPA is
-currently limited to performing either fully orthogonal or fully oblique
-rotations. Keeping structural zeros in selected positions of the factor
-correlation matrix after rotation is currently unavailable in
-Exploratory Factor Analysis. This is a shortcoming because in some cases
-it is known in advance that some factor correlations must be zero by
-theory or design. We therefore developed a new kind of rotation, the
-orthoblique rotation, in which both oblique and orthogonal relations
-between factors coexist. Building on the orthogonal and oblique
-algorithms of Jennrich, we provide a deeper account of how GPA works and
-use this account to generalize factor rotation to the orthoblique case.
-We then demonstrate that this rotation helps to estimate exploratory
-bifactor models with multiple general factors in which the general
-factors may be correlated but must remain orthogonal to the group
-factors, which can be considered a generalization of the biquartimin and
-bigeomin criteria of Jennrich and Bentler (2011; 2012). We also
-illustrate its application to exploratory multitrait-multimethod models,
-where trait and method factors may correlate within their respective
-sets but trait--method correlations are constrained to zero by design.
-Finally, we made available the new orthoblique rotation in the R package
-\texttt{latent}, whose \texttt{lrotate()} function serves the same
-purpose as the \texttt{GPArotation} package of Bernaards and Jennrich
-(2005). Taken together, this work helps bridge the gap between
-exploratory and confirmatory factor analysis and continues Jennrich's
-efforts to expand the flexibility and scope of factor rotation.
+The gradient projection algorithm (GPA) is the most used tool to rotate
+factor models. However, GPA is currently limited to fully orthogonal or
+fully oblique solutions. Keeping structural zeros in selected positions
+of the factor correlation matrix after rotation is currently
+unavailable. This limitation is relevant to analyses where theoretical
+considerations or study design require certain factor correlations to be
+zero. We therefore introduce the orthoblique rotation, which allows
+orthogonal and oblique relations between factors to coexist. Building on
+Jennrich's algorithms, we describe the geometric foundations of GPA and
+extend them to the orthoblique rotation. We illustrate its usefulness
+for exploratory bifactor models with multiple correlated general factors
+that remain orthogonal to group factors, and for multitrait--multimethod
+models in which trait and method factors may correlate within their
+respective sets while remaining orthogonal between sets. Finally, we
+make available the new orthoblique rotation in the R package
+\texttt{latent} through the \texttt{lrotate()} function, which extends
+the capabilities of the popular \texttt{GPArotation} package of
+Bernaards and Jennrich (2005). Taken together, this work helps bridge
+the gap between exploratory and confirmatory factor analyses and
+continues Jennrich's efforts to expand the flexibility and scope of
+factor rotation.
 
-Keywords: orthoblique rotation, exploratory factor analysis, gradient
-projection algorithm
+Keywords: bifactor, exploratory factor analysis, factor rotation,
+gradient projection algorithm, orthoblique rotation
 \end{abstract}
 
 
@@ -327,9 +322,9 @@ is simple and elegant. In fact, a general-purpose optimization routine
 based on GPA can be written in about 50 lines of code in the R language
 \footnote{See the \texttt{GPForth} and \texttt{GPFoblq} functions from
   the \texttt{GPArotation} R package (Bernaards \& Jennrich, 2005) for
-  orthogonal and oblique rotation, respectively}. Moreover, GPA is based
-on an optimization framework where traditional search directions based
-on first- and second-order derivatives and step-size selection
+  orthogonal and oblique rotation, respectively.}. Moreover, GPA is
+based on an optimization framework where traditional search directions
+based on first- and second-order derivatives and step-size selection
 techniques like backtracking line-search can be used (Liu, 2021).
 
 The generality of GPA for factor rotation was the main contribution of
@@ -1967,11 +1962,11 @@ the direction \(\mathrm{d}\theta=\mathbf{e}_i\) in turn and evaluate
 Equation~\ref{eq-rotation_constraint_differential} along
 \(\mathrm{d}\theta\) to find the first \(p(p-1) + q(q-1)\) constraint
 derivatives corresponding to the off-diagonal entries of the oblique
-blocks. To find the remaining \(pq + pr + qr + r(r-1)/2\) constraint
-derivatives of the symmetric entries corresponding to the intersections
-between blocks and the entries in the orthogonal block, simply evaluate
-\(\mathrm{d}\mathbf{K}-\mathrm{d}\mathbf{K}^\top\) in the same iterative
-fashion.
+blocks. Finally, to find the remaining \(pq + pr + qr + r(r-1)/2\)
+constraint derivatives of the symmetric entries corresponding to the
+intersections between blocks and the entries in the orthogonal block,
+simply evaluate \(\mathrm{d}\mathbf{K}-\mathrm{d}\mathbf{K}^\top\) in
+the same iterative fashion.
 
 \section{Software: orthoblique rotation with the latent
 package}\label{software-orthoblique-rotation-with-the-latent-package}
@@ -2023,11 +2018,11 @@ rotation:
 
 Here, \texttt{oblique = c(3, 3)} automatically selects the orthoblique
 geometry and partitions the factors into two blocks of three factors
-each. As a result, clumns 1--3 form the first oblique block, and columns
-4--6 form the second. Correlations are allowed within each block, while
-correlations between blocks are constrained to zero. With six factors,
-the column ordering and the correlation structure of the rotated
-solution become \[
+each. As a result, the columns 1--3 of the factor solution form the
+first oblique block, and columns 4--6 form the second oblique block.
+Correlations are allowed within each block, while correlations between
+blocks are effectively constrained to zero. With six factors, the column
+ordering and the correlation structure of the rotated solution become \[
 \mathbf{\Lambda}
 =\left[
 \underbrace{\boldsymbol{\lambda}_1\ \boldsymbol{\lambda}_2\ \boldsymbol{\lambda}_3}
@@ -2071,8 +2066,8 @@ matrix as inputs and performs factor extraction first and rotation
 later. \texttt{lefa()} allows all the same arguments as
 \texttt{lrotate()} but contains additional choices for factor extraction
 with either maximum likelihood (\texttt{"ml"}), unweighted least-squares
-(\texttt{"uls"}), or diagonally-weighted least-squares
-(\texttt{"dwls"}).
+(\texttt{"uls"}), or diagonally-weighted least-squares (\texttt{"dwls"})
+options.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2117,24 +2112,27 @@ Independently, the \texttt{rotation} argument applies oblimin to the
 first three loading columns and varimax to the last three columns. Thus,
 \texttt{oblique} determines the permitted factor-correlation structure,
 whereas \texttt{rotation} specifies the complexity criterion applied to
-each loading block. This particular combination of oblimin for oblique
-factors and varimax for orthogonal factors is intended solely to
-illustrate the flexibility of the rotation framework in the
-\texttt{lrotate()} function and is not a recommendation for use in
-practice.
+each loading block. As a clarification, this particular combination of
+oblimin for oblique factors and varimax for orthogonal factors is
+intended solely to illustrate the flexibility of the rotation framework
+in the \texttt{lrotate()} function and is not a recommendation for use
+in practice. The latter would require a mathematical argument or
+simulation design with results supporting this particular combination of
+criteria.
 
-Another advantage of \texttt{lefa()} is that it computes the
-variance-covariance matrix and standard errors of the rotated parameters
-and uniquenesses using the derivatives of the corresponding rotation
-constraints.
+Another advantage of using \texttt{lefa()} over \texttt{lrotate()} is
+that it automatically computes the variance-covariance matrix and
+standard errors of the rotated parameters and uniquenesses using the
+derivatives of the corresponding rotation constraints for all available
+criteria, even mixed criteria.
 
-Finally, \texttt{latent} can also estimate factor scores that preserve
-the orthoblique factor correlations. Currently, two existing methods
-implemented in the function \texttt{latscores} allow this: the
-constrained regression method of Green (1969) that finds the best
-correlation-preserving scores in the least-squares sense, and the method
-of {ten Berge et al.} (1999) that minimizes the determinant of the
-residual covariance matrix:
+Finally, the \texttt{latent} package can also estimate factor scores
+that preserve the orthoblique factor correlations. Currently, two
+existing methods implemented in the function \texttt{latscores} allow
+this: the constrained regression method of Green (1969) that finds the
+best correlation-preserving scores in the least-squares sense, and the
+method of {ten Berge et al.} (1999) that minimizes the determinant of
+the residual covariance matrix:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2810,7 +2808,7 @@ several general factors may correlate with one another while remaining
 orthogonal to specific factors that are also mutually orthogonal. As
 such, the present work not only builds on the general-purpose rotation
 framework developed by Jennrich (2001), Jennrich (2002), and Bernaards
-\& Jennrich (2005), but also extends the exploratory bifactor rotation
+and Jennrich (2005), but also extends the exploratory bifactor rotation
 methods based on biquartimin and bigeomin (Jennrich \& Bentler, 2011,
 2012) to models with multiple general factors.
 
