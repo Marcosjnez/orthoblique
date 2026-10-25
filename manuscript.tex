@@ -1839,10 +1839,10 @@ matter is how these constraints are translated to the rotated loadings
 this information is required for computing valid standard errors of
 rotated parameters.
 
-Let \(\theta\) be a vector collecting the \(k\) factor model parameters
-after factor rotation and \(\mathbf{I}_{\theta}\) be the corresponding
-observed information matrix (i.e., the negative Hessian of the
-log-likelihood). Define \(\mathbf{C}_{\theta}\) as the \(k\times c\)
+Let \(\theta\) be a vector collecting the \(k\) factor model parameter
+estimates after factor rotation and \(\mathbf{I}_{\theta}\) be the
+corresponding observed information matrix (i.e., the negative Hessian of
+the log-likelihood). Define \(\mathbf{C}_{\theta}\) as the \(k\times c\)
 matrix whose columns contain the derivatives of the \(c\) constraints
 with respect to these parameters that must be satisfied at the
 stationary point. Then,
@@ -1925,7 +1925,7 @@ Following the orthoblique definition in
 oblique factors in the first block, \(q\) is the number of oblique
 factors in the second block, and \(r\) is the number of completely
 orthogonal factors in the third block, then the number of stationarity
-equations is the dimension of the tangent space, \[
+equations is given by the dimension of the tangent space, \[
 c = p(p-1) + q(q-1) + pq + pr + qr + r(r-1)/2.
 \]
 
@@ -1979,8 +1979,8 @@ rotations, with a wide catalogue of rotation criteria. These are
 features retained in our \texttt{latent} package (Jiménez et al., 2026),
 with some additional capabilities. The relevant innovation here is the
 addition of the orthoblique manifold to restrict the factor-correlation
-structure as desired and the application of different rotation criteria
-to different blocks of factors.
+structure as desired and the capability to apply different rotation
+criteria to different blocks of factors.
 
 Rotation in the \texttt{latent} package is performed through the
 \texttt{lrotate()} function, which can receive an initial loading matrix
@@ -1997,11 +1997,12 @@ below:
 \end{Highlighting}
 \end{Shaded}
 
-The choice of criterion is separate from the choice of geometry:
+Here, the choice of criterion is separate from the choice of geometry:
 \texttt{rotation} specifies the criterion, while
 \texttt{projection = "orth"} requests an orthogonal rotation. The
 default, \texttt{projection = "oblq"}, allows all factors to be oblique.
 
+Now suppose that the \texttt{unrotated\_lambda} object has six columns.
 To choose orthoblique rotation we must use the \texttt{oblique}
 argument. For example, consider the following orthoblique target
 rotation:
@@ -2051,14 +2052,15 @@ setup, there are many alternative choices for the \texttt{oblique}
 argument. This argument accepts any vector of positive integers
 specifying the sizes of consecutive oblique blocks, which may vary in
 number and size as long as their total does not exceed the number of
-factors in the unrotated loading matrix. For example, with six factors,
-\texttt{oblique = c(2, 2, 2)} specifies three oblique blocks of two
-factors each, whereas \texttt{oblique = c(3, 2)} specifies two oblique
-blocks containing three and two factors, respectively. In the latter
-case, the remaining factor is assumed to be completely orthogonal. More
-generally, whenever the sum of the block sizes is smaller than the total
-number of factors, all remaining factors are constrained to be
-completely orthogonal.
+columns (i.e., factors) in the unrotated loading matrix. For example,
+with six factors, \texttt{oblique = c(2, 2, 2)} specifies three oblique
+blocks of two factors each, whereas \texttt{oblique = c(3, 2)} specifies
+two oblique blocks containing three and two factors, respectively. In
+the latter case, the remaining factor is assumed to be completely
+orthogonal. More generally, whenever the sum of the block sizes is
+smaller than the total number of factors, all remaining factors are
+constrained to be completely orthogonal (i.e., they belong to the
+orthogonal block).
 
 As an alternative to \texttt{lrotate()}, the function \texttt{lefa()}
 for exploratory factor analysis takes the raw data or a covariance
@@ -2067,7 +2069,8 @@ later. \texttt{lefa()} allows all the same arguments as
 \texttt{lrotate()} but contains additional choices for factor extraction
 with either maximum likelihood (\texttt{"ml"}), unweighted least-squares
 (\texttt{"uls"}), or diagonally-weighted least-squares (\texttt{"dwls"})
-options.
+options. For instance, to fit an oblique EFA model with six factors
+using maximum likelihood and oblimin, we can use the following command:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2082,7 +2085,7 @@ options.
 \end{Shaded}
 
 Because different factor blocks may contain different levels of
-complexity, both \texttt{lrotate()} and \texttt{lefa()} allow the
+complexity, both \texttt{lrotate()} and \texttt{lefa()} also allow the
 application of different rotation criteria to arbitrary columns of
 \(\mathbf{\Lambda}\). Suppose that we have a block of three oblique
 factors and another block of three orthogonal factors. Then, we may
@@ -2106,13 +2109,14 @@ easily implemented by providing a list of rotation criteria to the
 \end{Shaded}
 
 The value \texttt{oblique = 3} automatically selects the orthoblique
-manifold and allows correlations only among the first three factors. The
-remaining three factors are assumed to be completely orthogonal.
-Independently, the \texttt{rotation} argument applies oblimin to the
-first three loading columns and varimax to the last three columns. Thus,
-\texttt{oblique} determines the permitted factor-correlation structure,
-whereas \texttt{rotation} specifies the complexity criterion applied to
-each loading block. As a clarification, this particular combination of
+manifold and allows correlations only among the first three factors
+(i.e., oblique block). The remaining three factors are assumed to be
+completely orthogonal (i.e., orthogonal block). Independently, the
+\texttt{rotation} argument applies oblimin to the first three loading
+columns and varimax to the last three columns. Thus, \texttt{oblique}
+determines the permitted factor-correlation structure, whereas
+\texttt{rotation} specifies the complexity criterion applied to each
+loading block. As a clarification, this particular combination of
 oblimin for oblique factors and varimax for orthogonal factors is
 intended solely to illustrate the flexibility of the rotation framework
 in the \texttt{lrotate()} function and is not a recommendation for use
@@ -2148,8 +2152,8 @@ The development version of \texttt{latent} is available at
 \url{https://github.com/Marcosjnez/latent}, including the source and
 documentation of the functions \texttt{lrotate()}, \texttt{lefa()}, and
 \texttt{latscores()}. The R package can be installed with the command
-\texttt{pak("marcosjnez/latent")} that uses the \texttt{pak} library
-(Csárdi \& Hester, 2026).
+\texttt{pak::pak("marcosjnez/latent")} that uses the \texttt{pak}
+library (Csárdi \& Hester, 2026).
 
 \section{Alternative approaches towards an orthoblique
 structure}\label{alternative-approaches-towards-an-orthoblique-structure}
@@ -2199,20 +2203,21 @@ However, in this scenario the number of estimated parameters is smaller
 than in the more general orthoblique rotation framework presented here.
 Orthoblique rotation finds a dense rotation matrix \(\mathbf{X}\) that
 yields the desired orthoblique pattern whereas ESEM solves a more
-restricted optimization problem with structural zeros in the
-intersections of different exploratory blocks of factors. Consequently,
-orthoblique rotation searches over a larger set of rotation matrices and
-can attain a lower value of the rotation criterion than the more
-restrictive block-diagonal approach used in ESEM. In this respect,
-orthoblique rotation is a more exploratory approach than ESEM.
+restricted optimization problem with structural zeros in the rotation
+matrix that corresponds to intersections of different blocks of factors.
+Consequently, orthoblique rotation searches over a larger set of
+rotation matrices and can attain a lower value of the rotation criterion
+than the more restrictive block-diagonal approach used in ESEM. In this
+respect, orthoblique rotation is a more exploratory approach than ESEM.
 
 Second, we also highlight that using orthoblique rotation in tandem with
 target rotation is closely related to the extended target rotation
 proposed by Zhang et al. (2019). Their method incorporates expectations
 about both the loading matrix and the factor correlation matrix into the
-rotation criterion, so that selected trait-method correlations are
-rotated toward zero. More precisely, the extended target rotation
-minimizes the following criterion using oblique rotation:
+rotation criterion, so that selected trait-method correlations in a
+multitrait-multimethod (MTMM) analysis are rotated toward zero. More
+precisely, the extended target rotation minimizes the following
+criterion using oblique rotation:
 
 \[
 \frac{1}{2}\| \mathbf{W}_{\Lambda} \odot (\boldsymbol{\Lambda} - \mathbf{T}_{\Lambda})\|^2 + \frac{w}{4}\|\mathbf{W}_{\Psi} \odot (\boldsymbol{\Psi} - \mathbf{T}_{\Psi})\|^2,
@@ -2223,21 +2228,22 @@ loading matrix. In contrast, \(\mathbf{W}_{\Psi}\) and
 factor correlations. \(\mathbf{T}_{\Psi}\) must be symmetric and
 \(\mathbf{W}_{\Psi}\) must be off-diagonal symmetric with nonnegative
 elements. Lastly, the scalar \(w\) represents the relative contribution
-of the second term with respect to the former.
+of the second term (i.e., targets on factor correlations) with respect
+to the former (i.e., targets on factor loadings).
 
-This new rotation criterion can effectively penalize the unwanted
-correlations specified as zeros in the target for the factor correlation
-matrix and the result can be very similar to standard target rotation
-with the orthoblique manifold. However, in our orthoblique approach, the
-roles of the manifold and rotation criteria are separated: the target
-criterion is used only to orient the loading matrix, while the
-orthoblique manifold imposes the trait-method orthogonality exactly.
-Hence, orthoblique rotation can be used with any rotation criterion, not
-only target-based criteria. Moreover, the correlations encouraged to be
-small in extended target rotation become exact structural zeros in
-orthoblique rotation. As such, a benefit of our approach is that the
-constant parameter \(w\) that weights the relative contribution of
-target loadings and target correlations is not required.
+This rotation criterion can effectively penalize the unwanted factor
+correlations for a sufficiently large \(w\) and the result can be very
+similar to standard target rotation with the orthoblique manifold.
+However, in our orthoblique approach, the roles of the manifold and
+rotation criteria are separated: the target criterion is used only to
+orient the loading matrix, while the orthoblique manifold imposes the
+trait-method orthogonality exactly. Hence, orthoblique rotation can be
+used with any rotation criterion, not only target-based criteria.
+Moreover, the correlations encouraged to be small in extended target
+rotation become exact structural zeros in orthoblique rotation. As such,
+an additional benefit of our approach is that the constant parameter
+\(w\) that weights the relative contribution of target loadings and
+target correlations is not required.
 
 \section{Empirical applications of the orthoblique
 rotation}\label{empirical-applications-of-the-orthoblique-rotation}
@@ -2245,41 +2251,39 @@ rotation}\label{empirical-applications-of-the-orthoblique-rotation}
 We now illustrate the use of the orthoblique manifold with two empirical
 applications in which neither a fully orthogonal nor a fully oblique
 rotation would represent the intended factor-correlation structure. The
-examples come from psychopathology and personality research.
+examples come from psychopathology and personality research,
+respectively.
 
-We used target rotation for the MTMM application and for two of the
-three HEXACO specifications; the third HEXACO specification used a
-nontarget criterion. The targets guide the orientation of the factors
-without fixing the loadings to their theoretical values. The recovered
-patterns may therefore agree with or depart from those expectations, and
-the nontarget specification provides a complementary examination of the
-HEXACO structure.
-
-In the psychopathology example, we use a multitrait-multimethod (MTMM)
-design, where the same traits are measured using different informants.
-In these models, the associations between indicators may arise from the
-substantive traits but also from the method through which the
-measurements were obtained. Here, child, parent, and teacher reports
-constitute the different methods. EFA allows us to examine whether the
-expected trait structure emerges without fixing the loading pattern,
-whereas the orthoblique manifold keeps trait and method sources of
+In the psychopathology example, we use a MTMM design, where the same
+traits are measured using different informants. In these models, the
+associations between indicators may arise from the substantive traits
+but also from the method through which the measurements were obtained.
+Here, the orthoblique manifold can keep trait and method sources of
 common variance separated by imposing orthogonality between both blocks
-of factors.
+of factors while doing a completely exploratory estimation of the
+loadings.
 
 In the personality example, the HEXACO hierarchy contains many items and
 factors. It is therefore plausible that some items have secondary
 loadings or that some facets are less clearly defined than expected. EFA
 allows these possibilities to be examined instead of assuming that every
 item belongs exclusively to its designated domain and facet. However,
-the distinction between general and specific factors still requires
+the distinction between general and group factors still requires
 selected factor correlations to be zero. Thus, the exploratory model
 leaves all loadings free, whereas the orthoblique manifold constrains to
-zero the correlations between general and specific factors, as well as
-all correlations between distinct specific factors.
+zero the correlations between general and group factors, as well as all
+correlations between distinct group factors.
 
 Thus, both examples can be studied exploratorily while preserving the
 theoretically specified zero correlations between theoretically
 unrelated factors.
+
+We used partially specified target rotation for the MTMM application and
+fitted three models to the HEXACO data using different criteria for
+general and group factors, with combinations involving partially
+specified targets, geomin, and oblimin. The models with partially
+specified target rotation used the theoretical model to establish the
+targets.
 
 All analyses were conducted with the \texttt{latent} package and the
 \texttt{lefa()} function.
@@ -2306,31 +2310,29 @@ substantive motivation. Although the Achenbach System of Empirically
 Based Assessment (ASEBA) does not include Attention Problems in its
 Externalizing composite, Watts et al. (2022) included these indicators
 because attention-deficit/hyperactivity disorder is widely regarded as a
-marker of childhood Externalizing. They also referred to previous ASEBA
-analyses in which Attention Problems loaded strongly on an Externalizing
-factor. An exploratory analysis can examine whether the Attention
-Problems indicators are adequately captured by the Externalizing factor,
-as assumed in the merged specification.
+marker of childhood Externalizing. To justify this decision, they also
+referred to previous ASEBA analyses in which Attention Problems loaded
+strongly on an Externalizing factor.
 
-Following the specification used by Watts et al. (2022), the
-attention-problems indicators were included with Externalizing. We
-therefore considered five exploratory factors: two trait factors
-corresponding to Externalizing and Internalizing, where the
-Externalizing label now includes the items of the Attention Problems
-factor, and three method factors corresponding to children, parents, and
-teachers.
+An exploratory analysis can examine whether the Attention Problems
+indicators are adequately captured by the Externalizing factor, as
+assumed in the merged specification. We therefore considered five
+exploratory factors: two trait factors corresponding to Externalizing
+and Internalizing, where the Externalizing label now includes the items
+of the Attention Problems factor, and three method factors corresponding
+to children, parents, and teachers.
 
 Each indicator is expected to reflect both a substantive trait and a
 measurement method, but this allocation need not hold exactly in the
 data. Some indicators may show secondary loadings or may represent their
-designated trait or method less clearly than expected. An exploratory
-partially specified target rotation allows these possibilities to be
-examined without fixing non-target loadings to zero. At the same time,
-the MTMM structure requires trait factors to remain uncorrelated with
-method factors, while correlations may be allowed among trait factors
-and among method factors. Thus, the target criterion provides the
-substantive orientation of the factors, whereas the orthoblique manifold
-constrains all trait--method factor correlations to zero.
+designated trait or method less clearly than expected. A partially
+specified target rotation allows these possibilities to be examined
+without fixing non-target loadings to zero. At the same time, the MTMM
+structure requires trait factors to remain uncorrelated with method
+factors, while correlations may be allowed among trait factors and among
+method factors. Thus, the target criterion provides the substantive
+orientation of the factors, whereas the orthoblique manifold constrains
+all trait--method factor correlations to zero.
 
 The two trait factors and the three method factors form two internally
 oblique blocks such that \[
@@ -2338,38 +2340,38 @@ oblique blocks such that \[
 \begin{pmatrix}
 \boldsymbol{\Psi}_{T} & \mathbf{0}\\
 \mathbf{0} & \boldsymbol{\Psi}_{M}
-\end{pmatrix}.
-\]
+\end{pmatrix},
+\] where \(\boldsymbol{\Psi}\) is the factor correlation matrix between
+the traits and \(\boldsymbol{\Psi}_{M}\) is the factor correlation
+matrix between the methods. Thus, the Externalizing-Internalizing
+correlation and the three correlations among method factors are
+estimated, whereas all six trait-method correlations are constrained to
+zero by the orthoblique manifold.
 
-Thus, the Externalizing-Internalizing correlation and the three
-correlations among method factors are estimated, whereas all six
-trait-method correlations are constrained to zero by the orthoblique
-manifold.
-
-In the code below, factor positions 1 and 2 correspond to Externalizing
-and Internalizing, respectively, and positions 3, 4, and 5 correspond to
-Children, Parents, and Teachers. Supplying \texttt{oblique = c(2, 3)}
-automatically selects the orthoblique manifold: the two trait factors
-may correlate with each other, the three method factors may correlate
-with one another, and all six trait--method correlations are zero. The
-equivalent explicit-index specification is
-\texttt{oblique = list(1:2, 3:5)}. There is no need to specify
-\texttt{projection}, because its default already allows this block
-specification. The single criterion \texttt{rotation = "target"} is
-applied to the complete loading matrix, and \texttt{target} is the
-correspondingly ordered target matrix for the 54 retained indicators.
-
-The model was fitted using unweighted least squares and target rotation
-as follows:
+to specify the model with the \texttt{latent} package, we must consider
+that factor positions 1 and 2 correspond to Externalizing and
+Internalizing, respectively, and positions 3, 4, and 5 correspond to
+Children, Parents, and Teachers. Supplying the argument
+\texttt{oblique = c(2, 3)} automatically selects the orthoblique
+manifold: the two trait factors may correlate with each other, the three
+method factors may correlate with one another, and all six trait--method
+correlations are then zero. The single criterion
+\texttt{rotation = "target"} is applied to the complete loading matrix,
+and \texttt{target} is the correspondingly partially specified target
+matrix for the 54 retained indicators. The model was fitted using
+unweighted least squares as follows:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{2026}\NormalTok{)}
 \NormalTok{R }\OtherTok{\textless{}{-}}\NormalTok{ mtmm}\SpecialCharTok{$}\NormalTok{ABCD}\SpecialCharTok{$}\NormalTok{R }\CommentTok{\# Extract the correlation matrix}
-\NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{sample.cov =}\NormalTok{ R, }\AttributeTok{sample.nobs =} \DecValTok{2119}\NormalTok{,}
-            \AttributeTok{nfactors =} \DecValTok{5}\NormalTok{, }\AttributeTok{estimator =} \StringTok{"uls"}\NormalTok{,}
+\NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{sample.cov =}\NormalTok{ R, }
+            \AttributeTok{sample.nobs =} \DecValTok{2119}\NormalTok{,}
+            \AttributeTok{nfactors =} \DecValTok{5}\NormalTok{, }
+            \AttributeTok{estimator =} \StringTok{"uls"}\NormalTok{,}
             \AttributeTok{oblique =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{),}
-            \AttributeTok{rotation =} \StringTok{"target"}\NormalTok{, }\AttributeTok{target =}\NormalTok{ target)}
+            \AttributeTok{rotation =} \StringTok{"target"}\NormalTok{,}
+            \AttributeTok{target =}\NormalTok{ target)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2377,11 +2379,11 @@ The results showed that the estimated correlation between Externalizing
 and Internalizing was .251. The correlations were .298 between Children
 and Parents, .240 between Children and Teachers, and .302 between
 Parents and Teachers. In contrast, all six correlations between trait
-and method factors were zero to numerical precision as expected by the
-orthoblique constraints.
+and method factors were exactly zero as expected by the orthoblique
+constraints. The full factor correlation matrix rounded to three
+decimals was
 
-In the same factor order, these reported estimates give
-\begin{equation}\protect\phantomsection\label{eq-mtmm_estimated_correlations}{
+\[
 \widehat{\mathbf{\Psi}}
 =\left[
 \begin{array}{cc|ccc}
@@ -2392,40 +2394,25 @@ In the same factor order, these reported estimates give
     0 &     0 & .240 & .302 &    1
 \end{array}
 \right],
-}\end{equation} with rows and columns ordered as Externalizing,
-Internalizing, Children, Parents, and Teachers. The free correlations
-are rounded to three decimals, and the structural zeros are displayed as
-exact zeros.
+\]
+
+with rows and columns ordered as Externalizing, Internalizing, Children,
+Parents, and Teachers, respectively.
 
 The partially specified target rotation produced a sparse loading
-pattern. Among the 162 loadings targeted toward zero, 160 (98.8\%) had
-absolute values below .20, with a median absolute value of .030. The
-method factors were particularly well defined: all 54 expected method
-loadings exceeded .20 in absolute value, with a median absolute loading
-of .464. In contrast, the Externalizing indicators, apart from those
-assessing Attention Problems, loaded poorly on the merged trait factor.
-Of these 18 indicators, 16 had absolute loadings below .20, with a
-median of .079 and a range from .028 to .259. In contrast, 15 of the 18
-Attention Problems indicators exceeded .20 on the same factor, with a
-median absolute loading of .433. Thus, the original Externalizing
-indicators contributed little to the merged trait factor, which was
-mainly defined by Attention Problems.
-
-Moreover, all 18 original Externalizing indicators loaded more strongly
-on their corresponding method factor than on the merged trait factor,
-with a median absolute method loading of .530. Therefore, their weak
-trait loadings do not mean that they contributed little to the entire
-solution. Rather, their shared variation was represented more strongly
-by the method factors, while the merged trait factor mainly reflected
-Attention Problems and not Externalizing.
-
-Overall, this exploratory solution revealed that conflating the
-indicators of Externalizing and Attention Problems in a single factor
-did not recover the intended broad representation of both sets of
-indicators. Thus, the Externalizing label overstated the breadth of this
-merged factor: 15 of the 18 Attention Problems indicators, but only two
-of the 18 original Externalizing indicators, had absolute trait loadings
-above .20.
+pattern (Figure \ref{fig:mtmm-loadings}). Among the 162 loadings
+targeted toward zero, 160 (98.8\%) had absolute values below .20, with a
+median absolute value of .030. The method factors were particularly well
+defined: all 54 expected method loadings exceeded .20 in absolute value,
+with a median absolute loading of .464. In contrast, the Externalizing
+indicators, apart from those assessing Attention Problems, loaded poorly
+on the merged trait factor. Of these 18 indicators, 16 had absolute
+loadings below .20, with a median of .079 and a range from .028 to .259.
+In contrast, 15 of the 18 Attention Problems indicators exceeded .20 on
+the same factor, with a median absolute loading of .433. Thus, the
+original Externalizing indicators contributed little to the merged trait
+factor, which was mainly defined by the indicators of Attention
+Problems.
 
 \begin{figure}[!ht]
 \centering
@@ -2456,18 +2443,33 @@ loadings obtained through orthoblique target rotation.}
 \label{fig:mtmm-loadings}
 \end{figure}
 
+Moreover, all 18 original Externalizing indicators loaded more strongly
+on their corresponding method factor than on the merged trait factor,
+with a median absolute method loading of .530. Therefore, their weak
+trait loadings do not mean that they contributed little to the entire
+solution. Rather, their shared variation was represented more strongly
+by the method factors, while the merged trait factor mainly reflected
+Attention Problems and not Externalizing.
+
+Overall, this exploratory solution revealed that conflating the
+indicators of Externalizing and Attention Problems in a single factor
+did not recover the intended broad representation of both sets of
+indicators. Thus, the Externalizing label overstated the breadth of this
+merged factor.
+
 From a statistical perspective, the relevant feature of this example is
 that rotation criteria and restrictions on the factor correlation matrix
-are handled separately. Target rotation determines an interpretable
-orientation and permits empirically relevant cross-loadings, whereas the
-orthoblique manifold guarantees the exact block-orthogonality structure
-that disentangles the variance explained by traits and methods. A
-conventional orthogonal rotation would have forced the correlations
-within the trait and method blocks to zero, while a conventional oblique
-rotation would have estimated the six trait-method correlations that
-must be excluded by the MTMM design. In both cases, the results would
-have been inconsistent with the theoretical model. Thus, the orthoblique
-manifold combined with target rotation made it possible to assess the
+are handled separately. Partially specified target rotation encourages
+an interpretable orientation for the loadings and permits empirically
+relevant cross-loadings, whereas the orthoblique manifold guarantees the
+exact block-orthogonality structure that disentangles the variance
+explained by traits and methods. A conventional orthogonal rotation
+would have forced the correlations within the trait and method blocks to
+zero, while a conventional oblique rotation would have estimated the six
+trait-method correlations that must be excluded by the MTMM design. In
+both cases, the results would have been inconsistent with the
+theoretical model. Thus, the orthoblique manifold combined with
+partially specified target rotation made it possible to assess the
 adequacy of this MTMM analysis using EFA, revealing a potential model
 misspecification in Watts et al. (2022).
 
@@ -2482,64 +2484,62 @@ The original study reports that the sample included participants from
 131 countries, with 69\% being female, and had a mean age of 34.7 years.
 For the present analysis, we used 96 HEXACO items corresponding to the
 six personality domains and their 24 facets, excluding the last four
-altruism items that do not belong to the HEXACO hierarchy (i.e., they
-are not expected to be nested in a general factor).
+indicators of Altruism that do not belong to the HEXACO hierarchy (i.e.,
+they are not expected to be nested in a general factor).
 
 We fitted a 30-factor EFA model with six general factors, one for each
-HEXACO domain, and 24 specific factors. The first six factors were
-specified as one oblique block and the 24 specific factors were left
-orthogonal. Before any permutation used to align the factors for
-reporting, the specified factor correlation matrix has the form \[
+HEXACO domain, and 24 group factors. The first six factors were
+specified as one oblique block and the 24 group factors were left
+orthogonal. The specified factor correlation matrix has the form \[
 \boldsymbol{\Psi}=
 \begin{pmatrix}
 \boldsymbol{\Psi}_{G} & \mathbf{0}\\
 \mathbf{0} & \mathbf{I}_{24}
 \end{pmatrix},
 \] where \(\boldsymbol{\Psi}_{G}\) contains the correlations among the
-six domain-general factors. Therefore, the general factors can
-correlate, whereas every specific factor is orthogonal to the general
-factors and to all other specific factors. In this way, common variance
-would be partitioned between specific factors, representing narrow
-facet-level variance, and general factors, representing broader variance
-shared across facets.
+six general factors. Therefore, the general factors can correlate,
+whereas every group factor is orthogonal to the general factors and to
+all other group factors. In this way, common variance can be effectively
+partitioned between group factors, representing narrow facet-level
+variance, and general factors, representing broader variance shared
+across facets.
 
 This formulation extends the exploratory bifactor approach of Jennrich
 and Bentler (2011; 2012) to the case of multiple correlated general
 factors. In their biquartimin and bigeomin criteria, a single
-general-factor column is excluded from the simplicity rotation
-criterion, which is applied to the group-factor columns only. Here,
-there are six general-factor columns, and their orientation also has to
-be determined. We therefore applied a criterion to the general factor
-columns and another to the specific factor columns. Thus this example
-also illustrates the possibility of combining different rotation
-criteria within the same analysis.
+general-factor column is excluded from the rotation criterion, which is
+applied to the group-factor columns only. Here, there are six
+general-factor columns, and their orientation also has to be determined.
+We therefore applied a separate criterion to the general factor columns
+and another to the group factor columns. Thus this example also
+illustrates the possibility of combining different rotation criteria
+within the same analysis.
 
 To examine the extent to which the theoretical HEXACO structure is
 supported, we compared three rotation specifications. With 30 factors, a
 nontarget rotation has a large rotational search space and hence a
 greater risk of capitalizing on chance. Conversely, targeting a large
 number of loadings toward zero gives the theoretical structure a
-stronger role in determining factor orientation. We therefore applied
-geomin or oblimin to the six general factors combined with target
-rotation of the 24 specific factors, and compared these two solutions
-with oblimin applied to both blocks without a target. In the two
-target-based solutions, only the specific factors were targeted,
-providing theoretical anchoring where rotational complexity was greatest
-while leaving the general factors exploratory. The nontarget oblimin
-specification allows both levels to be oriented by the complexity
-criterion and can be viewed as an extension of biquartimin rotation to
-multiple general factors.\footnote{In both oblimin specifications, we
-  set \(\gamma=0\) (quartimin). In the geomin + target specification, we
-  set \(\epsilon=.01\). For target rotation, the facet memberships
-  determined the expected specific-factor loadings.}
+stronger role in determining factor orientation. In two analyses, we
+therefore applied geomin or oblimin to the six general factors and then
+partially specified targets on the 24 group factors. In these two
+target-based analyses, only the group factors were targeted, providing
+theoretical anchoring where capitalizing on chance was greatest while
+leaving the general factors exploratory. The third analysis applied
+oblimin deferentially to the block of general factors and to the block
+of group factors. This specification allows both levels to be oriented
+by the complexity criterion and can be viewed as an extension of
+biquartimin rotation to multiple general factors.\footnote{In both
+  oblimin specifications, we set \(\gamma=0\) (quartimin) whereas in the
+  geomin + target specification, we set \(\epsilon=.01\).}
 
 The three solutions recovered different aspects of the theoretical
 HEXACO hierarchy. In both target-based solutions, all 96 items had their
-largest absolute loading among the 24 specific factors on the expected
-facet. Without a target, this occurred for 75 of 96 items (78.1\%) under
-oblimin. Thus, target rotation provided clearer facet separation,
-although the nontarget oblimin solution also recovered much of the
-intended facet structure without prespecifying it.
+largest absolute loading among the 24 group factors on the expected
+facet. This occurred for 75 of 96 items (78.1\%) with the nontarget
+oblimin rotation. Thus, target rotation provided clearer facet
+separation, although the nontarget oblimin solution also recovered much
+of the intended facet structure.
 
 In all three solutions, the general-factor loading patterns broadly
 reflected the HEXACO domains. Emotionality, Extraversion,
@@ -2547,10 +2547,32 @@ Conscientiousness, Openness, and Agreeableness were recognizable,
 whereas Honesty--Humility was less consistently separated in the
 target-based specifications. Some Honesty--Humility items showed salient
 cross-loadings on the Conscientiousness general factor, and additional
-general-factor cross-loadings remained. Because none of these
-specifications targeted the general-factor loadings, this correspondence
-was not imposed directly by the target, although targeting the specific
-factors could still alter the partitioning of common variance.
+general-factor cross-loadings remained.
+
+The following code illustrates the oblimin + target specification.
+Oblimin is applied to the six general factors and target rotation to the
+24 group factors. The argument \texttt{oblique = 6} automatically
+selects the orthoblique manifold and places the first six factors in one
+oblique block; all remaining factors are mutually orthogonal and
+orthogonal to the general factors. The same \texttt{oblique}
+specification is used in all three analyses, independently of their
+rotation criteria. Because the items are ordinal, the model is estimated
+with diagonally weighted least squares using polychoric correlations
+(\texttt{ordered = TRUE}):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rotation\_model }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+  \AttributeTok{oblimin =} \FunctionTok{list}\NormalTok{(}\AttributeTok{gamma =} \DecValTok{0}\NormalTok{, }\AttributeTok{factors =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
+  \AttributeTok{target  =} \FunctionTok{list}\NormalTok{(}\AttributeTok{target =}\NormalTok{ target[, }\DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{], }\AttributeTok{factors =} \DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{))}
+\NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{data =}\NormalTok{ mooc, }
+            \AttributeTok{nfactors =} \DecValTok{30}\NormalTok{,}
+            \AttributeTok{ordered =} \ConstantTok{TRUE}\NormalTok{, }
+            \AttributeTok{estimator =} \StringTok{"dwls"}\NormalTok{,}
+            \AttributeTok{oblique =} \DecValTok{6}\NormalTok{,}
+            \AttributeTok{rotation =}\NormalTok{ rotation\_model)}
+\end{Highlighting}
+\end{Shaded}
 
 Figure \ref{fig:hexaco-loadings-comparison} compares the theoretical
 loading structure (a) with the three rotated loading solutions: (b)
@@ -2559,77 +2581,6 @@ loading heatmaps display absolute values. Figure
 \ref{fig:hexaco-correlations-comparison} presents the corresponding
 \(6\times6\) general-factor correlation matrices, in panels (a), (b),
 and (c), respectively.
-
-The following code illustrates the oblimin + target specification.
-Oblimin is applied to the six general factors and target rotation to the
-24 specific factors. The argument \texttt{oblique = 6} automatically
-selects the orthoblique manifold and places the first six factors in one
-oblique block; all remaining factors are mutually orthogonal and
-orthogonal to the general factors. The same \texttt{oblique}
-specification is used in all three analyses, independently of their
-rotation criteria. Because the items are ordinal, the model is estimated
-with diagonally weighted least squares using polychoric correlations.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{rotation\_model }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
-  \AttributeTok{oblimin =} \FunctionTok{list}\NormalTok{(}\AttributeTok{gamma =} \DecValTok{0}\NormalTok{, }\AttributeTok{factors =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{6}\NormalTok{),}
-  \AttributeTok{target  =} \FunctionTok{list}\NormalTok{(}\AttributeTok{target =}\NormalTok{ target[, }\DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{], }\AttributeTok{factors =} \DecValTok{7}\SpecialCharTok{:}\DecValTok{30}\NormalTok{))}
-\NormalTok{efa }\OtherTok{\textless{}{-}} \FunctionTok{lefa}\NormalTok{(}\AttributeTok{data =}\NormalTok{ mooc, }\AttributeTok{nfactors =} \DecValTok{30}\NormalTok{,}
-            \AttributeTok{ordered =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{estimator =} \StringTok{"dwls"}\NormalTok{,}
-            \AttributeTok{oblique =} \DecValTok{6}\NormalTok{,}
-            \AttributeTok{rotation =}\NormalTok{ rotation\_model)}
-\end{Highlighting}
-\end{Shaded}
-
-The oblimin + target solution yielded absolute correlations among the
-six general factors ranging from .007 to .217, with a median of .107
-(Figure \ref{fig:hexaco-correlations-comparison}b). All general-specific
-correlations and all off-diagonal correlations among the 24 specific
-factors were zero to numerical precision, as expected by the orthoblique
-constraints. Therefore, of the \(30(29)/2=435\) possible factor
-correlations, only the \(6(5)/2=15\) correlations among the general
-factors were estimated, while the remaining 420 were fixed to zero and
-recovered to numerical precision.
-
-The six general factors remained substantially exploratory in this
-analysis. The median absolute loading on the theoretically expected
-general factor was .384; 85 of the 96 designated general-factor loadings
-exceeded .20 in absolute value, and 430 of the 480 general-factor
-cross-loadings (89.6\%) were below .20. For the 24 specific factors, the
-median absolute theoretically expected loading was .431, and 91 of these
-96 loadings exceeded .20. In contrast, 2,205 of the 2,208
-specific-factor cross-loadings (99.86\%) were below .20, and no
-specific-factor cross-loading exceeded .30.
-
-With geomin + target (Figures \ref{fig:hexaco-loadings-comparison}b and
-\ref{fig:hexaco-correlations-comparison}a), the expected specific-factor
-loadings had a median absolute value of .427, with 91 of 96 exceeding
-.20; 2,204 of the 2,208 cross-loadings on other specific factors were
-below .20. Thus, geomin and oblimin produced comparably sparse
-specific-factor patterns when paired with target rotation. For the
-general factors, the median absolute designated loading was .414, 82 of
-the 96 designated loadings exceeded .20, and 426 of the 480
-general-factor cross-loadings were below .20. The absolute
-general-factor correlations ranged from .007 to .214 (median .116).
-Compared with oblimin + target, the differences were modest, especially
-for the specific-factor block.
-
-The oblimin + oblimin solution (Figures
-\ref{fig:hexaco-loadings-comparison}d and
-\ref{fig:hexaco-correlations-comparison}c) recovered the expected
-specific factor for 75 items. Its median absolute expected
-specific-factor loading was .348, with 72 of 96 exceeding .20; 2,193 of
-the 2,208 specific-factor cross-loadings were below .20, and five
-exceeded .30. In contrast, its general-factor block showed a clearer
-simple structure than in the two target-based solutions: the median
-absolute expected general-factor loading was .459, 95 of 96 exceeded
-.20, and 468 of the 480 general-factor cross-loadings were below .20.
-The absolute correlations among the general factors ranged from .015 to
-.276 (median .138), larger at the upper end than under the two
-target-based solutions. This configuration therefore favored a clearer
-general-factor structure at the expense of less distinct specific
-factors.
 
 \begin{figure}[!htbp]
 \centering
@@ -2665,7 +2616,7 @@ loadings for the HEXACO analyses: (a) theoretical structure,
 (b) geomin + target, (c) oblimin + target, and (d) oblimin + oblimin.
 The two target-based specifications use target rotation for the specific
 factors, whereas the nontarget specification uses oblimin for both
-general and specific factors.
+general and group factors.
 }
 \label{fig:hexaco-loadings-comparison}
 \end{figure}
@@ -2741,32 +2692,70 @@ group factors are constrained to zero and thus are not displayed.}
 \label{fig:hexaco-correlations-comparison}
 \end{figure}
 
-The conceptual advantage of the orthoblique manifold was particularly
-clear in this example. A fully oblique 30-factor rotation would allow
-all 435 factor correlations, although only the 15 correlations among the
-six general factors are needed for this representation. Conversely, a
-fully orthogonal rotation would force these 15 correlations to zero. In
-the two target-based specifications, the general-factor orientations
-remain determined by a simplicity criterion, while target rotation
-anchors the 24 specific factors where the risk of capitalizing on chance
-is especially high. The nontarget oblimin specification provides a
-comparison without this theoretical anchoring.
+The oblimin + target solution yielded low absolute correlations among
+the six general factors ranging from .007 to .217, with a median of .107
+(Figure \ref{fig:hexaco-correlations-comparison}b). All general-specific
+correlations and all off-diagonal correlations among the 24 group
+factors were zero, as expected by the orthoblique constraints.
+Therefore, of the \(30(29)/2=435\) possible factor correlations, only
+the \(6(5)/2=15\) correlations among the general factors were estimated,
+while the remaining 420 were fixed to zero.
 
-The three solutions illustrate a trade-off between the general and
-specific levels of the HEXACO hierarchy. Both target-based solutions
-yielded highly interpretable facet structures while leaving
-general-factor loadings exploratory. The nontarget oblimin solution
-provided a particularly simple general-factor pattern but weaker facet
-recovery. As these results come from a single sample, they should not be
-interpreted as a general ranking of the rotation criteria.
+The median absolute loading on the theoretically expected general factor
+was .384 and 85 of the 96 designated general-factor loadings exceeded
+.20 in absolute value 430 of the 480 general-factor cross-loadings
+(89.6\%) were below .20. For the 24 group factors, the median absolute
+theoretically expected loading was .431, and 91 of these 96 loadings
+exceeded .20. In contrast, 2,205 of the 2,208 group-factor
+cross-loadings (99.86\%) were below .20, and no group-factor
+cross-loading exceeded .30.
 
-Taken together, these applications illustrate the distinction between
-rotation criteria and manifold restrictions. Complexity criteria can
-yield different sparsity and parsimony patterns for each block of
-factors whereas the orthoblique manifold defines the admissible
-factor-correlation geometry exactly. The two mechanisms can therefore be
-combined without turning the factor model into a confirmatory
-simple-structure model.
+With geomin + target (Figures \ref{fig:hexaco-loadings-comparison}b and
+\ref{fig:hexaco-correlations-comparison}a), the expected group-factor
+loadings had a median absolute value of .427, with 91 of 96 exceeding
+.20; 2,204 of the 2,208 cross-loadings on other group factors were below
+.20. Thus, geomin and oblimin produced comparably sparse group-factor
+patterns when paired with target rotation. For the general factors, the
+median absolute designated loading was .414, 82 of the 96 designated
+loadings exceeded .20, and 426 of the 480 general-factor cross-loadings
+were below .20. The absolute general-factor correlations ranged from
+.007 to .214 (median .116). Compared with oblimin + target, the
+differences were modest, especially for the group-factor block.
+
+The oblimin + oblimin solution (Figures
+\ref{fig:hexaco-loadings-comparison}d and
+\ref{fig:hexaco-correlations-comparison}c) recovered the expected group
+factor for 75 items. Its median absolute expected group-factor loading
+was .348, with 72 of 96 exceeding .20; 2,193 of the 2,208 group-factor
+cross-loadings were below .20, and five exceeded .30. In contrast, its
+general-factor block showed a clearer simple structure than in the two
+target-based solutions: the median absolute expected general-factor
+loading was .459, 95 of 96 exceeded .20, and 468 of the 480
+general-factor cross-loadings were below .20. The absolute correlations
+among the general factors ranged from .015 to .276 (median .138), larger
+at the upper end than under the two target-based solutions. This
+configuration therefore favored a clearer general-factor structure at
+the expense of less distinct group factors.
+
+In other words, the three solutions illustrate a trade-off between the
+general and group levels of the HEXACO hierarchy. Both target-based
+solutions yielded highly interpretable facet structures while leaving
+general-factor loadings exploratory. In contrast, the nontarget oblimin
+solution provided a particularly simple general-factor pattern but
+weaker facet recovery.
+
+In any case, the conceptual advantage of the orthoblique manifold was
+particularly clear in this example. A fully oblique 30-factor rotation
+would allow all 435 factor correlations, although only the 15
+correlations among the six general factors are needed for this
+representation. Conversely, a fully orthogonal rotation would force
+these 15 correlations to zero. Taken together, these applications
+illustrate the distinction between rotation criteria and manifold
+restrictions. Complexity criteria can yield different sparsity and
+parsimony patterns for each block of factors whereas the orthoblique
+manifold defines the admissible factor-correlation geometry exactly. The
+two mechanisms can therefore be combined without turning the factor
+model into a confirmatory simple-structure model.
 
 \section{Discussion}\label{discussion}
 
@@ -2805,8 +2794,8 @@ new orthoblique geometry: an MTMM representation in which trait and
 method factors can correlate within their respective blocks while
 remaining orthogonal between blocks, and a bifactor model in which
 several general factors may correlate with one another while remaining
-orthogonal to specific factors that are also mutually orthogonal. As
-such, the present work not only builds on the general-purpose rotation
+orthogonal to group factors that are also mutually orthogonal. As such,
+the present work not only builds on the general-purpose rotation
 framework developed by Jennrich (2001), Jennrich (2002), and Bernaards
 and Jennrich (2005), but also extends the exploratory bifactor rotation
 methods based on biquartimin and bigeomin (Jennrich \& Bentler, 2011,
