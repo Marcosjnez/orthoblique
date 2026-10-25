@@ -260,7 +260,7 @@
 \title{The orthoblique rotation for factor analysis}
 \author{Marcos Jiménez \and Mauricio Garnier-Villarreal \and Vithor R.
 Franco \and Luis E. Garrido \and Francisco J. Abad}
-\date{19 October 2026}
+\date{26 October 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -301,22 +301,22 @@ gradient projection algorithm, orthoblique rotation
 Exploratory factor analysis (EFA) is a popular framework for estimating
 large and complex factor structures. It surpasses the overly restrictive
 measurement models and the unacceptable model fit indices often
-encountered in applications of confirmatory factor analysis {[}CFA;
-Marsh et al. (2020){]}. In CFA, incorrectly fixing cross-loadings to
-zero is an important caveat whereas EFA permits the estimation of all
-the loading parameters of the measurement model by means of a rotation
-step, reducing the risk of model misspecification.
+encountered in applications of confirmatory factor analysis (CFA) (Marsh
+et al., 2020). In CFA, incorrectly fixing cross-loadings to zero is an
+important caveat whereas EFA permits the estimation of all the loading
+parameters of the measurement model by means of a rotation step,
+reducing the risk of model misspecification.
 
 However, the flexibility of EFA comes at the expense of specifying a
 suitable simplicity criterion to be optimized, so that a factor solution
 is rotated to a loading matrix that best approximates the desired simple
-structure. In this regard, the gradient projection algorithm {[}GPA;
-Jennrich (2001); Jennrich (2002){]} has been the predominant
-computational tool for rotating loading patterns during the last twenty
-years. The success of GPA is instantiated by its availability in widely
-used and reputed statistical programs such as Mplus (Muthén \& Muthén,
-2017), \texttt{lavaan} (Rosseel, 2012), and \texttt{psych} (Revelle,
-2020). In contrast with previously used rotation procedures like the
+structure. In this regard, the gradient projection algorithm (GP)
+(Jennrich, 2001, 2002) has been the predominant computational tool for
+rotating loading patterns during the last twenty years. The success of
+GPA is instantiated by its availability in widely used and reputed
+statistical programs such as Mplus (Muthén \& Muthén, 2017),
+\texttt{lavaan} (Rosseel, 2012), and \texttt{psych} (Revelle, 2020). In
+contrast with previously used rotation procedures like the
 criterion-specific pairwise algorithms discussed by Jennrich (2001), GPA
 is simple and elegant. In fact, a general-purpose optimization routine
 based on GPA can be written in about 50 lines of code in the R language
@@ -1855,12 +1855,11 @@ stationary point. Then,
 }\end{equation}
 
 is an augmented Information matrix whose inverse can be used to obtain a
-variance-covariance estimate in maximum likelihood estimation
-{[}Equation 17; Jennrich (1974){]}. For non-maximum-likelihood
-estimators, an alternative augmented Hessian matrix that replaces
-\(\mathbf{I}_\theta\) with the Hessian matrix of the loss function can
-be incorporated into the sandwich covariance estimator described by
-Zhang (2014).
+variance-covariance estimate in maximum likelihood estimation (Jennrich,
+1974, Equation 17). For non-maximum-likelihood estimators, an
+alternative augmented Hessian matrix that replaces \(\mathbf{I}_\theta\)
+with the Hessian matrix of the loss function can be incorporated into
+the sandwich covariance estimator described by Zhang (2014).
 
 For orthogonal and oblique rotations, the derivatives of the constraints
 can be found elsewhere (Archer \& Jennrich, 1973; Jennrich, 1973). For
@@ -2141,10 +2140,10 @@ the residual covariance matrix:
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Compute the best factor scores in the least{-}squares sense:}
-\NormalTok{Green\_scores }\OtherTok{\textless{}{-}} \FunctionTok{latscores}\NormalTok{(fit, }\AttributeTok{method =} \StringTok{"Green"}\NormalTok{)}
+\NormalTok{Green\_scores }\OtherTok{\textless{}{-}} \FunctionTok{latscores}\NormalTok{(fit\_efa, }\AttributeTok{method =} \StringTok{"Green"}\NormalTok{)}
 \CommentTok{\# Compute the factor scores that minimize the determinant of the residual}
 \CommentTok{\# covariance matrix:}
-\NormalTok{tenBerge\_scores }\OtherTok{\textless{}{-}} \FunctionTok{latscores}\NormalTok{(fit, }\AttributeTok{method =} \StringTok{"tenBerge"}\NormalTok{)}
+\NormalTok{tenBerge\_scores }\OtherTok{\textless{}{-}} \FunctionTok{latscores}\NormalTok{(fit\_efa, }\AttributeTok{method =} \StringTok{"tenBerge"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2162,10 +2161,10 @@ In this section, we compare orthoblique rotation with two alternative
 approaches and highlight their main differences.
 
 First, one may argue that achieving an orthoblique correlation pattern
-is already possible in Exploratory Structural Equation Modeling {[}ESEM;
-Asparouhov \& Muthén (2009){]}. In ESEM, rotation is usually presented
-as an optimization problem with independent exploratory blocks of
-factors that can be either oblique or orthogonal. Take as an example the
+is already possible in Exploratory Structural Equation Modeling (ESEM)
+(Asparouhov \& Muthén, 2009). In ESEM, rotation is usually presented as
+an optimization problem with independent exploratory blocks of factors
+that can be either oblique or orthogonal. Take as an example the
 orthoblique pattern presented in Figure \ref{fig:rotations}. In the ESEM
 framework, we can reproduce the same correlation pattern by building a
 block-diagonal matrix with three square blocks of independent rotation
@@ -2201,14 +2200,22 @@ orthoblique pattern is recovered for the factor correlation matrix:
 
 However, in this scenario the number of estimated parameters is smaller
 than in the more general orthoblique rotation framework presented here.
-Orthoblique rotation finds a dense rotation matrix \(\mathbf{X}\) that
-yields the desired orthoblique pattern whereas ESEM solves a more
-restricted optimization problem with structural zeros in the rotation
-matrix that corresponds to intersections of different blocks of factors.
-Consequently, orthoblique rotation searches over a larger set of
-rotation matrices and can attain a lower value of the rotation criterion
-than the more restrictive block-diagonal approach used in ESEM. In this
-respect, orthoblique rotation is a more exploratory approach than ESEM.
+In the ESEM representation there is a total of five free parameters: two
+in each of the oblique blocks and one in the orthogonal block. In
+contrast, the orthoblique rotation matrix starts with 36 matrix elements
+and then imposes six unit-diagonal constraints and 13 zero-correlation
+constraints to yield \(17\) free parameters. Thus, in this example
+orthoblique rotation has 12 additional degrees of freedom in the
+rotation matrix. Moreover, orthoblique rotation finds a dense rotation
+matrix \(\mathbf{X}\) that yields the desired orthoblique pattern
+whereas ESEM solves a more restricted optimization problem with
+structural zeros in the rotation matrix that corresponds to
+intersections of different blocks of factors. Consequently, even if the
+number of free parameters were the same in both approaches, orthoblique
+rotation searches over a larger set of rotation matrices and can attain
+a lower value of the rotation criterion than the more restrictive
+block-diagonal approach used in ESEM. In this respect, orthoblique
+rotation is a more exploratory approach than ESEM.
 
 Second, we also highlight that using orthoblique rotation in tandem with
 target rotation is closely related to the extended target rotation
@@ -2526,9 +2533,9 @@ partially specified targets on the 24 group factors. In these two
 target-based analyses, only the group factors were targeted, providing
 theoretical anchoring where capitalizing on chance was greatest while
 leaving the general factors exploratory. The third analysis applied
-oblimin deferentially to the block of general factors and to the block
-of group factors. This specification allows both levels to be oriented
-by the complexity criterion and can be viewed as an extension of
+oblimin separately to the block of general factors and to the block of
+group factors. This specification allows both levels to be oriented by
+the complexity criterion and can be viewed as an extension of
 biquartimin rotation to multiple general factors.\footnote{In both
   oblimin specifications, we set \(\gamma=0\) (quartimin) whereas in the
   geomin + target specification, we set \(\epsilon=.01\).}
@@ -2684,11 +2691,7 @@ general and group factors.
 \end{minipage}
 
 \caption{\fontsize{12}{12}\selectfont
-Factor correlation matrices among the six general HEXACO factors for
-(a) geomin + target, (b) oblimin + target, and (c) oblimin + oblimin.
-All entries are rounded to two decimal places.
-Correlations between general and group factors and between distinct
-group factors are constrained to zero and thus are not displayed.}
+Factor correlation matrices among the six general HEXACO factors for (a) geomin + target, (b) oblimin + target, and (c) oblimin + oblimin. The ordering of the factors is as follows: Emotionality, Extraversion, Conscientiousness, Openness, Agreeableness, and Honesty–Humility. All entries are rounded to two decimal places. Correlations between general and group factors and between distinct group factors are constrained to zero and thus are not displayed.}
 \label{fig:hexaco-correlations-comparison}
 \end{figure}
 
@@ -2703,10 +2706,10 @@ while the remaining 420 were fixed to zero.
 
 The median absolute loading on the theoretically expected general factor
 was .384 and 85 of the 96 designated general-factor loadings exceeded
-.20 in absolute value 430 of the 480 general-factor cross-loadings
-(89.6\%) were below .20. For the 24 group factors, the median absolute
-theoretically expected loading was .431, and 91 of these 96 loadings
-exceeded .20. In contrast, 2,205 of the 2,208 group-factor
+.20 in absolute value whereas 430 of the 480 general-factor
+cross-loadings (89.6\%) were below .20. For the 24 group factors, the
+median absolute theoretically expected loading was .431, and 91 of these
+96 loadings exceeded .20. In contrast, 2,205 of the 2,208 group-factor
 cross-loadings (99.86\%) were below .20, and no group-factor
 cross-loading exceeded .30.
 
@@ -2856,12 +2859,12 @@ algorithms on matrix manifolds}. Princeton University Press.
 \bibitem[\citeproctext]{ref-anglim_2022}
 Anglim, J., Dunlop, P. D., Wee, S., Horwood, S., Wood, J. K., \& Marty,
 A. (2022). Personality and intelligence: {A} meta-analysis.
-\emph{Psychological Bulletin}, \emph{148}, 301--336.
+\emph{Psychological Bulletin}, \emph{148}(5-6), 301--336.
 \url{https://doi.org/10.1037/bul0000373}
 
 \bibitem[\citeproctext]{ref-archer_1973}
-Archer, C. O., \& Jennrich, R. I. (1973). Standard {Errors} for {Rotated
-Factor Loadings}. \emph{Psychometrika}, \emph{38}(4), 581--592.
+Archer, C. O., \& Jennrich, R. I. (1973). Standard errors for rotated
+factor loadings. \emph{Psychometrika}, \emph{38}(4), 581--592.
 \url{https://doi.org/10.1007/BF02291496}
 
 \bibitem[\citeproctext]{ref-asparouhov_2009}
@@ -2959,18 +2962,19 @@ Muthén, L. K., \& Muthén, B. O. (2017). \emph{Mplus {User}'s {Guide}.
 
 \bibitem[\citeproctext]{ref-psych}
 Revelle, W. (2020). \emph{Psych: {Procedures} for psychological,
-psychometric, and personality research} {[}Manual{]}.
+psychometric, and personality research} {[}Manual{]}. Northwestern
+University.
 
 \bibitem[\citeproctext]{ref-lavaan}
 Rosseel, Y. (2012). Lavaan: {An R} package for structural equation
-modeling. \emph{Journal of Statistical Software}, \emph{48}, 1--36.
+modeling. \emph{Journal of Statistical Software}, \emph{48}(2), 1--36.
 \url{https://doi.org/10.18637/jss.v048.i02}
 
 \bibitem[\citeproctext]{ref-tenberge_1999}
 {ten Berge, J. M. F., Krijnen, W. P., Wansbeek, T., \& Shapiro, A.}
 (1999). Some new results on correlation-preserving factor scores
 prediction methods. \emph{Linear Algebra and Its Applications},
-\emph{289}(1), 311--318.
+\emph{289}(1-3), 311--318.
 \url{https://doi.org/10.1016/S0024-3795(97)10007-6}
 
 \bibitem[\citeproctext]{ref-watts_2022}
@@ -2982,8 +2986,8 @@ inform the meaning of general factors of youth psychopathology.
 \url{https://doi.org/10.1177/21677026211055170}
 
 \bibitem[\citeproctext]{ref-zhang_2014}
-Zhang, G. (2014). Estimating {Standard Errors} in {Exploratory Factor
-Analysis}. \emph{Multivariate Behavioral Research}, \emph{49}(4),
+Zhang, G. (2014). Estimating standard errors in exploratory factor
+analysis. \emph{Multivariate Behavioral Research}, \emph{49}(4),
 339--353. \url{https://doi.org/10.1080/00273171.2014.908271}
 
 \bibitem[\citeproctext]{ref-zhang_2019}

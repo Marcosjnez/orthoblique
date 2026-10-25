@@ -17,7 +17,7 @@ geometry:
   - bottom=2.5cm
 
 indent: true
-date: 2026-10-19
+date: 2026-10-26
 date-format: "D MMMM YYYY"
 fontsize: 12pt
 number-sections: false
@@ -105,9 +105,9 @@ abstract: |
 
 # Introduction
 
-Exploratory factor analysis (EFA) is a popular framework for estimating large and complex factor structures. It surpasses the overly restrictive measurement models and the unacceptable model fit indices often encountered in applications of confirmatory factor analysis [CFA; @marsh_2020]. In CFA, incorrectly fixing cross-loadings to zero is an important caveat whereas EFA permits the estimation of all the loading parameters of the measurement model by means of a rotation step, reducing the risk of model misspecification.
+Exploratory factor analysis (EFA) is a popular framework for estimating large and complex factor structures. It surpasses the overly restrictive measurement models and the unacceptable model fit indices often encountered in applications of confirmatory factor analysis (CFA) [@marsh_2020]. In CFA, incorrectly fixing cross-loadings to zero is an important caveat whereas EFA permits the estimation of all the loading parameters of the measurement model by means of a rotation step, reducing the risk of model misspecification.
 
-However, the flexibility of EFA comes at the expense of specifying a suitable simplicity criterion to be optimized, so that a factor solution is rotated to a loading matrix that best approximates the desired simple structure. In this regard, the gradient projection algorithm [GPA; @jennrich_2001; @jennrich_2002] has been the predominant computational tool for rotating loading patterns during the last twenty years. The success of GPA is instantiated by its availability in widely used and reputed statistical programs such as Mplus [@mplus], \texttt{lavaan} [@lavaan], and \texttt{psych} [@psych]. In contrast with previously used rotation procedures like the criterion-specific pairwise algorithms discussed by @jennrich_2001, GPA is simple and elegant. In fact, a general-purpose optimization routine based on GPA can be written in about 50 lines of code in the R language ^[See the \texttt{GPForth} and \texttt{GPFoblq} functions from the \texttt{GPArotation} R package [@bernaards_2005] for orthogonal and oblique rotation, respectively.]. Moreover, GPA is based on an optimization framework where traditional search directions based on first- and second-order derivatives and step-size selection techniques like backtracking line-search can be used [@liu_2021].
+However, the flexibility of EFA comes at the expense of specifying a suitable simplicity criterion to be optimized, so that a factor solution is rotated to a loading matrix that best approximates the desired simple structure. In this regard, the gradient projection algorithm (GP) [@jennrich_2001; @jennrich_2002] has been the predominant computational tool for rotating loading patterns during the last twenty years. The success of GPA is instantiated by its availability in widely used and reputed statistical programs such as Mplus [@mplus], \texttt{lavaan} [@lavaan], and \texttt{psych} [@psych]. In contrast with previously used rotation procedures like the criterion-specific pairwise algorithms discussed by @jennrich_2001, GPA is simple and elegant. In fact, a general-purpose optimization routine based on GPA can be written in about 50 lines of code in the R language ^[See the \texttt{GPForth} and \texttt{GPFoblq} functions from the \texttt{GPArotation} R package [@bernaards_2005] for orthogonal and oblique rotation, respectively.]. Moreover, GPA is based on an optimization framework where traditional search directions based on first- and second-order derivatives and step-size selection techniques like backtracking line-search can be used [@liu_2021].
 
 The generality of GPA for factor rotation was the main contribution of @jennrich_2001 and @jennrich_2002. Rather than developing a different algorithm for every simplicity criterion, Jennrich showed that a common computational procedure could optimize many criteria under the same rotation constraints. Bernaards and Jennrich (2005) developed this idea into general-purpose software and separated the evaluation of the criterion and the gradient of the parameters from the operations that enforce the rotation constraints. They also provided derivations, proofs, and software implementation details. Thus, their work provided both the motivation and the computational starting point for the present generalization to a new rotation method. Our purpose is to give a deeper and more explicit geometric account of all the mathematical objects involving factor rotation and the connections between them. Explaining why they are needed, how they are derived from the constraints of the rotation matrix, and how they work together provides a constructive route from the orthogonal and oblique cases to other rotation geometries.
 
@@ -1199,7 +1199,7 @@ $$
 \end{pmatrix}
 $$ {#eq-augmented-information}
 
-is an augmented Information matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood estimation [Equation 17; @jennrich_1974]. For non-maximum-likelihood estimators, an alternative augmented Hessian matrix that replaces $\mathbf{I}_\theta$ with the Hessian matrix of the loss function can be incorporated into the sandwich covariance estimator described by @zhang_2014.
+is an augmented Information matrix whose inverse can be used to obtain a variance-covariance estimate in maximum likelihood estimation [@jennrich_1974, Equation 17]. For non-maximum-likelihood estimators, an alternative augmented Hessian matrix that replaces $\mathbf{I}_\theta$ with the Hessian matrix of the loss function can be incorporated into the sandwich covariance estimator described by @zhang_2014.
 
 For orthogonal and oblique rotations, the derivatives of the constraints can be found elsewhere [@archer_1973; @jennrich_1973]. For orthoblique rotation, we first derive the constraints on the rotated parameters and then compute their corresponding derivatives with respect to all the model parameters. 
 
@@ -1366,10 +1366,10 @@ Finally, the \texttt{latent} package can also estimate factor scores that preser
 #| eval: false
 #| echo: true
 # Compute the best factor scores in the least-squares sense:
-Green_scores <- latscores(fit, method = "Green")
+Green_scores <- latscores(fit_efa, method = "Green")
 # Compute the factor scores that minimize the determinant of the residual
 # covariance matrix:
-tenBerge_scores <- latscores(fit, method = "tenBerge")
+tenBerge_scores <- latscores(fit_efa, method = "tenBerge")
 ```
 
 The development version of \texttt{latent} is available at \url{https://github.com/Marcosjnez/latent}, including the source and documentation of the functions \texttt{lrotate()}, \texttt{lefa()}, and \texttt{latscores()}. The R package can be installed with the command \texttt{pak::pak("marcosjnez/latent")} that uses the \texttt{pak} library [@pak].
@@ -1378,7 +1378,7 @@ The development version of \texttt{latent} is available at \url{https://github.c
 
 In this section, we compare orthoblique rotation with two alternative approaches and highlight their main differences.
 
-First, one may argue that achieving an orthoblique correlation pattern is already possible in Exploratory Structural Equation Modeling [ESEM; @asparouhov_2009]. In ESEM, rotation is usually presented as an optimization problem with independent exploratory blocks of factors that can be either oblique or orthogonal. Take as an example the orthoblique pattern presented in Figure \ref{fig:rotations}. In the ESEM framework, we can reproduce the same correlation pattern by building a block-diagonal matrix with three square blocks of independent rotation matrices of size $2\times 2$ each:  
+First, one may argue that achieving an orthoblique correlation pattern is already possible in Exploratory Structural Equation Modeling (ESEM) [@asparouhov_2009]. In ESEM, rotation is usually presented as an optimization problem with independent exploratory blocks of factors that can be either oblique or orthogonal. Take as an example the orthoblique pattern presented in Figure \ref{fig:rotations}. In the ESEM framework, we can reproduce the same correlation pattern by building a block-diagonal matrix with three square blocks of independent rotation matrices of size $2\times 2$ each:  
 
 $$
 \mathbf{X} =
@@ -1406,7 +1406,7 @@ $$
 \right).
 $$
 
-However, in this scenario the number of estimated parameters is smaller than in the more general orthoblique rotation framework presented here. Orthoblique rotation finds a dense rotation matrix $\mathbf{X}$ that yields the desired orthoblique pattern whereas ESEM solves a more restricted optimization problem with structural zeros in the rotation matrix that corresponds to intersections of different blocks of factors. Consequently, orthoblique rotation searches over a larger set of rotation matrices and can attain a lower value of the rotation criterion than the more restrictive block-diagonal approach used in ESEM. In this respect, orthoblique rotation is a more exploratory approach than ESEM.
+However, in this scenario the number of estimated parameters is smaller than in the more general orthoblique rotation framework presented here. In the ESEM representation there is a total of five free parameters: two in each of the oblique blocks and one in the orthogonal block. In contrast, the orthoblique rotation matrix starts with 36 matrix elements and then imposes six unit-diagonal constraints and 13 zero-correlation constraints to yield $17$ free parameters. Thus, in this example orthoblique rotation has 12 additional degrees of freedom in the rotation matrix. Moreover, orthoblique rotation finds a dense rotation matrix $\mathbf{X}$ that yields the desired orthoblique pattern whereas ESEM solves a more restricted optimization problem with structural zeros in the rotation matrix that corresponds to intersections of different blocks of factors. Consequently, even if the number of free parameters were the same in both approaches, orthoblique rotation searches over a larger set of rotation matrices and can attain a lower value of the rotation criterion than the more restrictive block-diagonal approach used in ESEM. In this respect, orthoblique rotation is a more exploratory approach than ESEM.
 
 Second, we also highlight that using orthoblique rotation in tandem with target rotation is closely related to the extended target rotation proposed by @zhang_2019. Their method incorporates expectations about both the loading matrix and the factor correlation matrix into the rotation criterion, so that selected trait-method correlations in a multitrait-multimethod (MTMM) analysis are rotated toward zero. More precisely, the extended target rotation minimizes the following criterion using oblique rotation:
 
@@ -1538,7 +1538,7 @@ where $\boldsymbol{\Psi}_{G}$ contains the correlations among the six general fa
 
 This formulation extends the exploratory bifactor approach of Jennrich and Bentler (2011; 2012) to the case of multiple correlated general factors. In their biquartimin and bigeomin criteria, a single general-factor column is excluded from the rotation criterion, which is applied to the group-factor columns only. Here, there are six general-factor columns, and their orientation also has to be determined. We therefore applied a separate criterion to the general factor columns and another to the group factor columns. Thus this example also illustrates the possibility of combining different rotation criteria within the same analysis. 
 
-To examine the extent to which the theoretical HEXACO structure is supported, we compared three rotation specifications. With 30 factors, a nontarget rotation has a large rotational search space and hence a greater risk of capitalizing on chance. Conversely, targeting a large number of loadings toward zero gives the theoretical structure a stronger role in determining factor orientation. In two analyses, we therefore applied geomin or oblimin to the six general factors and then partially specified targets on the 24 group factors. In these two target-based analyses, only the group factors were targeted, providing theoretical anchoring where capitalizing on chance was greatest while leaving the general factors exploratory.  The third analysis applied oblimin deferentially to the block of general factors and to the block of group factors. This specification allows both levels to be oriented by the complexity criterion and can be viewed as an extension of biquartimin rotation to multiple general factors.^[In both oblimin specifications, we set $\gamma=0$ (quartimin) whereas in the geomin + target specification, we set $\epsilon=.01$.]
+To examine the extent to which the theoretical HEXACO structure is supported, we compared three rotation specifications. With 30 factors, a nontarget rotation has a large rotational search space and hence a greater risk of capitalizing on chance. Conversely, targeting a large number of loadings toward zero gives the theoretical structure a stronger role in determining factor orientation. In two analyses, we therefore applied geomin or oblimin to the six general factors and then partially specified targets on the 24 group factors. In these two target-based analyses, only the group factors were targeted, providing theoretical anchoring where capitalizing on chance was greatest while leaving the general factors exploratory.  The third analysis applied oblimin separately to the block of general factors and to the block of group factors. This specification allows both levels to be oriented by the complexity criterion and can be viewed as an extension of biquartimin rotation to multiple general factors.^[In both oblimin specifications, we set $\gamma=0$ (quartimin) whereas in the geomin + target specification, we set $\epsilon=.01$.]
 
 The three solutions recovered different aspects of the theoretical HEXACO hierarchy. In both target-based solutions, all 96 items had their largest absolute loading among the 24 group factors on the expected facet. This occurred for 75 of 96 items (78.1\%) with the nontarget oblimin rotation. Thus, target rotation provided clearer facet separation, although the nontarget oblimin solution also recovered much of the intended facet structure.
 
@@ -1665,17 +1665,13 @@ general and group factors.
 \end{minipage}
 
 \caption{\fontsize{12}{12}\selectfont
-Factor correlation matrices among the six general HEXACO factors for
-(a) geomin + target, (b) oblimin + target, and (c) oblimin + oblimin.
-All entries are rounded to two decimal places.
-Correlations between general and group factors and between distinct
-group factors are constrained to zero and thus are not displayed.}
+Factor correlation matrices among the six general HEXACO factors for (a) geomin + target, (b) oblimin + target, and (c) oblimin + oblimin. The ordering of the factors is as follows: Emotionality, Extraversion, Conscientiousness, Openness, Agreeableness, and Honesty–Humility. All entries are rounded to two decimal places. Correlations between general and group factors and between distinct group factors are constrained to zero and thus are not displayed.}
 \label{fig:hexaco-correlations-comparison}
 \end{figure}
 
 The oblimin + target solution yielded low absolute correlations among the six general factors ranging from .007 to .217, with a median of .107 (Figure \ref{fig:hexaco-correlations-comparison}b). All general-specific correlations and all off-diagonal correlations among the 24 group factors were zero, as expected by the orthoblique constraints. Therefore, of the $30(29)/2=435$ possible factor correlations, only the $6(5)/2=15$ correlations among the general factors were estimated,  while the remaining 420 were fixed to zero.
 
-The median absolute loading on the theoretically expected general factor was .384 and 85 of the 96 designated general-factor loadings exceeded .20 in absolute value 430 of the 480 general-factor cross-loadings (89.6\%) were below .20. For the 24 group factors, the median absolute theoretically expected loading was .431, and 91 of these 96 loadings exceeded .20. In contrast, 2,205 of the 2,208 group-factor cross-loadings (99.86\%) were below .20, and no group-factor cross-loading exceeded .30.
+The median absolute loading on the theoretically expected general factor was .384 and 85 of the 96 designated general-factor loadings exceeded .20 in absolute value whereas 430 of the 480 general-factor cross-loadings (89.6\%) were below .20. For the 24 group factors, the median absolute theoretically expected loading was .431, and 91 of these 96 loadings exceeded .20. In contrast, 2,205 of the 2,208 group-factor cross-loadings (99.86\%) were below .20, and no group-factor cross-loading exceeded .30.
 
 With geomin + target (Figures \ref{fig:hexaco-loadings-comparison}b and \ref{fig:hexaco-correlations-comparison}a), the expected group-factor loadings had a median absolute value of .427, with 91 of 96 exceeding .20; 2,204 of the 2,208 cross-loadings on other group factors were below .20. Thus, geomin and oblimin produced comparably sparse group-factor patterns when paired with target rotation. For the general factors, the median absolute designated loading was .414, 82 of the 96 designated loadings exceeded .20, and 426 of the 480 general-factor cross-loadings were below .20. The absolute general-factor correlations ranged from .007 to .214 (median .116). Compared with oblimin + target, the differences were modest, especially for the group-factor block.
 
