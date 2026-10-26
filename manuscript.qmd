@@ -1429,7 +1429,7 @@ Thus, both examples can be studied exploratorily while preserving the theoretica
 
 We used partially specified target rotation for the MTMM application and fitted three models to the HEXACO data using different criteria for general and group factors, with combinations involving partially specified targets, geomin, and oblimin. The models with partially specified target rotation used the theoretical model to establish the targets.
 
-All analyses were conducted with the `latent` package and the `lefa()` function.
+All analyses were conducted with the `latent` package and the `lefa()` function. The R scripts used for the empirical applications, including all the materials used to generate the current manuscript, are available in an Open Science Framework (OSF) repository at \url{https://osf.io/hszfc/overview?view_only=1bd218794e3d45e5ad27e551b5e4816d}.
 
 ## ASEBA. An exploratory multitrait-multimethod model
 
