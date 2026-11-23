@@ -1,0 +1,166 @@
+---
+title: 'The orthoblique rotation for factor analysis'
+classoption: article
+format: pdf
+execute:
+  eval: false
+pdf-engine: pdflatex
+
+geometry:
+  - top=2.5cm
+  - left=2.5cm
+  - right=2.5cm
+  - bottom=2.5cm
+
+indent: true
+fontsize: 12pt
+number-sections: false
+number-depth: 2
+editor: visual
+
+bibliography:
+  - references.bib
+csl: apa_7.csl
+
+header-includes:
+  - \usepackage[utf8]{inputenc}
+  - \usepackage{amsmath, amsfonts, amssymb, lmodern, fontenc, babel, setspace}
+  - \usepackage{mathtools}
+  - \usepackage{xcolor}
+  - \usepackage{graphicx, caption}
+  - \usepackage{tikz}
+  - \usepackage{tikz-3dplot}
+  - \newtheorem{definition}{Definition}
+  - \newtheorem{theorem}{Theorem}
+  - |
+      \AtBeginDocument{%
+        \renewcommand{\maketitle}{%
+          \begin{center}
+          {\LARGE\bfseries The orthoblique rotation for factor analysis}
+          
+          \vspace{1.5em}
+          
+          {\normalsize
+          Marcos Jiménez\textsuperscript{1,4},
+          Mauricio Garnier-Villarreal\textsuperscript{1},
+          Vithor R. Franco\textsuperscript{2},
+          Luis E. Garrido\textsuperscript{3}, and
+          Francisco J. Abad\textsuperscript{4}
+          }
+          
+          \vspace{1em}
+          
+          {\small
+          \textsuperscript{1} Vrije Universiteit Amsterdam, The Netherlands\\
+          \textsuperscript{2} Universidade São Francisco, Brasil\\
+          \textsuperscript{3} Pontificia Universidad Católica Madre y Maestra, Dominican Republic\\
+          \textsuperscript{4} Universidad Autónoma de Madrid, Spain
+          }
+          
+          \vspace{1em}
+          
+          {\small
+          Corresponding author: Marcos Jiménez\\
+          Email: m.j.jimenezhenriquez@vu.nl\\
+          ORCID: 0000-0003-4029-6144
+          }
+          \end{center}
+          
+          \vspace{1.5em}
+          
+          \begin{center}
+          {\small\bfseries Financial Support}
+          \end{center}
+          
+          \begingroup
+          \small
+          \noindent
+          This work was supported by the Ministry of Science,
+          Innovation and Universities of Spain under Grant
+          PID2022-137258NB-I00
+          (\emph{Computerized Adaptive Tests Based on New
+          Evaluation Formats}, TAI-NFE); and by NWO--Open
+          Science NL, Open Science Infrastructure, under
+          Grant Agreement No.~500.040.2469
+          (\emph{Fast Estimation of Classical and New
+          Latent Variable Models in R}).
+          \par
+          \endgroup
+          
+          \vspace{1.5em}
+          
+          \begin{center}
+          {\small\bfseries Data Availability Statement}
+          \end{center}
+
+          \begingroup
+          \small
+          \noindent
+          All data used in this study are publicly available
+          through open-access repositories.
+          \par
+          \endgroup
+          
+          \vspace{1.5em}
+
+          \begin{center}
+          {\small\bfseries Competing Interests}
+          \end{center}
+          
+          \begingroup
+          \small
+          \noindent
+          The authors declare no competing interests.
+          \par
+          \endgroup
+          
+          \vspace{1.5em}
+
+          \begin{center}
+          {\small\bfseries Acknowledgements: Use of Artificial Intelligence}
+          \end{center}
+
+          \begingroup
+          \small
+          \noindent
+          The authors used ChatGPT (GPT-6; OpenAI; https://chatgpt.com) in August and October 2026 
+          to assist in creating visualizations using LaTeX code and to check the
+          accuracy of some mathematical derivations. All AI-assisted outputs were 
+          critically reviewed and verified by the authors, who take full responsibility 
+          for the accuracy, integrity, and content of the manuscript.
+          \par
+          \endgroup
+        }%
+      }
+
+output-file: title_page.pdf
+keep-tex: true
+
+author:
+  - name: "Marcos Jiménez"
+    affiliation:
+      - ref: vu
+      - ref: uam
+  - name: "Mauricio Garnier-Villarreal"
+    affiliation:
+      - ref: vu
+  - name: "Vithor R. Franco"
+    affiliation:
+      - ref: usf
+  - name: "Luis E. Garrido"
+    affiliation:
+      - ref: pucmm
+  - name: "Francisco J. Abad"
+    affiliation:
+      - ref: uam
+
+affiliations:
+  - id: vu
+    name: "Vrije Universiteit Amsterdam, The Netherlands"
+  - id: usf
+    name: "Universidade São Francisco, Brasil"
+  - id: pucmm
+    name: "Pontificia Universidad Católica Madre y Maestra, Dominican Republic"
+  - id: uam
+    name: "Universidad Autónoma de Madrid, Spain"
+---
